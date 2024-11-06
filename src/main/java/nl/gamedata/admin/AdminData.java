@@ -140,14 +140,9 @@ public class AdminData extends CommonData
         this.menuChoice = menuChoice;
     }
 
-    public String getTopMenu1()
+    public String getTopMenu()
     {
-        return AdminServlet.getTopMenu1(this);
-    }
-
-    public String getTopMenu2()
-    {
-        return AdminServlet.getTopMenu2(this);
+        return AdminServlet.getTopMenu(this);
     }
 
     public String getContentHtml()
