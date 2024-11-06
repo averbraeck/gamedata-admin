@@ -1,0 +1,409 @@
+html, body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.gd-button-small {
+  display: block;
+  flex-grow: 0;
+  width: 120px;
+  height: 24px;
+  background: navy;
+  font-size: 0.8em;
+  color: white;
+  text-align: center;
+  padding-top: 7px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.gd-page {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  min-height: 0px;
+}
+
+.gd-header, .gd-body, .gd-footer {
+  flex-shrink: 0;
+}
+
+/* ****** */
+/* HEADER */
+/* ****** */
+
+.gd-header {
+  background: navy;
+  padding: 5px;
+  height: 50px;
+  text-align: left;
+  line-height: 50px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.gd-game-heading {
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  margin-left: 420px;
+  display: inline;
+}
+
+.gd-slogan {
+  font-weight: bold;
+  font-size: 1.3em;
+  color:yellow;
+  font-style:italic;
+  margin-left: 40px;
+  display: inline;
+}
+
+@media screen and (max-width: 1500px) {
+  .gd-slogan {
+    display: none;
+  }
+}
+
+.gd-header-right {
+  position: absolute;
+  background: white;
+  margin: 2px;
+  margin-top: 6px;
+  height: 46px;
+  width: 300px;
+  right: 20px;
+  vertical-align: middle;
+  border-radius: 20px;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.gd-header-right > img {
+  display: inline-flex;
+  margin-left: 20px;
+  margin-top: 3px;
+  height: 40px;
+  width: auto;
+}
+
+.gd-header-right > p {
+  display: inline-flex;
+  margin-left: 20px;
+  margin-bottom: 30px;
+  vertical-align: middle;
+}
+
+.gd-header-right > p > a {
+  color: blue;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.gd-header-logout > a:link, .gd-header-logout > a:visited, .gd-header-logout > a:active {
+  color: white;
+}
+
+.gd-header-game-user {
+  position: absolute;
+  text-align: left;
+  color: white;
+  font-weight: normal;
+  font-size: 0.8em;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.gd-header-game-user > p {
+  margin: 1px;
+}
+
+
+/* ****** */
+/* FOOTER */
+/* ****** */
+
+.gd-footer {
+  width: 100%;
+  background: navy;
+  padding: 0px;
+  height: 50px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.gd-footer > table {
+  position: absolute;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.gd-help-icon-left {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background-color: white;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.gd-help-icon-left > img {
+  display: inline;
+  width: 44px;
+  height: 44px;
+}
+
+.gd-help-col {
+  padding-right: 20px;
+}
+
+.gd-help-col td {
+  white-space: nowrap;
+}
+
+.gd-help-col p {
+  margin: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 10px;
+  font-size: 0.7em;
+  color: white;
+  font-style: normal;
+}
+
+/* ======================= */
+/* MAIN BODY OF THE SCREEN */
+/* ======================= */
+
+.gd-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+  height: calc(100vh - 200px);
+}
+
+.gd-admin-menu {
+  height: 30px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.gd-admin-menu-button, .gd-admin-menu-button-red, .gd-admin-menu-button-inactive {
+  flex-grow: 0;
+  width: 8rem;
+  height: 25px;
+  font-size: 0.9em;
+  color: white;
+  text-align: center;
+  padding-top: 7px;
+  border-radius: 7px;
+}
+
+.gd-admin-menu-button {
+  background-color: navy;
+  cursor: pointer;
+}
+
+.gd-admin-menu-button-inactive {
+  background-color: gray;
+  cursor: default;
+}
+
+.gd-admin-menu-button-red {
+  background-color: red;
+  cursor: pointer;
+}
+
+.gd-admin {
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.gd-admin-line-header {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: orange;
+  margin-bottom: 5px;
+}
+
+.gd-admin-line:nth-child(even) {
+  background-color: white;  
+}
+
+.gd-admin-line:nth-child(odd) {
+  background-color: #cccccc;  
+}
+
+.gd-admin-line, .gd-admin-line-selected {
+  display: flex;
+  flex-direction: row;
+}
+
+.gd-admin-line-selected {
+  background-color: yellow;
+}
+
+.gd-admin-highlight, .gd-admin-highlight a {
+  background-color: yellow;
+}
+
+.gd-admin-line-field {
+  flex-grow: 1;
+}
+
+.gd-admin-line-click {
+  flex-grow: 0;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.gd-admin-table-button {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.gd-preview-image-100 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100px;
+  height: 100px;
+}
+
+.gd-preview-image-100 > img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.gd-preview-image-200 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 200px;
+  height: 200px;
+}
+
+.gd-preview-image-200 > img {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.gd-users-score {
+  font-size: 0.8em;
+}
+
+.gd-detail-score {
+  font-size: 0.8em;
+}
+
+.gd-logging {
+  font-size: 0.8em;
+}
+
+/* ===================================== */
+/* MODAL WINDOWS WITH POP UP INFORMATION */
+/* ===================================== */
+
+/* modal background */
+.gd-modal {
+  display: block;
+  position: fixed; /* Stay in place */
+  z-index: 9; /* On top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* modal window close button */
+.gd-modal-close {
+  font-size: 2em;
+  font-weight: bold; 
+  padding-left: 10px;
+}
+
+.gd-modal-close:hover,
+.gd-modal-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* modal window definition for client */
+.gd-modal-window {
+  position: absolute;
+  z-index: 10;
+  display: block;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #fefefe;
+  left: calc(50vw - 350px);
+  top: calc(50vh - 200px);
+  border: 1px solid #888;
+  width: 700px;
+  height: 400px;
+}
+
+/* modal window header for client */
+.gd-modal-window-header {
+  cursor: move;
+  display: flex;
+  background-color: orange;
+  width: 100%;
+  height: 40px;
+  padding-top: 2px;
+}
+
+.gd-modal-window-header > p {
+  width: 100%;
+  font-weight: bold;
+  font-size: 1.2em;
+  color: black;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.gd-modal-button-row {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.gd-modal-body {
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.gd-modal-text {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.gd-modal-text > p {
+  text-align: center;
+  font-size: 1em;
+  font-style: normal;
+}
+  
