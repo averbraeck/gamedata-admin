@@ -434,7 +434,7 @@ public class AdminServlet extends HttpServlet
             s.append("    <td width=\"");
             s.append(data.getColumn(i).getWidth());
             s.append("\">\n");
-            s.append("      <div class=\"hg-admin-line-header\">");
+            s.append("      <div class=\"gd-admin-line-header\">");
             s.append(data.getColumn(i).getHeader());
             s.append("</div>\n");
             s.append(data.getColumn(i).getContent());
@@ -445,7 +445,7 @@ public class AdminServlet extends HttpServlet
             s.append("    <td width=\"");
             s.append(data.getFormColumn().getWidth());
             s.append("\">\n");
-            s.append("      <div class=\"hg-admin-line-header\">");
+            s.append("      <div class=\"gd-admin-line-header\">");
             s.append(data.getFormColumn().getHeader());
             s.append("</div>\n");
             s.append(data.getFormColumn().getContent());
@@ -508,12 +508,12 @@ public class AdminServlet extends HttpServlet
         return s.toString();
     }
 
-    private static final String br = "          <div class=\"hg-admin-menu-button-red\"";
+    private static final String br = "          <div class=\"gd-admin-menu-button-red\"";
 
     private static void topmenu(final AdminData data, final StringBuilder s, final String key, final String text,
             final String color)
     {
-        String bn = "          <div class=\"hg-admin-menu-button\" style=\"background-color: " + color + "\"";
+        String bn = "          <div class=\"gd-admin-menu-button\" style=\"background-color: " + color + "\"";
         s.append(key.equals(data.getMenuChoice()) ? br : bn);
         s.append(" onclick=\"clickMenu('");
         s.append(key);

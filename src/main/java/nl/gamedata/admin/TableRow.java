@@ -36,20 +36,20 @@ public class TableRow
     {
         StringBuilder s = new StringBuilder();
         if (this.id == this.selectedId)
-            s.append("        <div class=\"hg-admin-line-selected\">\n");
+            s.append("        <div class=\"gd-admin-line-selected\">\n");
         else
-            s.append("        <div class=\"hg-admin-line\">\n");
-        s.append("            <div class=\"hg-admin-line-field\">");
+            s.append("        <div class=\"gd-admin-line\">\n");
+        s.append("            <div class=\"gd-admin-line-field\">");
         s.append("<a href=\"#\" onClick=\"clickRecordId('");
         s.append(this.viewMethod);
         s.append("',");
         s.append(this.id);
         s.append("); return false;\">");
         s.append(this.name);
-        s.append("</a></div>\n"); // hg-admin-line-field
+        s.append("</a></div>\n"); // gd-admin-line-field
         for (int i = 0; i < this.editButtons.size(); i++)
         {
-            s.append("            <div class=\"hg-admin-line-click\"><a href=\"#\" onClick=\"clickRecordId('");
+            s.append("            <div class=\"gd-admin-line-click\"><a href=\"#\" onClick=\"clickRecordId('");
             s.append(this.editMethods.get(i));
             s.append("',");
             s.append(this.id);
@@ -57,7 +57,7 @@ public class TableRow
             s.append(this.editButtons.get(i));
             s.append("</a></div>\n");
         }
-        s.append("          </div>\n"); // hg-admin-line
+        s.append("          </div>\n"); // gd-admin-line
         return s.toString();
     }
 

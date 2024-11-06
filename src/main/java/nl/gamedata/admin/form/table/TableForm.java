@@ -60,7 +60,7 @@ public class TableForm
     public TableForm startMultipartForm()
     {
         this.multipart = true;
-        this.s.append("<div class=\"hg-form\">\n");
+        this.s.append("<div class=\"gd-form\">\n");
         this.s.append("  <form id=\"editForm\" action=\"/housinggame-admin/admin\" ");
         this.s.append("method=\"POST\" enctype=\"multipart/form-data\">\n");
         this.s.append("    <input id=\"editClick\" type=\"hidden\" name=\"editClick\" value=\"tobefilled\" />\n");
@@ -80,7 +80,7 @@ public class TableForm
     public TableForm startForm()
     {
         this.multipart = false;
-        this.s.append("<div class=\"hg-form\">\n");
+        this.s.append("<div class=\"gd-form\">\n");
         this.s.append("  <form id=\"editForm\" action=\"/housinggame-admin/admin\" method=\"POST\" >\n");
         this.s.append("    <input id=\"editClick\" type=\"hidden\" name=\"editClick\" value=\"tobefilled\" />\n");
         this.s.append("    <input id=\"editRecordNr\" type=\"hidden\" name=\"editRecordNr\" value=\"0\" />\n");
@@ -106,8 +106,8 @@ public class TableForm
 
     private void buttonRow()
     {
-        this.s.append("    <div class=\"hg-admin-form-buttons\">\n");
-        this.s.append("      <span class=\"hg-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
+        this.s.append("    <div class=\"gd-admin-form-buttons\">\n");
+        this.s.append("      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
         this.s.append(this.cancelMethod);
         this.s.append("', ");
         if (this.cancelRecordNr > 0)
@@ -117,7 +117,7 @@ public class TableForm
         this.s.append("); return false;\">Cancel</a></span>");
         if (this.edit && this.saveMethod.length() > 0)
         {
-            this.s.append("      <span class=\"hg-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
+            this.s.append("      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
             this.s.append(this.saveMethod);
             this.s.append("', ");
             this.s.append(this.recordNr);
@@ -127,7 +127,7 @@ public class TableForm
         }
         if (!this.edit && this.editMethod.length() > 0)
         {
-            this.s.append("      <span class=\"hg-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
+            this.s.append("      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
             this.s.append(this.editMethod);
             this.s.append("', ");
             this.s.append(this.recordNr);
@@ -135,7 +135,7 @@ public class TableForm
         }
         if (this.edit && this.recordNr > 0 && this.deleteMethod.length() > 0)
         {
-            this.s.append("      <span class=\"hg-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
+            this.s.append("      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
             this.s.append(this.deleteMethod);
             this.s.append("', ");
             this.s.append(this.recordNr);
@@ -149,7 +149,7 @@ public class TableForm
 
         for (int i = 0; i < this.additionalButtons.size(); i++)
         {
-            this.s.append("<br/>      <span class=\"hg-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
+            this.s.append("<br/>      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
             this.s.append(this.additionalMethods.get(i));
             this.s.append("', ");
             this.s.append(this.recordNr);

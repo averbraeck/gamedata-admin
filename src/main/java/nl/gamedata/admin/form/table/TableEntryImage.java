@@ -174,9 +174,9 @@ public class TableEntryImage extends AbstractTableEntry<TableEntryImage, byte[]>
         else
             s.append("'\" />\n");
         if (isLargeImage())
-            s.append("        <div class=\"hg-preview-image-200\">\n");
+            s.append("        <div class=\"gd-preview-image-200\">\n");
         else
-            s.append("        <div class=\"hg-preview-image-100\">\n");
+            s.append("        <div class=\"gd-preview-image-100\">\n");
         s.append("          <img id=\"");
         s.append(getTableField().getName());
         if (getImageServlet().length() > 0 && getImageRecordNr() > 0)
