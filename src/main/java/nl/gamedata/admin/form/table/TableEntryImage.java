@@ -181,7 +181,7 @@ public class TableEntryImage extends AbstractTableEntry<TableEntryImage, byte[]>
         s.append(getTableField().getName());
         if (getImageServlet().length() > 0 && getImageRecordNr() > 0)
         {
-            s.append("\" src=\"/housinggame-admin/");
+            s.append("\" src=\"/gamedata-admin/");
             s.append(getImageServlet());
             s.append("?id=");
             s.append(getImageRecordNr());

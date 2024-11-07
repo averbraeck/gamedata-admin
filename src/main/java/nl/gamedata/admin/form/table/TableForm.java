@@ -61,7 +61,7 @@ public class TableForm
     {
         this.multipart = true;
         this.s.append("<div class=\"gd-form\">\n");
-        this.s.append("  <form id=\"editForm\" action=\"/housinggame-admin/admin\" ");
+        this.s.append("  <form id=\"editForm\" action=\"/gamedata-admin/admin\" ");
         this.s.append("method=\"POST\" enctype=\"multipart/form-data\">\n");
         this.s.append("    <input id=\"editClick\" type=\"hidden\" name=\"editClick\" value=\"tobefilled\" />\n");
         this.s.append("    <input id=\"editRecordNr\" type=\"hidden\" name=\"editRecordNr\" value=\"0\" />\n");
@@ -81,7 +81,7 @@ public class TableForm
     {
         this.multipart = false;
         this.s.append("<div class=\"gd-form\">\n");
-        this.s.append("  <form id=\"editForm\" action=\"/housinggame-admin/admin\" method=\"POST\" >\n");
+        this.s.append("  <form id=\"editForm\" action=\"/gamedata-admin/admin\" method=\"POST\" >\n");
         this.s.append("    <input id=\"editClick\" type=\"hidden\" name=\"editClick\" value=\"tobefilled\" />\n");
         this.s.append("    <input id=\"editRecordNr\" type=\"hidden\" name=\"editRecordNr\" value=\"0\" />\n");
         buttonRow();
