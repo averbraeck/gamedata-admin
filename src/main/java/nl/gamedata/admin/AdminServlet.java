@@ -27,7 +27,7 @@ public class AdminServlet extends HttpServlet
         AdminData data = SessionUtils.getData(session);
         if (data == null)
         {
-            response.sendRedirect("/housinggame-admin/login");
+            response.sendRedirect("/gamedata-admin/login");
             return;
         }
 
@@ -48,30 +48,16 @@ public class AdminServlet extends HttpServlet
 
         switch (click)
         {
-            // Language - LanguageGroup (non-heriarchic) - Label
-            case "language":
-            case "viewLanguage":
-            case "editLanguage":
-            case "saveLanguage":
-            case "deleteLanguage":
-            case "deleteLanguageOk":
-            case "newLanguage":
-
-            case "viewLanguageGroup":
-            case "editLanguageGroup":
-            case "saveLanguageGroup":
-            case "deleteLanguageGroup":
-            case "deleteLanguageGroupOk":
-            case "newLanguageGroup":
-
-            case "viewLabel":
-            case "editLabel":
-            case "saveLabel":
-            case "deleteLabel":
-            case "deleteLabelOk":
-            case "newLabel":
-                data.setMenuChoice("language");
-                // MaintainLanguage.handleMenu(request, click, recordNr);
+            // organization
+            case "organization":
+            case "viewOrganization":
+            case "editOrganization":
+            case "saveOrganization":
+            case "deleteOrganization":
+            case "deleteOrganizationOk":
+            case "newOrganization":
+                data.setMenuChoice("Organization");
+                MaintainOrganization.handleMenu(request, click, recordNr);
                 break;
 
             default:
@@ -117,14 +103,21 @@ public class AdminServlet extends HttpServlet
     public static String getTopMenu(final AdminData data)
     {
         StringBuilder s = new StringBuilder();
+        
         // Organization
         topmenu(data, s, "organization", "Organization", "#008000");
-        // Role
-        topmenu(data, s, "role", "Role", "#ff8000");
-        // Game - GameSession - GameMission
+        // User - UserRole
+        topmenu(data, s, "user", "User", "#ff8000");
+        // Game - GameVersion - GameSession
         topmenu(data, s, "game", "Game", "#ff8000");
         // (Game) - DashboardSettings
         topmenu(data, s, "dashboard", "Dashboard", "#008000");
+        // (Game) - Token
+        topmenu(data, s, "token", "Token", "#008000");
+        // (Game) - GameRole
+        topmenu(data, s, "gamerole", "GameRole", "#008000");
+        // (Game) - (GameVersion) - GameMission
+        topmenu(data, s, "gamemission", "GameMission", "#008000");
 
         return s.toString();
     }
