@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 import org.jooq.Record;
-import org.jooq.TableField;
 
 import nl.gamedata.admin.AdminData;
 
