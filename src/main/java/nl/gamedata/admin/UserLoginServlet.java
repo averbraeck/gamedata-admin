@@ -1,8 +1,13 @@
 package nl.gamedata.admin;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -34,6 +39,37 @@ public class UserLoginServlet extends HttpServlet
         super.init();
         System.getProperties().setProperty("org.jooq.no-logo", "true");
 
+        // retrieve the username and password for the database
+        String homeFolder = System.getProperty("user.home");
+        if (homeFolder == null)
+        {
+            throw new ServletException("Home folder to retrieve database credentials not found");
+        }
+        String configDir = homeFolder + File.pathSeparator + "gamedata";
+        File configFile = new File(configDir, "gamedata.properties");
+        Properties gamedataProperties = new Properties();
+        try
+        {
+            InputStream stream = new FileInputStream(configFile);
+            gamedataProperties.load(stream);
+        }
+        catch (FileNotFoundException fnfe)
+        {
+            throw new ServletException(
+                    "File with database credentials not found at " + configDir + "/" + "gamedata.properties");
+        }
+        catch (IOException ioe)
+        {
+            throw new ServletException("Error when reading database credentials at " + configDir + "/" + "gamedata.properties");
+        }
+        String dbUser = gamedataProperties.getProperty("dbUser");
+        String dbPassword = gamedataProperties.getProperty("dbPassword");
+        if (dbUser == null || dbPassword == null)
+        {
+            throw new ServletException(
+                    "Properties dbUser or dbPassword not found in " + configDir + "/" + "gamedata.properties");
+        }
+
         // determine the connection pool, and create one if it does not yet exist (first use after server restart)
         try
         {
@@ -49,18 +85,18 @@ public class UserLoginServlet extends HttpServlet
             Context ctx = new InitialContext();
             try
             {
-                ctx.lookup("/housinggame-admin_datasource");
+                ctx.lookup("/gamedata-admin_datasource");
             }
             catch (NamingException ne)
             {
                 final HikariConfig config = new HikariConfig();
-                config.setJdbcUrl("jdbc:mysql://localhost:3306/housinggame");
-                config.setUsername("housinggame");
-                config.setPassword("tudHouse#4");
+                config.setJdbcUrl("jdbc:mysql://localhost:3306/gamedata");
+                config.setUsername(dbUser);
+                config.setPassword(dbPassword);
                 config.setMaximumPoolSize(2);
                 config.setDriverClassName("com.mysql.cj.jdbc.Driver");
                 DataSource dataSource = new HikariDataSource(config);
-                ctx.bind("/housinggame-admin_datasource", dataSource);
+                ctx.bind("/gamedata-admin_datasource", dataSource);
             }
         }
         catch (NamingException e)
@@ -95,7 +131,7 @@ public class UserLoginServlet extends HttpServlet
         session.setAttribute("adminData", data);
         try
         {
-            data.setDataSource((DataSource) new InitialContext().lookup("/housinggame-admin_datasource"));
+            data.setDataSource((DataSource) new InitialContext().lookup("/gamedata-admin_datasource"));
         }
         catch (NamingException e)
         {
@@ -105,7 +141,7 @@ public class UserLoginServlet extends HttpServlet
         UserRecord user = AdminUtils.readUserFromUsername(data, username);
         String userPassword = user == null ? "" : user.getPassword() == null ? "" : user.getPassword();
         // TODO: hashedPassword
-        if (user != null && userPassword.equals(password) && user.getAdministrator() == 1)
+        if (user != null && userPassword.equals(password)) // TODO: check role
         {
             data.setUsername(user.getName());
             data.setUserId(user.getId());
