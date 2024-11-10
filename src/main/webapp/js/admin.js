@@ -4,7 +4,7 @@ function initPage() {
   /* logged in? */
   var rn = String("${adminData}");
   if (rn.length == 0 || rn == "null") {
-    window.location = "/housinggame-admin/login";
+    window.location = "/gamedata-admin/login";
   }
 }
 
