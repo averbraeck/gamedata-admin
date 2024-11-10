@@ -76,9 +76,9 @@ html, body {
   margin-top: 6px;
   height: 46px;
   width: 300px;
-  right: 20px;
+  right: 8px;
   vertical-align: middle;
-  border-radius: 20px;
+  border-radius: 5px;
   flex-direction: row;
   justify-content: flex-start;
 }

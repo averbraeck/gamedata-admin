@@ -33,12 +33,12 @@
     <div class="gd-page">
       <div class="gd-header">
         <span class="gd-game-heading">GameData</span>
-        <span class="gd-slogan">Game Administration</span>
+        <span class="gd-slogan">Administration</span>
       </div>
       <div class="gd-header-right">
         <img src="images/tudelft.png" />
         <p><a href="/gamedata-admin">LOGOUT</a></p>
-        <span style="font-size: 12px; padding-left: 20px; position:relative; top:-4px; color:black;">v1.7.0</span>
+        <span style="font-size: 12px; padding-left: 20px; position:relative; top:-4px; color:black;">v0.1</span>
       </div>
       <div class="gd-header-game-user">
         <p>&nbsp;</p>
