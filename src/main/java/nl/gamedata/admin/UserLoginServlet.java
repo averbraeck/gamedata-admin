@@ -45,7 +45,7 @@ public class UserLoginServlet extends HttpServlet
         {
             throw new ServletException("Home folder to retrieve database credentials not found");
         }
-        String configDir = homeFolder + File.pathSeparator + "gamedata";
+        String configDir = homeFolder + File.separator + "gamedata";
         File configFile = new File(configDir, "gamedata.properties");
         Properties gamedataProperties = new Properties();
         try
@@ -140,8 +140,7 @@ public class UserLoginServlet extends HttpServlet
 
         UserRecord user = AdminUtils.readUserFromUsername(data, username);
         String userPassword = user == null ? "" : user.getPassword() == null ? "" : user.getPassword();
-        // TODO: hashedPassword
-        if (user != null && userPassword.equals(password)) // TODO: check role
+        if (user != null && userPassword.equals(hashedPassword))
         {
             data.setUsername(user.getName());
             data.setUserId(user.getId());
