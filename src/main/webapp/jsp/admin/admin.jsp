@@ -30,33 +30,33 @@
   </head>
 
   <body onload="initPage()">
-    <div class="hg-page">
-      <div class="hg-header">
-        <span class="hg-game-heading">GameData</span>
-        <span class="hg-slogan">Game Administration</span>
+    <div class="gd-page">
+      <div class="gd-header">
+        <span class="gd-game-heading">GameData</span>
+        <span class="gd-slogan">Game Administration</span>
       </div>
-      <div class="hg-header-right">
+      <div class="gd-header-right">
         <img src="images/tudelft.png" />
         <p><a href="/gamedata-admin">LOGOUT</a></p>
         <span style="font-size: 12px; padding-left: 20px; position:relative; top:-4px; color:black;">v1.7.0</span>
       </div>
-      <div class="hg-header-game-user">
+      <div class="gd-header-game-user">
         <p>&nbsp;</p>
         <p>User:&nbsp;&nbsp;&nbsp; ${adminData.getUser().getUsername()}</p>
       </div>
 
-      <div class="hg-body">
+      <div class="gd-body">
       
-        <div class="hg-admin-menu">
+        <div class="gd-admin-menu">
           ${adminData.getTopMenu()}
         </div>
-        <div class="hg-admin" id="hg-admin">
+        <div class="gd-admin" id="gd-admin">
           ${adminData.getContentHtml()}
         </div>
         
-      </div> <!-- hg-body -->
+      </div> <!-- gd-body -->
       
-    </div> <!-- hg-page -->
+    </div> <!-- gd-page -->
     
     <!-- modal window for the client information within an order -->
     
