@@ -105,19 +105,28 @@ public class AdminServlet extends HttpServlet
         StringBuilder s = new StringBuilder();
         
         // Organization
-        topmenu(data, s, "organization", "Organization", "#000080");
-        // User
-        topmenu(data, s, "user", "User", "#000080");
-        // Game - GameVersion - GameSession
-        topmenu(data, s, "game", "Game", "#000080");
+        if (data.isSuperAdmin())
+            topmenu(data, s, "organization", "Organization", "#000080");
+
+        // User - GameRole
+        if (data.isOrgAdmin())
+            topmenu(data, s, "user", "User", "#000080");
+        
+        // Game - GameVersion - GameMission
+        if (data.isSuperAdmin())
+            topmenu(data, s, "game", "Game", "#000080");
+        
+        // (Game) - (GameVersion) - GameSession
+        if (data.isGameAdmin())
+            topmenu(data, s, "gamesession", "GameSession", "#000080");
+        
         // (Game) - DashboardSettings
-        topmenu(data, s, "dashboard", "Dashboard", "#000080");
+        if (data.isGameAdmin())
+            topmenu(data, s, "dashboard", "Dashboard", "#000080");
+        
         // (Game) - Token
-        topmenu(data, s, "token", "Token", "#000080");
-        // (Game) - GameRole
-        topmenu(data, s, "gamerole", "GameRole", "#000080");
-        // (Game) - (GameVersion) - GameMission
-        topmenu(data, s, "gamemission", "GameMission", "#000080");
+        if (data.isGameAdmin())
+            topmenu(data, s, "token", "Token", "#000080");
 
         return s.toString();
     }
