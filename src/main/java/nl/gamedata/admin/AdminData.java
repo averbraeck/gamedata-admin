@@ -119,6 +119,21 @@ public class AdminData extends CommonData
     {
         this.user = user;
     }
+    
+    public boolean isSuperAdmin()
+    {
+        return getUser() == null ? false : getUser().getSuperAdmin() != 0;
+    }
+
+    public boolean isOrgAdmin()
+    {
+        return getUser() == null ? false : getUser().getSuperAdmin() != 0 || getUser().getOrgAdmin() != 0;
+    }
+
+    public boolean isGameAdmin()
+    {
+        return getUser() == null ? false : getUser().getSuperAdmin() != 0 || getUser().getGameAdmin() != 0;
+    }
 
     public int getShowModalWindow()
     {
