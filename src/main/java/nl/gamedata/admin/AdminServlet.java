@@ -105,19 +105,19 @@ public class AdminServlet extends HttpServlet
         StringBuilder s = new StringBuilder();
         
         // Organization
-        topmenu(data, s, "organization", "Organization", "#008000");
-        // User - UserRole
-        topmenu(data, s, "user", "User", "#ff8000");
+        topmenu(data, s, "organization", "Organization", "#000080");
+        // User
+        topmenu(data, s, "user", "User", "#000080");
         // Game - GameVersion - GameSession
-        topmenu(data, s, "game", "Game", "#ff8000");
+        topmenu(data, s, "game", "Game", "#000080");
         // (Game) - DashboardSettings
-        topmenu(data, s, "dashboard", "Dashboard", "#008000");
+        topmenu(data, s, "dashboard", "Dashboard", "#000080");
         // (Game) - Token
-        topmenu(data, s, "token", "Token", "#008000");
+        topmenu(data, s, "token", "Token", "#000080");
         // (Game) - GameRole
-        topmenu(data, s, "gamerole", "GameRole", "#008000");
+        topmenu(data, s, "gamerole", "GameRole", "#000080");
         // (Game) - (GameVersion) - GameMission
-        topmenu(data, s, "gamemission", "GameMission", "#008000");
+        topmenu(data, s, "gamemission", "GameMission", "#000080");
 
         return s.toString();
     }

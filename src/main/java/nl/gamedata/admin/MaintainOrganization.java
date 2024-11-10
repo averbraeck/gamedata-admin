@@ -94,7 +94,7 @@ public class MaintainOrganization
                         .setRequired()
                         .setInitialValue(organization.getCode(), "")
                         .setLabel("Organization code")
-                        .setMaxChars(2))
+                        .setMaxChars(16))
                 .addEntry(new TableEntryString(Tables.ORGANIZATION.NAME)
                         .setRequired()
                         .setInitialValue(organization.getName(), "")
