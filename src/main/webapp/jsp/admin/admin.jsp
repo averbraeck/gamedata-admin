@@ -42,7 +42,7 @@
       </div>
       <div class="gd-header-game-user">
         <p>&nbsp;</p>
-        <p>User:&nbsp;&nbsp;&nbsp; ${adminData.getUser().getUsername()}</p>
+        <p>User:&nbsp;&nbsp;&nbsp; ${adminData.getUser().getName()}</p>
       </div>
 
       <div class="gd-body">
@@ -58,7 +58,7 @@
       
     </div> <!-- gd-page -->
     
-    <!-- modal window for the client information within an order -->
+    <!-- modal window with potential error message or extra confirmation (e.g., delete) -->
     
     ${adminData.getModalWindowHtml()}
 
