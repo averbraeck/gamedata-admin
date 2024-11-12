@@ -60,6 +60,26 @@ public class AdminServlet extends HttpServlet
                 MaintainOrganization.handleMenu(request, click, recordNr);
                 break;
 
+            // user - gamerole
+            case "user":
+            case "viewUser":
+            case "editUser":
+            case "saveUser":
+            case "deleteUser":
+            case "deleteUserOk":
+            case "newUser":
+                
+            case "gameRole":
+            case "viewGameRole":
+            case "editGameRole":
+            case "saveGameRole":
+            case "deleteGameRole":
+            case "deleteGameRoleOk":
+            case "newGameRole":
+                data.setMenuChoice("User");
+                MaintainUser.handleMenu(request, click, recordNr);
+                break;
+
             default:
                 System.err.println("Unknown menu choice: " + click);
                 break;
@@ -103,7 +123,7 @@ public class AdminServlet extends HttpServlet
     public static String getTopMenu(final AdminData data)
     {
         StringBuilder s = new StringBuilder();
-        
+
         // Organization
         if (data.isSuperAdmin())
             topmenu(data, s, "organization", "Organization", "#000080");
@@ -111,19 +131,19 @@ public class AdminServlet extends HttpServlet
         // User - GameRole
         if (data.isOrgAdmin())
             topmenu(data, s, "user", "User", "#000080");
-        
+
         // Game - GameVersion - GameMission
         if (data.isSuperAdmin())
             topmenu(data, s, "game", "Game", "#000080");
-        
+
         // (Game) - (GameVersion) - GameSession
         if (data.isGameAdmin())
             topmenu(data, s, "gamesession", "GameSession", "#000080");
-        
+
         // (Game) - DashboardSettings
         if (data.isGameAdmin())
             topmenu(data, s, "dashboard", "Dashboard", "#000080");
-        
+
         // (Game) - Token
         if (data.isGameAdmin())
             topmenu(data, s, "token", "Token", "#000080");
