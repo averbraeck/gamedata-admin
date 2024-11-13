@@ -13,6 +13,7 @@ import org.jooq.impl.DSL;
 
 import jakarta.xml.bind.DatatypeConverter;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
+import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.data.Tables;
@@ -163,8 +164,13 @@ public class MaintainUser
                     .setRequired()
                     .setInitialValue(user.getOrgAdmin(), Byte.valueOf((byte) 0))
                     .setLabel("Organization admin?"));
+            form.addEntry(new TableEntryPickRecord(Tables.USER.ORGANIZATION_ID)
+                    .setRequired(false)
+                    .setInitialValue(user.getOrganizationId(), null)
+                    .setPickTable(data, Tables.ORGANIZATION, Tables.ORGANIZATION.ID, Tables.ORGANIZATION.NAME)
+                    .setLabel("Organization"));
         }
-        if (data.isOrgAdmin())
+        else if (data.isOrgAdmin())
         {
             form.addEntry(new TableEntryBoolean(Tables.USER.ORG_ADMIN)
                     .setRequired()
