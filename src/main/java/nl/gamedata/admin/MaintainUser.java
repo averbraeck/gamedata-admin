@@ -136,6 +136,11 @@ public class MaintainUser
                         .setInitialValue(user.getName(), "")
                         .setLabel("User name")
                         .setMaxChars(45))
+                .addEntry(new TableEntryString(Tables.USER.EMAIL)
+                        .setRequired(false)
+                        .setInitialValue(user.getEmail(), "")
+                        .setLabel("Email")
+                        .setMaxChars(255))
                 .addEntry(new TableEntryString(Tables.USER.PASSWORD)
                         .setLabel("Password")
                         .setRequired(userId == 0) // only required when no password yet
