@@ -7,6 +7,7 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
+import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.data.Tables;
@@ -100,6 +101,10 @@ public class MaintainOrganization
                         .setInitialValue(organization.getName(), "")
                         .setLabel("Organization name")
                         .setMaxChars(45))
+                .addEntry(new TableEntryBoolean(Tables.ORGANIZATION.ANONYMOUS_SESSIONS)
+                        .setRequired()
+                        .setInitialValue(organization.getAnonymousSessions(), Byte.valueOf((byte) 0))
+                        .setLabel("Anonymous sessions?"))
                 .endForm();
         //@formatter:on
         data.getFormColumn().setHeaderForm("Edit Organization", form);
