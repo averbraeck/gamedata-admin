@@ -34,8 +34,6 @@ public class MaintainUser
         HttpSession session = request.getSession();
         AdminData data = SessionUtils.getData(session);
         
-        System.out.println(click + " for record " + recordId);
-
         if (click.equals("user"))
         {
             data.clearColumns("25%", "User", "25%", "GameRole");
@@ -219,7 +217,8 @@ public class MaintainUser
         if (errors.length() > 0)
         {
             ModalWindowUtils.popup(data, "Error storing record", errors,
-                    "clickRecordId('showUsers'," + data.getColumn(0).getSelectedRecordId() + ")");
+                    "clickRecordId('viewUser'," + data.getColumn(0).getSelectedRecordId() + ")");
+            data.setError(true);
             return -1;
         }
         else
