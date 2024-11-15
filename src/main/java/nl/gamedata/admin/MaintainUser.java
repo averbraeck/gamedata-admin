@@ -33,6 +33,8 @@ public class MaintainUser
     {
         HttpSession session = request.getSession();
         AdminData data = SessionUtils.getData(session);
+        
+        System.out.println(click + " for record " + recordId);
 
         if (click.equals("user"))
         {
@@ -145,7 +147,13 @@ public class MaintainUser
                         .setLabel("Password")
                         .setRequired(userId == 0) // only required when no password yet
                         .setInitialValue("", "")  // old password is never shown
-                        .setMaxChars(255));
+                        .setMaxChars(255))
+                .addEntry(new TableEntryString(Tables.USER.SALT)
+                        .setRequired(false)
+                        .setInitialValue(user.getSalt(), makeSalt())
+                        .setLabel("Salt")
+                        .setHidden(true)
+                        .setMaxChars(45));
 
         if (data.isSuperAdmin())
         {
@@ -246,6 +254,11 @@ public class MaintainUser
             }
             return user.getId();
         }
+    }
+    
+    private static String makeSalt()
+    {
+        return "";
     }
 
 }
