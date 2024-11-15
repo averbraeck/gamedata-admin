@@ -335,9 +335,13 @@ public class TableForm
                     }
                 }
                 if (!set)
+                {
                     errors += entry.setRecordValue(record, value);
+                }
             }
         }
+        if (errors.length() > 0)
+            data.setError(true);
         return errors;
     }
 
