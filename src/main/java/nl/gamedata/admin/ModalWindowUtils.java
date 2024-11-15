@@ -6,6 +6,7 @@ public class ModalWindowUtils
     public static void popup(AdminData data, String title, String message, String okMethod)
     {
         // make popup
+        System.err.println("popup with title [" + title + "] and message: " + message);
         StringBuilder s = new StringBuilder();
         s.append("<p>");
         s.append(message);
