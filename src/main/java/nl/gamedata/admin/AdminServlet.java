@@ -132,7 +132,11 @@ public class AdminServlet extends HttpServlet
         if (data.isOrgAdmin())
             topmenu(data, s, "user", "User", "#000080");
 
-        // Game - GameVersion - GameMission
+        // Scale
+        if (data.isSuperAdmin())
+            topmenu(data, s, "scale", "Scale", "#000080");
+
+        // Game - GameVersion - GameMission - GroupObjective - PlayerObjective
         if (data.isSuperAdmin())
             topmenu(data, s, "game", "Game", "#000080");
 
