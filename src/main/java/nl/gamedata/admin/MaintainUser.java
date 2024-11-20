@@ -157,14 +157,14 @@ public class MaintainUser
         {
             form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN)
                     .setRequired()
-                    .setInitialValue(user.getGameAdmin(), Byte.valueOf((byte) 0))
+                    .setInitialValue(user.getSuperAdmin(), Byte.valueOf((byte) 0))
                     .setLabel("Super admin?"));
         }
         else
         {
             form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN)
                     .setRequired()
-                    .setInitialValue(user.getGameAdmin(), Byte.valueOf((byte) 0))
+                    .setInitialValue(user.getSuperAdmin(), Byte.valueOf((byte) 0))
                     .setReadOnly()
                     .setLabel("Super admin?"));
         }
@@ -196,11 +196,6 @@ public class MaintainUser
                     .setReadOnly()
                     .setLabel("Organization admin?"));
         }
-
-        form.addEntry(new TableEntryBoolean(Tables.USER.GAME_ADMIN)
-                .setRequired()
-                .setInitialValue(user.getGameAdmin(), Byte.valueOf((byte) 1))
-                .setLabel("Game admin?"));
 
         form.endForm();
         //@formatter:on
