@@ -68,7 +68,7 @@ public class AdminServlet extends HttpServlet
             case "deleteUser":
             case "deleteUserOk":
             case "newUser":
-                
+
             case "gameRole":
             case "viewGameRole":
             case "editGameRole":
@@ -141,16 +141,13 @@ public class AdminServlet extends HttpServlet
             topmenu(data, s, "game", "Game", "#000080");
 
         // (Game) - (GameVersion) - GameSession
-        if (data.isGameAdmin())
-            topmenu(data, s, "gamesession", "GameSession", "#000080");
+        topmenu(data, s, "gamesession", "GameSession", "#000080");
 
         // (Game) - DashboardSettings
-        if (data.isGameAdmin())
-            topmenu(data, s, "dashboard", "Dashboard", "#000080");
+        topmenu(data, s, "dashboard", "Dashboard", "#000080");
 
         // (Game) - Token
-        if (data.isGameAdmin())
-            topmenu(data, s, "token", "Token", "#000080");
+        topmenu(data, s, "token", "Token", "#000080");
 
         return s.toString();
     }
