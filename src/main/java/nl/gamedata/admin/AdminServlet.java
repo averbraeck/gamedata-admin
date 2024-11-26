@@ -124,21 +124,24 @@ public class AdminServlet extends HttpServlet
     {
         StringBuilder s = new StringBuilder();
 
-        // Organization
+        // Organization - GameAccess
         if (data.isSuperAdmin())
             topmenu(data, s, "organization", "Organization", "#000080");
 
-        // User - GameRole
-        if (data.isOrgAdmin())
-            topmenu(data, s, "user", "User", "#000080");
+        // Game - GameVersion - GameMission
+        if (data.isSuperAdmin())
+            topmenu(data, s, "game", "Game", "#000080");
 
         // Scale
         if (data.isSuperAdmin())
             topmenu(data, s, "scale", "Scale", "#000080");
 
-        // Game - GameVersion - GameMission - GroupObjective - PlayerObjective
+        // (Game) - (GameVersion) - (GameMission) - GroupObjective - PlayerObjective
         if (data.isSuperAdmin())
-            topmenu(data, s, "game", "Game", "#000080");
+            topmenu(data, s, "objective", "Objective", "#000080");
+
+        // User
+        topmenu(data, s, "user", "User", "#000080");
 
         // (Game) - (GameVersion) - GameSession
         topmenu(data, s, "gamesession", "GameSession", "#000080");

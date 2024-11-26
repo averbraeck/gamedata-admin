@@ -13,7 +13,6 @@ import org.jooq.impl.DSL;
 
 import jakarta.xml.bind.DatatypeConverter;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
-import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.data.Tables;
@@ -33,7 +32,7 @@ public class MaintainUser
     {
         HttpSession session = request.getSession();
         AdminData data = SessionUtils.getData(session);
-        
+
         if (click.equals("user"))
         {
             data.clearColumns("25%", "User", "25%", "GameRole");
@@ -85,14 +84,14 @@ public class MaintainUser
         {
             data.showColumn("User", 0, recordId, editButton, Tables.USER, Tables.USER.NAME, "name", true);
         }
-        else if (data.isOrgAdmin()) // show only records of users from the own organization
-        {
-            Integer orgId = data.getUser().getOrganizationId();
-            if (orgId == null)
-                orgId = 0;
-            data.showColumn("User", 0, recordId, editButton, Tables.USER.where(Tables.USER.ORGANIZATION_ID.eq(orgId)),
-                    Tables.USER.NAME, "name", true);
-        }
+        // else if (data.isOrgAdmin()) // show only records of users from the own organization
+        // {
+        // Integer orgId = data.getUser().getOrganizationId();
+        // if (orgId == null)
+        // orgId = 0;
+        // data.showColumn("User", 0, recordId, editButton, Tables.USER.where(Tables.USER.ORGANIZATION_ID.eq(orgId)),
+        // Tables.USER.NAME, "name", true);
+        // }
         data.resetFormColumn();
         if (recordId != 0)
         {
@@ -169,34 +168,6 @@ public class MaintainUser
                     .setLabel("Super admin?"));
         }
 
-        if (data.isSuperAdmin())
-        {
-            form.addEntry(new TableEntryBoolean(Tables.USER.ORG_ADMIN)
-                    .setRequired()
-                    .setInitialValue(user.getOrgAdmin(), Byte.valueOf((byte) 0))
-                    .setLabel("Organization admin?"));
-            form.addEntry(new TableEntryPickRecord(Tables.USER.ORGANIZATION_ID)
-                    .setRequired(false)
-                    .setInitialValue(user.getOrganizationId(), null)
-                    .setPickTable(data, Tables.ORGANIZATION, Tables.ORGANIZATION.ID, Tables.ORGANIZATION.NAME)
-                    .setLabel("Organization"));
-        }
-        else if (data.isOrgAdmin())
-        {
-            form.addEntry(new TableEntryBoolean(Tables.USER.ORG_ADMIN)
-                    .setRequired()
-                    .setInitialValue(user.getOrgAdmin(), Byte.valueOf((byte) 0))
-                    .setLabel("Organization admin?"));
-        }
-        else
-        {
-            form.addEntry(new TableEntryBoolean(Tables.USER.ORG_ADMIN)
-                    .setRequired()
-                    .setInitialValue(user.getOrgAdmin(), Byte.valueOf((byte) 0))
-                    .setReadOnly()
-                    .setLabel("Organization admin?"));
-        }
-
         form.endForm();
         //@formatter:on
         data.getFormColumn().setHeaderForm("Edit User", form);
@@ -249,7 +220,7 @@ public class MaintainUser
             return user.getId();
         }
     }
-    
+
     private static String makeSalt()
     {
         return "";

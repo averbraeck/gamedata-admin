@@ -125,11 +125,6 @@ public class AdminData extends CommonData
         return getUser() == null ? false : getUser().getSuperAdmin() != 0;
     }
 
-    public boolean isOrgAdmin()
-    {
-        return getUser() == null ? false : getUser().getSuperAdmin() != 0 || getUser().getOrgAdmin() != 0;
-    }
-
     public int getShowModalWindow()
     {
         return this.showModalWindow;
