@@ -16,4 +16,9 @@ public class Provider
             return -1;
         return Integer.valueOf(record.get("id").toString());
     }
+
+    public static <R extends org.jooq.Record> String getName(final R record, final String nameField)
+    {
+        return record.get(record.field(nameField)).toString();
+    }
 }
