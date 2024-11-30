@@ -10,9 +10,12 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import nl.gamedata.common.CommonData;
+import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.GameAccessRecord;
+import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameRoleRecord;
+import nl.gamedata.data.tables.records.GameSessionRecord;
 import nl.gamedata.data.tables.records.OrganizationRoleRecord;
 import nl.gamedata.data.tables.records.UserRecord;
 
@@ -159,37 +162,86 @@ public class AdminData extends CommonData
         this.gameRoles = dslContext.selectFrom(Tables.GAME_ROLE).where(Tables.GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
     }
 
-    public Map<Integer, Boolean> getAdminAccessToGameIds()
+    public Map<GameRecord, Boolean> getAdminAccessToGames()
     {
-        Map<Integer, Boolean> ret = new HashMap<>();
+        Map<GameRecord, Boolean> ret = new HashMap<>();
         for (GameRoleRecord gameRole : this.gameRoles)
         {
+            GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gameRole.getGameId());
             if (gameRole.getGameAdmin() == 1)
-                ret.put(gameRole.getGameId(), true);
+                ret.put(game, true);
             else if (gameRole.getGameViewer() == 1)
-                ret.put(gameRole.getGameId(), false);
+                ret.put(game, false);
         }
         return ret;
     }
 
-    public Map<Integer, Boolean> getOrganizationAccessToGameIds(final int organizationId)
+    public Map<GameRecord, Boolean> getOrganizationAccessToGames(final int organizationId)
     {
-        Map<Integer, Boolean> ret = new HashMap<>();
+        Map<GameRecord, Boolean> ret = new HashMap<>();
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
         List<GameAccessRecord> gameAccessRecords =
                 dslContext.selectFrom(Tables.GAME_ACCESS).where(Tables.GAME_ACCESS.ORGANIZATION_ID.eq(organizationId)).fetch();
         for (GameAccessRecord gameAccess : gameAccessRecords)
-            ret.put(gameAccess.getGameId(), false);
+        {
+            GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gameAccess.getGameId());
+            ret.put(game, false);
+        }
         return ret;
     }
 
-    public Map<Integer, Boolean> getTotalAccessToGames()
+    public Map<GameRecord, Boolean> getAccessToGames()
     {
-        Map<Integer, Boolean> ret = new HashMap<>();
-        ret.putAll(getAdminAccessToGameIds());
+        Map<GameRecord, Boolean> ret = new HashMap<>();
+        ret.putAll(getAdminAccessToGames());
         for (OrganizationRoleRecord organizationRole : this.organizationRoles)
         {
-            ret.putAll(getOrganizationAccessToGameIds(organizationRole.getOrganizationId()));
+            // TODO: org_admin all, session_admin dependent on games via sessions?
+            ret.putAll(getOrganizationAccessToGames(organizationRole.getOrganizationId()));
+        }
+        return ret;
+    }
+
+    public Map<GameSessionRecord, Boolean> getOrganizationAccessToSessionIds(final int gameAccessId, final boolean admin)
+    {
+        Map<GameSessionRecord, Boolean> ret = new HashMap<>();
+        DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
+        List<GameSessionRecord> gameSessionRecords =
+                dslContext.selectFrom(Tables.GAME_SESSION).where(Tables.GAME_SESSION.GAME_ACCESS_ID.eq(gameAccessId)).fetch();
+        for (GameSessionRecord gameSesion : gameSessionRecords)
+            ret.put(gameSesion, admin);
+        return ret;
+    }
+
+    public Map<GameSessionRecord, Boolean> getAccessToGameSessionIds()
+    {
+        Map<GameSessionRecord, Boolean> ret = new HashMap<>();
+        DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
+        for (OrganizationRoleRecord organizationRole : this.organizationRoles)
+        {
+            if (organizationRole.getOrganizationAdmin() == 1)
+            {
+                List<GameAccessRecord> gameAccessRecords = dslContext.selectFrom(Tables.GAME_ACCESS)
+                        .where(Tables.GAME_ACCESS.ORGANIZATION_ID.eq(organizationRole.getOrganizationId())).fetch();
+                for (GameAccessRecord gameAccess : gameAccessRecords)
+                    ret.putAll(getOrganizationAccessToSessionIds(gameAccess.getId(), true));
+            }
+            else if (organizationRole.getSessionGameAccessId() != null)
+            {
+                if (organizationRole.getSessionAdmin() == 1)
+                    ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), true));
+                else if (organizationRole.getSessionViewer() == 1)
+                    ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), false));
+            }
+            else if (organizationRole.getSessionGameSessionId() != null)
+            {
+                GameSessionRecord gameSession =
+                        SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, organizationRole.getSessionGameSessionId());
+                if (organizationRole.getSessionAdmin() == 1)
+                    ret.put(gameSession, true);
+                else if (organizationRole.getSessionViewer() == 1)
+                    ret.put(gameSession, false);
+            }
         }
         return ret;
     }
