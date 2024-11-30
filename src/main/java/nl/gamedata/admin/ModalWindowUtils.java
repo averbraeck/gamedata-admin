@@ -12,7 +12,7 @@ public class ModalWindowUtils
         s.append(message);
         s.append("</p>\n");
         data.setModalWindowHtml(makeOkModalWindow(title, s.toString(), okMethod));
-        data.setShowModalWindow(1);
+        data.setShowModalWindow(true);
     }
 
     public static String makeModalWindow(String title, String content, String onClickClose)
@@ -99,7 +99,7 @@ public class ModalWindowUtils
         s.append("    </script>");
 
         data.setModalWindowHtml(s.toString());
-        data.setShowModalWindow(1);
+        data.setShowModalWindow(true);
     }
 
 }
