@@ -18,8 +18,6 @@ public final class SessionUtils
     public static AdminData getData(final HttpSession session)
     {
         AdminData data = (AdminData) session.getAttribute("adminData");
-        if (data != null)
-            data.setError(false);
         return data;
     }
 
@@ -40,26 +38,5 @@ public final class SessionUtils
         }
         return true;
     }
-
-    /*-
-    public static void showGames(HttpSession session, AdminData data, int selectedGameRecordNr, String showText,
-            String showMethod) {
-        StringBuilder s = new StringBuilder();
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<GameRecord> gameRecords = dslContext.selectFrom(Tables.GAME).fetch();
-
-        s.append(AdminTable.startTable());
-        for (GameRecord game : gameRecords) {
-            TableRow tableRow = new TableRow(game.getId(), selectedGameRecordNr,
-                    game.getCode() + " : " + game.getName(), showMethod);
-            tableRow.addButton(showText, showMethod);
-            s.append(tableRow.process());
-        }
-        s.append(AdminTable.endTable());
-
-        data.getColumn(0).setSelectedRecordNr(selectedGameRecordNr);
-        data.getColumn(0).setContent(s.toString());
-    }
-    */
 
 }
