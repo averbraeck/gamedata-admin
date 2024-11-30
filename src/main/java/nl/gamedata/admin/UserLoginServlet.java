@@ -143,7 +143,6 @@ public class UserLoginServlet extends HttpServlet
         if (user != null && userPassword.equals(hashedPassword))
         {
             data.setUsername(user.getName());
-            data.setUserId(user.getId());
             data.setUser(user);
             response.sendRedirect("jsp/admin/admin.jsp");
         }
