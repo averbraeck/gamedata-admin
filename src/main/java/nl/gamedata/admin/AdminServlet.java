@@ -43,7 +43,7 @@ public class AdminServlet extends HttpServlet
         else if (request.getParameter("editRecordNr") != null)
             recordNr = Integer.parseInt(request.getParameter("editRecordNr"));
 
-        data.setShowModalWindow(0);
+        data.setShowModalWindow(false);
         data.setModalWindowHtml("");
 
         switch (click)
@@ -88,39 +88,7 @@ public class AdminServlet extends HttpServlet
         response.sendRedirect("jsp/admin/admin.jsp");
     }
 
-    public static void makeColumnContent(final AdminData data)
-    {
-        StringBuilder s = new StringBuilder();
-        s.append("<table width=\"100%\">\n");
-        s.append("  <tr>");
-        for (int i = 0; i < data.getNrColumns(); i++)
-        {
-            s.append("    <td width=\"");
-            s.append(data.getColumn(i).getWidth());
-            s.append("\">\n");
-            s.append("      <div class=\"gd-admin-line-header\">");
-            s.append(data.getColumn(i).getHeader());
-            s.append("</div>\n");
-            s.append(data.getColumn(i).getContent());
-            s.append("    </td>\n");
-        }
-        if (data.getFormColumn() != null)
-        {
-            s.append("    <td width=\"");
-            s.append(data.getFormColumn().getWidth());
-            s.append("\">\n");
-            s.append("      <div class=\"gd-admin-line-header\">");
-            s.append(data.getFormColumn().getHeader());
-            s.append("</div>\n");
-            s.append(data.getFormColumn().getContent());
-            s.append("    </td>\n");
-        }
-        s.append("  </tr>");
-        s.append("</table>\n");
-        data.setContentHtml(s.toString());
-    }
-
-    public static String getTopMenu(final AdminData data)
+    public static String getHeader(final AdminData data)
     {
         StringBuilder s = new StringBuilder();
 
