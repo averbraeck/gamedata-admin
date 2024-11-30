@@ -8,7 +8,7 @@ package nl.gamedata.admin;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class IdProvider
+public class Provider
 {
     public static <R extends org.jooq.Record> int getId(final R record)
     {

@@ -146,7 +146,7 @@ public class AdminData extends CommonData
 
     public <R extends org.jooq.UpdatableRecord<R>> int getId(final R record)
     {
-        return IdProvider.getId(record);
+        return Provider.getId(record);
     }
 
     public void retrieveOrganizationRoles()
