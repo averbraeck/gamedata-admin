@@ -340,8 +340,7 @@ public class TableForm
                 }
             }
         }
-        if (errors.length() > 0)
-            data.setError(true);
+        // TODO: if (errors.length() > 0) data.setError(true);
         return errors;
     }
 
