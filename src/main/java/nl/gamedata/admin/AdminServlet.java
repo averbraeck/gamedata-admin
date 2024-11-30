@@ -57,10 +57,10 @@ public class AdminServlet extends HttpServlet
             case "deleteOrganizationOk":
             case "newOrganization":
                 data.setMenuChoice("Organization");
-                MaintainOrganization.handleMenu(request, click, recordNr);
+                // MaintainOrganization.handleMenu(request, click, recordNr);
                 break;
 
-            // user - gamerole
+                // user - gamerole
             case "user":
             case "viewUser":
             case "editUser":
@@ -77,7 +77,7 @@ public class AdminServlet extends HttpServlet
             case "deleteGameRoleOk":
             case "newGameRole":
                 data.setMenuChoice("User");
-                MaintainUser.handleMenu(request, click, recordNr);
+                // MaintainUser.handleMenu(request, click, recordNr);
                 break;
 
             default:
