@@ -161,7 +161,7 @@ html, body {
           <li>Creating and maintaining users</li>
           <li>Allocating roles to users</li>
           <li>Creating access tokens</li>
-          <li>Maintining games and game versions</li>
+          <li>Maintaining games and game versions</li>
         </ul>
       </div>
 
