@@ -11,8 +11,8 @@
     <!--  favicon -->
     <link rel="shortcut icon" href="/gamedata-admin/favicon.ico" type="image/x-icon">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script -->
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
@@ -26,12 +26,17 @@
 
   <body onload="initPage()">
     <div class="container-fluid">
-      <div class="row flex-nowrap">
-        ${adminData.getHeader()}
-        ${adminData.getSidebar()}
-        <div class="col py-3">
-          ${adminData.getContent()}
-        </div>
+      <div class="flex-nowrap">
+        <header>
+          ${adminData.getSidebar()}
+          ${adminData.getNavbar()}
+        </header>
+        <main style="margin-top: 58px;">
+          <div class="container-fluid ps-2 pe-2 pt-4">
+            ${adminData.getContent()}
+            <h1>Content!</h1>
+          </div>
+        </main>
       </div>
     </div>
     
