@@ -146,8 +146,7 @@ public class UserLoginServlet extends HttpServlet
             data.setUser(user);
             data.retrieveGameRoles();
             data.retrieveOrganizationRoles();
-            data.setSidebar(Sidebar.makeSidebar(data));
-            data.setNavbar(Navbar.makeNavbar(data));
+            data.setMenuChoice("home");
             response.sendRedirect("jsp/admin/admin.jsp");
         }
         else

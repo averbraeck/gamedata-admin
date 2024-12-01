@@ -38,12 +38,22 @@ public class Sidebar
     {
         StringBuilder s = new StringBuilder();
         s.append(sidebarTop);
-        s.append(sidebarItem.formatted("active", "true", "home", "fa-house", "Admin panel"));
-        s.append(sidebarItem.formatted("", "false", "organization", "fa-sitemap", "Organization"));
-        s.append(sidebarItem.formatted("", "false", "user", "fa-user", "User"));
-        s.append(sidebarItem.formatted("", "false", "game", "fa-dice", "Game"));
-        s.append(sidebarItem.formatted("", "false", "gamesession", "fa-chart-line", "Game Session"));
+        item(s, data, "fa-house", "home", "Admin panel");
+        item(s, data, "fa-sitemap", "organization", "Organization");
+        item(s, data, "fa-user", "user", "User");
+        item(s, data, "fa-dice", "game", "Game");
+        item(s, data, "fa-chart-line", "gamesession", "Game Session");
+        item(s, data, "fa-sign-out", "logoff", "Logoff");
         s.append(sidebarBottom);
         return s.toString();
+    }
+
+    private static void item(final StringBuilder s, final AdminData data, final String faIcon, final String menuChoice,
+            final String menuText)
+    {
+        if (data.getMenuChoice().equals(menuChoice))
+            s.append(sidebarItem.formatted("active", "true", menuChoice, faIcon, menuText));
+        else
+            s.append(sidebarItem.formatted("", "false", menuChoice, faIcon, menuText));
     }
 }

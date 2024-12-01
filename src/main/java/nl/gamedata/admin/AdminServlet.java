@@ -45,11 +45,17 @@ public class AdminServlet extends HttpServlet
 
         System.out.println("Clicked: " + click);
 
+        data.setMenuChoice(click);
         data.setShowModalWindow(false);
         data.setModalWindowHtml("");
 
         switch (click)
         {
+            // logoff
+            case "logoff":
+                response.sendRedirect("jsp/admin/login.jsp");
+                return;
+
             // organization
             case "organization":
             case "viewOrganization":
@@ -58,11 +64,10 @@ public class AdminServlet extends HttpServlet
             case "deleteOrganization":
             case "deleteOrganizationOk":
             case "newOrganization":
-                data.setMenuChoice("Organization");
                 // MaintainOrganization.handleMenu(request, click, recordNr);
                 break;
 
-                // user - gamerole
+            // user - gamerole
             case "user":
             case "viewUser":
             case "editUser":
@@ -78,7 +83,6 @@ public class AdminServlet extends HttpServlet
             case "deleteGameRole":
             case "deleteGameRoleOk":
             case "newGameRole":
-                data.setMenuChoice("User");
                 // MaintainUser.handleMenu(request, click, recordNr);
                 break;
 

@@ -106,22 +106,12 @@ public class AdminData extends CommonData
 
     public String getSidebar()
     {
-        return this.sidebar;
-    }
-
-    public void setSidebar(final String sidebar)
-    {
-        this.sidebar = sidebar;
+        return Sidebar.makeSidebar(this);
     }
 
     public String getNavbar()
     {
-        return this.navbar;
-    }
-
-    public void setNavbar(final String navbar)
-    {
-        this.navbar = navbar;
+        return Navbar.makeNavbar(this);
     }
 
     public String getContent()
