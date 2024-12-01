@@ -40,8 +40,8 @@ public class AdminData extends CommonData
     /** Which menu has been chosen, to maintain persistence after a POST. */
     private String menuChoice = "";
 
-    /** the header and breadcrumb as built by the admin servlet. */
-    private String header = "";
+    /** the navbar and breadcrumb as built by the admin servlet. */
+    private String navbar = "";
 
     /** the sidebar as built by the admin servlet. */
     private String sidebar = "";
@@ -114,14 +114,14 @@ public class AdminData extends CommonData
         this.sidebar = sidebar;
     }
 
-    public String getHeader()
+    public String getNavbar()
     {
-        return this.header;
+        return this.navbar;
     }
 
-    public void setHeader(final String header)
+    public void setNavbar(final String navbar)
     {
-        this.header = header;
+        this.navbar = navbar;
     }
 
     public String getContent()
