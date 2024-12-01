@@ -13,6 +13,7 @@ public class Navbar
     private static String navbar = """
               <!-- Navbar -->
               <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+
                 <!-- Container wrapper -->
                 <div class="container-fluid">
 
@@ -54,8 +55,10 @@ public class Navbar
                   </ul>
                 </div>
                 <!-- Container wrapper -->
+
               </nav>
               <!-- Navbar -->
+
             </header>
             <!--Main Navigation-->
                                   """;
