@@ -43,6 +43,8 @@ public class AdminServlet extends HttpServlet
         else if (request.getParameter("editRecordNr") != null)
             recordNr = Integer.parseInt(request.getParameter("editRecordNr"));
 
+        System.out.println("Clicked: " + click);
+
         data.setShowModalWindow(false);
         data.setModalWindowHtml("");
 
