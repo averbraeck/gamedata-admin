@@ -56,6 +56,11 @@ public class AdminServlet extends HttpServlet
                 response.sendRedirect("jsp/admin/login.jsp");
                 return;
 
+            // user - gamerole
+            case "user":
+                MaintainUser.handleMenu(data, request, click, recordNr);
+                break;
+
             // organization
             case "organization":
             case "viewOrganization":
@@ -67,8 +72,6 @@ public class AdminServlet extends HttpServlet
                 // MaintainOrganization.handleMenu(request, click, recordNr);
                 break;
 
-            // user - gamerole
-            case "user":
             case "viewUser":
             case "editUser":
             case "saveUser":

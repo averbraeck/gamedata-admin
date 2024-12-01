@@ -34,7 +34,6 @@
         <main style="margin-top: 58px;">
           <div class="container-fluid ps-2 pe-2 pt-4">
             ${adminData.getContent()}
-            <h1>Content!</h1>
           </div>
         </main>
       </div>
