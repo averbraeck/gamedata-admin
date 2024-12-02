@@ -11,15 +11,9 @@
     <!--  favicon -->
     <link rel="shortcut icon" href="/gamedata-admin/favicon.ico" type="image/x-icon">
 
-    <!-- link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script -->
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.min.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.umd.min.js"></script>
-
+    <link href="/gamedata-admin/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/gamedata-admin/js/bootstrap.bundle.min.js"></script>
+    <link href="/gamedata-admin/css/fa.all.min.css" rel="stylesheet"/>
     <script src="/gamedata-admin/js/admin.js"></script>
     <link href="/gamedata-admin/css/admin.css" rel="stylesheet"/>
   </head>
