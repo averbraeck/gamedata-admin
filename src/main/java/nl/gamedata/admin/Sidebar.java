@@ -18,7 +18,15 @@ public class Sidebar
                 <div class="list-group list-group-flush mx-3 mt-4">
                                 """;
 
-    /** Sidebar item with: 1. active/blank, 2. true/false, 3. onclick menu, 4. fa-icon, 5. text */
+    /** User item with: text. */
+    private static String sidebarUser = """
+            <a href="#" class="list-group-item py-2">
+              <i class="fas fa-circle-user fa-fw me-3"></i><span>%s</span>
+            </a>
+            <a href="#" class="list-group-item py-2"></a>
+                          """;
+
+    /** Sidebar item with: 1. active/blank, 2. true/false, 3. onclick menu, 4. fa-icon, 5. text. */
     private static String sidebarItem = """
             <a href="#" class="list-group-item list-group-item-action py-2 ripple %s" aria-current="%s"
                 onclick="clickMenu('%s')">
@@ -38,6 +46,7 @@ public class Sidebar
     {
         StringBuilder s = new StringBuilder();
         s.append(sidebarTop);
+        s.append(sidebarUser.formatted(data.getUsername()));
         item(s, data, "fa-house", "home", "Admin panel");
         item(s, data, "fa-sitemap", "organization", "Organization");
         item(s, data, "fa-users", "user", "User");

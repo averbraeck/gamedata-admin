@@ -10,62 +10,88 @@ package nl.gamedata.admin;
  */
 public class Navbar
 {
-    private static String navbar = """
-              <!-- Navbar -->
-              <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    private static String navbarStart = """
+            <!-- Navbar -->
+            <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
 
-                <!-- Container wrapper -->
-                <div class="container-fluid">
+              <!-- Container wrapper -->
+              <div class="container-fluid d-flex flex-row" style="justify-content: flex-start">
 
-                  <!-- Toggle button -->
-                  <button data-mdb-button-init class="navbar-toggler" type="button"
-                    data-mdb-collapse-init data-mdb-target="#sidebarMenu"
-                    aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                  </button>
+                <!-- Hamburger toggle button -->
+                <button data-mdb-button-init class="navbar-toggler" type="button"
+                  data-mdb-collapse-init data-mdb-target="#sidebarMenu"
+                  aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                  <i class="fas fa-bars"></i>
+                </button>
 
-                  <!-- Brand -->
-                  <a class="navbar-brand" href="#" onclick="clickMenu('home')">
-                    <h2>GameData</h2>
-                  </a>
+                <!-- Brand -->
+                <a class="navbar-brand ps-3" href="#" onclick="clickMenu('home')" style="width:240px;">
+                  <h2>Game Data</h2>
+                </a>
 
-                  <!-- Right links -->
-                  <ul class="navbar-nav ms-auto d-flex flex-row">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs">
+                      """;
 
-                    <!-- Icon -->
-                    <li class="nav-item">
-                      <a class="nav-link me-3 me-lg-0" href="#">
-                        %s
-                      </a>
-                    </li>
+    /** Inactive clickable tab; 1=onclick menu, 2=text. */
+    private static String tabInactive = """
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="clickMenu('%s')">%s</a>
+                  </li>
+            """;
 
-                    <li class="nav-item">
-                      <a class="nav-link me-3 me-lg-0" href="#" onclick="clickMenu('settings')">
-                        <i class="fas fa-user-gear"></i>
-                      </a>
-                    </li>
+    /** Active clickable tab; 1=onclick menu, 2=text. */
+    private static String tabActive = """
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#" onclick="clickMenu('%s')">%s</a>
+                  </li>
+            """;
 
-                    <!-- Icon -->
-                    <li class="nav-item me-3 me-lg-0">
-                      <a class="nav-link" href="#" onclick="clickMenu('logoff')">
-                        <i class="fas fa-sign-out"></i>
-                      </a>
-                    </li>
+    /** tab; 1=text. */
+    private static String tabDisabled = """
+                  <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">%s</a>
+                  </li>
+            """;
 
-                  </ul>
-                </div>
-                <!-- Container wrapper -->
+    private static String navbarEnd = """
+                </ul>
+              </div>
+              <!-- Container wrapper -->
 
-              </nav>
-              <!-- Navbar -->
-
-            </header>
-            <!--Main Navigation-->
-                                  """;
+            </nav>
+            <!-- Navbar -->
+                                            """;
 
     public static String makeNavbar(final AdminData data)
     {
-        return navbar.formatted(data.getUsername());
+        StringBuilder s = new StringBuilder();
+        s.append(navbarStart);
+        if (data.getMenuChoice().equals("user"))
+        {
+            tab(s, data, "user", "User");
+            tab(s, data, "user-role", "User Role");
+            tab(s, data, "game-role", "Game Role");
+        }
+        else if (data.getMenuChoice().equals("organization"))
+        {
+            tab(s, data, "organization", "Organization");
+            tab(s, data, "org-user", "Org Users");
+            tab(s, data, "game-access", "Game Access");
+            tab(s, data, "private-dashboard", "Dashboard");
+            tab(s, data, "access-token", "Token");
+            tab(s, data, "game-session", "Session");
+        }
+        s.append(navbarEnd);
+        return s.toString();
     }
 
+    private static void tab(final StringBuilder s, final AdminData data, final String tabChoice,
+            final String tabText)
+    {
+        if (data.getMenuChoice().equals(tabChoice))
+            s.append(tabActive.formatted(tabChoice, tabText));
+        else
+            s.append(tabInactive.formatted(tabChoice, tabText));
+    }
 }
