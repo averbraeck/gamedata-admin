@@ -13,7 +13,7 @@ public class Sidebar
     /** top of the sidebar. */
     private static String sidebarTop = """
             <!-- Sidebar -->
-            <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+            <nav id="sidebarMenu" class="d-lg-block sidebar collapse bg-white">
               <div class="position-sticky">
                 <div class="list-group list-group-flush mx-3 mt-4">
                                 """;
@@ -40,9 +40,10 @@ public class Sidebar
         s.append(sidebarTop);
         item(s, data, "fa-house", "home", "Admin panel");
         item(s, data, "fa-sitemap", "organization", "Organization");
-        item(s, data, "fa-user", "user", "User");
+        item(s, data, "fa-users", "user", "User");
         item(s, data, "fa-dice", "game", "Game");
         item(s, data, "fa-chart-line", "gamesession", "Game Session");
+        item(s, data, "fa-user-gear", "settings", "Settings");
         item(s, data, "fa-sign-out", "logoff", "Logoff");
         s.append(sidebarBottom);
         return s.toString();
