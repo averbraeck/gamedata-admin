@@ -61,32 +61,9 @@ public class AdminServlet extends HttpServlet
                 MaintainUser.handleMenu(data, request, click, recordNr);
                 break;
 
-            // organization
+            // user - gamerole
             case "organization":
-            case "viewOrganization":
-            case "editOrganization":
-            case "saveOrganization":
-            case "deleteOrganization":
-            case "deleteOrganizationOk":
-            case "newOrganization":
-                // MaintainOrganization.handleMenu(request, click, recordNr);
-                break;
-
-            case "viewUser":
-            case "editUser":
-            case "saveUser":
-            case "deleteUser":
-            case "deleteUserOk":
-            case "newUser":
-
-            case "gameRole":
-            case "viewGameRole":
-            case "editGameRole":
-            case "saveGameRole":
-            case "deleteGameRole":
-            case "deleteGameRoleOk":
-            case "newGameRole":
-                // MaintainUser.handleMenu(request, click, recordNr);
+                MaintainOrganization.handleMenu(data, request, click, recordNr);
                 break;
 
             default:
@@ -97,52 +74,4 @@ public class AdminServlet extends HttpServlet
         response.sendRedirect("jsp/admin/admin.jsp");
     }
 
-    public static String getHeader(final AdminData data)
-    {
-        StringBuilder s = new StringBuilder();
-
-        // Organization - GameAccess
-        if (data.isSuperAdmin())
-            topmenu(data, s, "organization", "Organization", "#000080");
-
-        // Game - GameVersion - GameMission
-        if (data.isSuperAdmin())
-            topmenu(data, s, "game", "Game", "#000080");
-
-        // Scale
-        if (data.isSuperAdmin())
-            topmenu(data, s, "scale", "Scale", "#000080");
-
-        // (Game) - (GameVersion) - (GameMission) - GroupObjective - PlayerObjective
-        if (data.isSuperAdmin())
-            topmenu(data, s, "objective", "Objective", "#000080");
-
-        // User
-        topmenu(data, s, "user", "User", "#000080");
-
-        // (Game) - (GameVersion) - GameSession
-        topmenu(data, s, "gamesession", "GameSession", "#000080");
-
-        // (Game) - DashboardSettings
-        topmenu(data, s, "dashboard", "Dashboard", "#000080");
-
-        // (Game) - Token
-        topmenu(data, s, "token", "Token", "#000080");
-
-        return s.toString();
-    }
-
-    private static final String br = "          <div class=\"gd-admin-menu-button-red\"";
-
-    private static void topmenu(final AdminData data, final StringBuilder s, final String key, final String text,
-            final String color)
-    {
-        String bn = "          <div class=\"gd-admin-menu-button\" style=\"background-color: " + color + "\"";
-        s.append(key.equals(data.getMenuChoice()) ? br : bn);
-        s.append(" onclick=\"clickMenu('");
-        s.append(key);
-        s.append("')\">");
-        s.append(text);
-        s.append("</div>\n");
-    }
 }

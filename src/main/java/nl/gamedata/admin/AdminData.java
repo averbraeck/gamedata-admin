@@ -40,12 +40,6 @@ public class AdminData extends CommonData
     /** Which menu has been chosen, to maintain persistence after a POST. */
     private String menuChoice = "";
 
-    /** the navbar and breadcrumb as built by the admin servlet. */
-    private String navbar = "";
-
-    /** the sidebar as built by the admin servlet. */
-    private String sidebar = "";
-
     /** the page content as built by the appropriate class. */
     private String content = "";
 
@@ -132,6 +126,16 @@ public class AdminData extends CommonData
     public void setModalWindowHtml(final String modalClientWindowHtml)
     {
         this.modalWindowHtml = modalClientWindowHtml;
+    }
+
+    public List<OrganizationRoleRecord> getOrganizationRoles()
+    {
+        return this.organizationRoles;
+    }
+
+    public List<GameRoleRecord> getGameRoles()
+    {
+        return this.gameRoles;
     }
 
     public <R extends org.jooq.UpdatableRecord<R>> int getId(final R record)
