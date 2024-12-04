@@ -16,7 +16,7 @@ import nl.gamedata.data.tables.records.GameAccessRecord;
 import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameRoleRecord;
 import nl.gamedata.data.tables.records.GameSessionRecord;
-import nl.gamedata.data.tables.records.OrganizationRoleRecord;
+import nl.gamedata.data.tables.records.UserRoleRecord;
 import nl.gamedata.data.tables.records.UserRecord;
 
 public class AdminData extends CommonData
@@ -28,7 +28,7 @@ public class AdminData extends CommonData
     private UserRecord user;
 
     /** the access rights of the user via organizations. */
-    private List<OrganizationRoleRecord> organizationRoles = new ArrayList<>();
+    private List<UserRoleRecord> organizationRoles = new ArrayList<>();
 
     /** the access right of the user via games. */
     private List<GameRoleRecord> gameRoles = new ArrayList<>();
@@ -128,7 +128,7 @@ public class AdminData extends CommonData
         this.modalWindowHtml = modalClientWindowHtml;
     }
 
-    public List<OrganizationRoleRecord> getOrganizationRoles()
+    public List<UserRoleRecord> getUserRoles()
     {
         return this.organizationRoles;
     }
@@ -143,11 +143,11 @@ public class AdminData extends CommonData
         return Provider.getId(record);
     }
 
-    public void retrieveOrganizationRoles()
+    public void retrieveUserRoles()
     {
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        this.organizationRoles = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
-                .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
+        this.organizationRoles = dslContext.selectFrom(Tables.USER_ROLE)
+                .where(Tables.USER_ROLE.USER_ID.eq(this.user.getId())).fetch();
     }
 
     public void retrieveGameRoles()
@@ -188,7 +188,7 @@ public class AdminData extends CommonData
     {
         Map<GameRecord, Boolean> ret = new HashMap<>();
         ret.putAll(getAdminAccessToGames());
-        for (OrganizationRoleRecord organizationRole : this.organizationRoles)
+        for (UserRoleRecord organizationRole : this.organizationRoles)
         {
             // TODO: org_admin all, session_admin dependent on games via sessions?
             ret.putAll(getOrganizationAccessToGames(organizationRole.getOrganizationId()));
@@ -211,7 +211,7 @@ public class AdminData extends CommonData
     {
         Map<GameSessionRecord, Boolean> ret = new HashMap<>();
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        for (OrganizationRoleRecord organizationRole : this.organizationRoles)
+        for (UserRoleRecord organizationRole : this.organizationRoles)
         {
             if (organizationRole.getOrganizationAdmin() == 1)
             {

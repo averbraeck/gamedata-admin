@@ -13,7 +13,7 @@ import org.jooq.impl.DSL;
 
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
-import nl.gamedata.data.tables.records.OrganizationRoleRecord;
+import nl.gamedata.data.tables.records.UserRoleRecord;
 import nl.gamedata.data.tables.records.UserRecord;
 
 /**
@@ -77,10 +77,10 @@ public class MaintainUser
         {
             // see if there are organization(s) for which this user is organization_admin
             Set<Integer> orgIdAdminSet = new HashSet<>();
-            for (var orgRole : data.getOrganizationRoles())
+            for (var userRole : data.getUserRoles())
             {
-                if (orgRole.getOrganizationAdmin() != 0)
-                    orgIdAdminSet.add(orgRole.getOrganizationId());
+                if (userRole.getOrganizationAdmin() != 0)
+                    orgIdAdminSet.add(userRole.getOrganizationId());
             }
             if (orgIdAdminSet.size() != 0)
             {
@@ -88,10 +88,10 @@ public class MaintainUser
                 // all users with a role with these organizations
                 for (int orgId : orgIdAdminSet)
                 {
-                    List<OrganizationRoleRecord> orgRoleList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
-                            .where(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(orgId)).fetch();
-                    for(var orgRole : orgRoleList)
-                        userSet.add(orgRole.getUserId());
+                    List<UserRoleRecord> userRoleList = dslContext.selectFrom(Tables.USER_ROLE)
+                            .where(Tables.USER_ROLE.ORGANIZATION_ID.eq(orgId)).fetch();
+                    for(var userRole : userRoleList)
+                        userSet.add(userRole.getUserId());
                 }
                 for (int userId : userSet)
                     userRecords.add(SqlUtils.readUserFromUserId(data, userId));
