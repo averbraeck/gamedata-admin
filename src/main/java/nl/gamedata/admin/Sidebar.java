@@ -47,17 +47,17 @@ public class Sidebar
         StringBuilder s = new StringBuilder();
         s.append(sidebarTop);
         s.append(sidebarUser.formatted(data.getUsername()));
-        item(s, data, "fa-house", "home", "Admin panel");
-        item(s, data, "fa-sitemap", "organization", "Organization");
-        item(s, data, "fa-user", "user", "User");
-        item(s, data, "fa-dice", "game", "Game");
-        item(s, data, "fa-square-binary", "game-control", "Game Control");
-        item(s, data, "fa-calendar-check", "game-session", "Game Session");
-        item(s, data, "fa-chart-pie", "data-session", "Data Session");
-        item(s, data, "fa-chart-line", "data-player", "Data Player");
-        item(s, data, "fa-chart-simple", "data-group", "Data Group");
-        item(s, data, "fa-user-gear", "settings", "Settings");
-        item(s, data, "fa-sign-out", "logoff", "Logoff");
+        item(s, data, "fa-house", "menu-admin-panel", "Admin panel");
+        item(s, data, "fa-sitemap", "menu-organization", "Organization");
+        item(s, data, "fa-user", "menu-user", "User");
+        item(s, data, "fa-dice", "menu-game", "Game");
+        item(s, data, "fa-square-binary", "menu-game-control", "Game Control");
+        item(s, data, "fa-calendar-check", "menu-game-session", "Game Session");
+        item(s, data, "fa-chart-pie", "menu-data-session", "Data Session");
+        item(s, data, "fa-chart-line", "menu-data-player", "Data Player");
+        item(s, data, "fa-chart-simple", "menu-data-group", "Data Group");
+        item(s, data, "fa-user-gear", "menu-settings", "Settings");
+        item(s, data, "fa-sign-out", "menu-logoff", "Logoff");
         s.append(sidebarBottom);
         return s.toString();
     }
