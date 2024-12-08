@@ -34,12 +34,39 @@ import nl.gamedata.data.tables.records.UserRecord;
 public class MaintainUser
 {
     private static final String tableStart = """
+            <div class="gd-table-caption">
+              <div class="gd-table-title"><h3>User</h3></div>
+              <div class="gd-button">
+                <button type="button" class="btn btn-primary" onclick="clickMenu('user-new')">New</button>
+              </div>
+            </div>
+
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Super Admin</th>
+                  <th class="gd-col-icon" scope="col"><i class="fas fa-square fa-fw"></i></th>
+                  <th class="gd-col-icon" scope="col"><i class="far fa-eye fa-fw"></i></th>
+                  <th class="gd-col-icon" scope="col"><i class="fas fa-pencil fa-fw"></i></th>
+                  <th class="gd-col-icon" scope="col"><i class="far fa-trash-can fa-fw"></i></th>
+                  <th class="gd-col-icon" scope="col">&nbsp;</th>
+                  <th scope="col">
+                    Name &nbsp;
+                    <a href="#" onclick="clickMenu('user-name-za')">
+                      <i class="fas fa-arrow-down-z-a fa-fw"></i>
+                    </a>
+                  </th>
+                  <th scope="col">
+                    Email &nbsp;
+                    <a href="#" onclick="clickMenu('user-email-za')">
+                      <i class="fas fa-arrow-down-z-a fa-fw"></i>
+                    </a>
+                  </th>
+                  <th scope="col">
+                    Super User &nbsp;
+                    <a href="#" onclick="clickMenu('user-super-user-za')">
+                      <i class="fas fa-arrow-down-z-a fa-fw"></i>
+                    </a>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -47,6 +74,25 @@ public class MaintainUser
 
     private static final String tableRowStart = """
                 <tr>
+                  <td class="gd-col-icon" scope="col">
+                    <a href="#" onclick="clickMenu('user-select')">
+                      <i class="far fa-square fa-fw"></i>
+                    </a>
+                  </td>
+                  <td class="gd-col-icon" scope="col">
+                    <a href="#" onclick="clickMenu('user-view')">
+                      <i class="far fa-eye fa-fw"></i>
+                    </a>
+                  </td>
+                  <td class="gd-col-icon" scope="col">
+                    <a href="#" onclick="clickMenu('user-edit')">
+                      <i class="fas fa-pencil fa-fw"></i></td>
+                    </a>
+                  <td class="gd-col-icon" scope="col">
+                    <a href="#" onclick="clickMenu('user-delete')">
+                      <i class="far fa-trash-can fa-fw"></i></td>
+                    </a>
+                  <td class="gd-col-icon" scope="col">&nbsp;</td>
             """;
 
     private static final String tableCell = """

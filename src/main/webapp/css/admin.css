@@ -100,3 +100,19 @@ body {
 .gd-tab-choice-close {
   display: block;  
 }
+
+.gd-table-caption {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.gd-table-title {
+  padding-left: 8px;
+}
+
+.gd-col-icon {
+  width: 24px !important;
+  max-width: 24px !important;
+}
