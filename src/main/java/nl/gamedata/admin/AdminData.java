@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
+import org.jooq.TableRecord;
 import org.jooq.impl.DSL;
 
 import nl.gamedata.common.CommonData;
@@ -43,6 +44,12 @@ public class AdminData extends CommonData
     /** Which tab has been chosen, to maintain persistence after a POST. */
     private String tabChoice = "";
 
+    /** The filter choices in the tabs in the navbar. */
+    private Map<String, TableRecord<?>> tabFilterChoices = new HashMap<>();
+
+    /** The sorting order of columns in the tables. The map is from table (tab) to column header to A-Z / Z-A */
+    private Map<String, ColumnSort> tableColumnSort = new HashMap<>();
+
     /** the page content as built by the appropriate class. */
     private String content = "";
 
@@ -51,6 +58,15 @@ public class AdminData extends CommonData
 
     /** Modal window content for popup. */
     private String modalWindowHtml = "";
+
+    /** Record that has the column name and the direction of sorting; A-Z is true. */
+    public record ColumnSort(String columnName, boolean az)
+    {
+    }
+
+    /* =================================== */
+    /* GENERIC METHODS FOR THE DATA OBJECT */
+    /* =================================== */
 
     public boolean isSuperAdmin()
     {
@@ -247,8 +263,18 @@ public class AdminData extends CommonData
         return this.modalWindowHtml;
     }
 
+    public Map<String, TableRecord<?>> getTabFilterChoices()
+    {
+        return this.tabFilterChoices;
+    }
+
     public void setModalWindowHtml(final String modalWindowHtml)
     {
         this.modalWindowHtml = modalWindowHtml;
+    }
+
+    public Map<String, ColumnSort> getTableColumnSort()
+    {
+        return this.tableColumnSort;
     }
 }
