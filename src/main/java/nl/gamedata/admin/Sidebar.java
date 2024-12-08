@@ -49,9 +49,13 @@ public class Sidebar
         s.append(sidebarUser.formatted(data.getUsername()));
         item(s, data, "fa-house", "home", "Admin panel");
         item(s, data, "fa-sitemap", "organization", "Organization");
-        item(s, data, "fa-users", "user", "User");
+        item(s, data, "fa-user", "user", "User");
         item(s, data, "fa-dice", "game", "Game");
-        item(s, data, "fa-chart-line", "gamesession", "Game Session");
+        item(s, data, "fa-square-binary", "game-control", "Game Control");
+        item(s, data, "fa-calendar-check", "game-session", "Game Session");
+        item(s, data, "fa-chart-pie", "data-session", "Data Session");
+        item(s, data, "fa-chart-line", "data-player", "Data Player");
+        item(s, data, "fa-chart-simple", "data-group", "Data Group");
         item(s, data, "fa-user-gear", "settings", "Settings");
         item(s, data, "fa-sign-out", "logoff", "Logoff");
         s.append(sidebarBottom);
