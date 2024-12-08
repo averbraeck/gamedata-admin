@@ -9,8 +9,6 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
-import lombok.Getter;
-import lombok.Setter;
 import nl.gamedata.common.CommonData;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
@@ -24,21 +22,15 @@ import nl.gamedata.data.tables.records.UserRoleRecord;
 public class AdminData extends CommonData
 {
     /** The name of the user logged in to this session. If null, no user is logged in. */
-    @Getter
-    @Setter
     private String username;
 
     /** the User record (static during session). */
-    @Getter
-    @Setter
     private UserRecord user;
 
     /** the access rights of the user via organizations. */
-    @Getter
     private List<UserRoleRecord> userRoles = new ArrayList<>();
 
     /** the access right of the user via games. */
-    @Getter
     private List<GameRoleRecord> gameRoles = new ArrayList<>();
 
     /* ================================================ */
@@ -46,28 +38,18 @@ public class AdminData extends CommonData
     /* ================================================ */
 
     /** Which menu has been chosen, to maintain persistence after a POST. */
-    @Getter
-    @Setter
     private String menuChoice = "";
 
     /** Which tab has been chosen, to maintain persistence after a POST. */
-    @Getter
-    @Setter
     private String tabChoice = "";
 
     /** the page content as built by the appropriate class. */
-    @Getter
-    @Setter
     private String content = "";
 
     /** Show popup window or not. */
-    @Getter
-    @Setter
     private boolean showModalWindow = false;
 
     /** Modal window content for popup. */
-    @Getter
-    @Setter
     private String modalWindowHtml = "";
 
     public boolean isSuperAdmin()
@@ -184,5 +166,89 @@ public class AdminData extends CommonData
             }
         }
         return ret;
+    }
+
+    /* ******************* */
+    /* GETTERS AND SETTERS */
+    /* ******************* */
+
+    public String getUsername()
+    {
+        return this.username;
+    }
+
+    public void setUsername(final String username)
+    {
+        this.username = username;
+    }
+
+    public UserRecord getUser()
+    {
+        return this.user;
+    }
+
+    public void setUser(final UserRecord user)
+    {
+        this.user = user;
+    }
+
+    public List<UserRoleRecord> getUserRoles()
+    {
+        return this.userRoles;
+    }
+
+    public List<GameRoleRecord> getGameRoles()
+    {
+        return this.gameRoles;
+    }
+
+    public String getMenuChoice()
+    {
+        return this.menuChoice;
+    }
+
+    public void setMenuChoice(final String menuChoice)
+    {
+        this.menuChoice = menuChoice;
+    }
+
+    public String getTabChoice()
+    {
+        return this.tabChoice;
+    }
+
+    public void setTabChoice(final String tabChoice)
+    {
+        this.tabChoice = tabChoice;
+    }
+
+    public String getContent()
+    {
+        return this.content;
+    }
+
+    public void setContent(final String content)
+    {
+        this.content = content;
+    }
+
+    public boolean isShowModalWindow()
+    {
+        return this.showModalWindow;
+    }
+
+    public void setShowModalWindow(final boolean showModalWindow)
+    {
+        this.showModalWindow = showModalWindow;
+    }
+
+    public String getModalWindowHtml()
+    {
+        return this.modalWindowHtml;
+    }
+
+    public void setModalWindowHtml(final String modalWindowHtml)
+    {
+        this.modalWindowHtml = modalWindowHtml;
     }
 }
