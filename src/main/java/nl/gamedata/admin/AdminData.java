@@ -9,6 +9,8 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
+import lombok.Getter;
+import lombok.Setter;
 import nl.gamedata.common.CommonData;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
@@ -16,86 +18,61 @@ import nl.gamedata.data.tables.records.GameAccessRecord;
 import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameRoleRecord;
 import nl.gamedata.data.tables.records.GameSessionRecord;
-import nl.gamedata.data.tables.records.UserRoleRecord;
 import nl.gamedata.data.tables.records.UserRecord;
+import nl.gamedata.data.tables.records.UserRoleRecord;
 
 public class AdminData extends CommonData
 {
     /** The name of the user logged in to this session. If null, no user is logged in. */
+    @Getter
+    @Setter
     private String username;
 
     /** the User record (static during session). */
+    @Getter
+    @Setter
     private UserRecord user;
 
     /** the access rights of the user via organizations. */
-    private List<UserRoleRecord> organizationRoles = new ArrayList<>();
+    @Getter
+    private List<UserRoleRecord> userRoles = new ArrayList<>();
 
     /** the access right of the user via games. */
+    @Getter
     private List<GameRoleRecord> gameRoles = new ArrayList<>();
 
-    /* ================================= */
-    /* FULLY DYNAMIC INFO IN THE SESSION */
-    /* ================================= */
+    /* ================================================ */
+    /* PERSISTENT DATA ABOUT CHOICES MADE ON THE SCREEN */
+    /* ================================================ */
 
     /** Which menu has been chosen, to maintain persistence after a POST. */
+    @Getter
+    @Setter
     private String menuChoice = "";
 
+    /** Which tab has been chosen, to maintain persistence after a POST. */
+    @Getter
+    @Setter
+    private String tabChoice = "";
+
     /** the page content as built by the appropriate class. */
+    @Getter
+    @Setter
     private String content = "";
 
     /** Show popup window or not. */
+    @Getter
+    @Setter
     private boolean showModalWindow = false;
 
     /** Modal window content for popup. */
+    @Getter
+    @Setter
     private String modalWindowHtml = "";
-
-    /* ******************* */
-    /* GETTERS AND SETTERS */
-    /* ******************* */
-
-    public String getUsername()
-    {
-        return this.username;
-    }
-
-    public void setUsername(final String username)
-    {
-        this.username = username;
-    }
-
-    public UserRecord getUser()
-    {
-        return this.user;
-    }
-
-    public void setUser(final UserRecord user)
-    {
-        this.user = user;
-    }
 
     public boolean isSuperAdmin()
     {
         return getUser() == null ? false : getUser().getSuperAdmin() != 0;
-    }
-
-    public boolean isShowModalWindow()
-    {
-        return this.showModalWindow;
-    }
-
-    public void setShowModalWindow(final boolean showModalWindow)
-    {
-        this.showModalWindow = showModalWindow;
-    }
-
-    public String getMenuChoice()
-    {
-        return this.menuChoice;
-    }
-
-    public void setMenuChoice(final String menuChoice)
-    {
-        this.menuChoice = menuChoice;
     }
 
     public String getSidebar()
@@ -108,36 +85,6 @@ public class AdminData extends CommonData
         return Navbar.makeNavbar(this);
     }
 
-    public String getContent()
-    {
-        return this.content;
-    }
-
-    public void setContent(final String content)
-    {
-        this.content = content;
-    }
-
-    public String getModalWindowHtml()
-    {
-        return this.modalWindowHtml;
-    }
-
-    public void setModalWindowHtml(final String modalClientWindowHtml)
-    {
-        this.modalWindowHtml = modalClientWindowHtml;
-    }
-
-    public List<UserRoleRecord> getUserRoles()
-    {
-        return this.organizationRoles;
-    }
-
-    public List<GameRoleRecord> getGameRoles()
-    {
-        return this.gameRoles;
-    }
-
     public <R extends org.jooq.UpdatableRecord<R>> int getId(final R record)
     {
         return Provider.getId(record);
@@ -146,8 +93,7 @@ public class AdminData extends CommonData
     public void retrieveUserRoles()
     {
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        this.organizationRoles = dslContext.selectFrom(Tables.USER_ROLE)
-                .where(Tables.USER_ROLE.USER_ID.eq(this.user.getId())).fetch();
+        this.userRoles = dslContext.selectFrom(Tables.USER_ROLE).where(Tables.USER_ROLE.USER_ID.eq(this.user.getId())).fetch();
     }
 
     public void retrieveGameRoles()
@@ -188,7 +134,7 @@ public class AdminData extends CommonData
     {
         Map<GameRecord, Boolean> ret = new HashMap<>();
         ret.putAll(getAdminAccessToGames());
-        for (UserRoleRecord organizationRole : this.organizationRoles)
+        for (UserRoleRecord organizationRole : this.userRoles)
         {
             // TODO: org_admin all, session_admin dependent on games via sessions?
             ret.putAll(getOrganizationAccessToGames(organizationRole.getOrganizationId()));
@@ -211,7 +157,7 @@ public class AdminData extends CommonData
     {
         Map<GameSessionRecord, Boolean> ret = new HashMap<>();
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        for (UserRoleRecord organizationRole : this.organizationRoles)
+        for (UserRoleRecord organizationRole : this.userRoles)
         {
             if (organizationRole.getOrganizationAdmin() == 1)
             {
