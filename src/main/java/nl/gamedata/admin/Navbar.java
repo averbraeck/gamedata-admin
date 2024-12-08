@@ -30,32 +30,93 @@ public class Navbar
                 </a>
 
                 <!-- Tabs -->
-                <ul class="nav nav-tabs">
+                <div class="gd-nav">
                       """;
 
-    /** Inactive clickable tab; 1=onclick menu, 2=text. */
-    private static String tabInactive = """
-                  <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="clickMenu('%s')">%s</a>
-                  </li>
+    /** active tab with choice; 1=menu name, 2=choice text, 3=close action. */
+    private static String tabChoiceActive = """
+                  <div class="gd-tab">
+                    <div class="gd-tab-item gd-tab-item-active">
+                      %s
+                    </div>
+                    <div class="gd-tab-choice">
+                      <div class="gd-tab-choice-text">%s</div>
+                      <div class="gd-tab-choice-close">
+                        <a href="#" onclick="clickMenu('%s')">
+                          <i class="fas fa-xmark fa-fw"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
             """;
 
-    /** Active clickable tab; 1=onclick menu, 2=text. */
+    /** inactive tab with choice; 1=onclick menu, 2=menu name, 3=choice text, 4=close action. */
+    private static String tabChoiceInactive = """
+                  <div class="gd-tab">
+                    <div class="gd-tab-item gd-tab-item-inactive">
+                      <a href="#" onclick="clickMenu('%s')">%s</a>
+                    </div>
+                    <div class="gd-tab-choice">
+                      <div class="gd-tab-choice-text">"%s</div>
+                      <div class="gd-tab-choice-close">
+                        <a href="#" onclick="clickMenu('%s')">
+                          <i class="fas fa-xmark fa-fw"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+            """;
+
+    /** active tab with choice; 1=menu name. */
+    private static String tabChoiceActiveEmpty = """
+                  <div class="gd-tab">
+                    <div class="gd-tab-item gd-tab-item-active">
+                      %s
+                    </div>
+                    <div class="gd-tab-choice">
+                      <div class="gd-tab-choice-text">&nbsp;</div>
+                    </div>
+                  </div>
+            """;
+
+    /** inactive tab with choice; 1=onclick menu, 2=menu name. */
+    private static String tabChoiceInactiveEmpty = """
+                  <div class="gd-tab">
+                    <div class="gd-tab-item gd-tab-item-inactive">
+                      <a href="#" onclick="clickMenu('%s')">%s</a>
+                    </div>
+                    <div class="gd-tab-choice">
+                      <div class="gd-tab-choice-text">&nbsp;</div>
+                    </div>
+                  </div>
+            """;
+
+    /** active tab without choice; 1=menu name. */
     private static String tabActive = """
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#" onclick="clickMenu('%s')">%s</a>
-                  </li>
+                  <div class="gd-tab">
+                    <div class="gd-tab-item gd-tab-item-active">
+                      %s
+                    </div>
+                    <div class="gd-tab-nochoice">
+                      <div class="gd-tab-choice-text">&nbsp;</div>
+                    </div>
+                  </div>
             """;
 
-    /** tab; 1=text. */
-    private static String tabDisabled = """
-                  <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">%s</a>
-                  </li>
+    /** inactive tab without choice; 1=onclick menu, 2=menu name. */
+    private static String tabInactive = """
+                  <div class="gd-tab">
+                    <div class="gd-tab-item gd-tab-item-inactive">
+                      <a href="#" onclick="clickMenu('%s')">%s</a>
+                    </div>
+                    <div class="gd-tab-nochoice">
+                      <div class="gd-tab-choice-text">&nbsp;</div>
+                    </div>
+                  </div>
             """;
 
     private static String navbarEnd = """
-                </ul>
+                </div>
               </div>
               <!-- Container wrapper -->
 
@@ -69,14 +130,17 @@ public class Navbar
         s.append(navbarStart);
         if (data.getMenuChoice().equals("user"))
         {
-            tab(s, data, "user", "User");
+            tabChoice(s, data, "user", "User", "");
             tab(s, data, "user-role", "User Role");
+            tabChoice(s, data, "game", "Game", "");
             tab(s, data, "game-role", "Game Role");
         }
         else if (data.getMenuChoice().equals("organization"))
         {
-            tab(s, data, "organization", "Organization");
-            tab(s, data, "org-user", "Org Users");
+            tabChoice(s, data, "organization", "Organization", "TUD");
+            tabChoice(s, data, "user", "User", "");
+            tab(s, data, "user-role", "User Role");
+            tabChoice(s, data, "game", "Game", "");
             tab(s, data, "game-access", "Game Access");
             tab(s, data, "private-dashboard", "Dashboard");
             tab(s, data, "access-token", "Token");
@@ -86,12 +150,31 @@ public class Navbar
         return s.toString();
     }
 
-    private static void tab(final StringBuilder s, final AdminData data, final String tabChoice,
-            final String tabText)
+    private static void tab(final StringBuilder s, final AdminData data, final String tabChoice, final String tabText)
     {
         if (data.getMenuChoice().equals(tabChoice))
-            s.append(tabActive.formatted(tabChoice, tabText));
+            s.append(tabActive.formatted(tabText));
         else
             s.append(tabInactive.formatted(tabChoice, tabText));
     }
+
+    private static void tabChoice(final StringBuilder s, final AdminData data, final String tabChoice, final String tabText,
+            final String choice)
+    {
+        if (choice.length() == 0)
+        {
+            if (data.getMenuChoice().equals(tabChoice))
+                s.append(tabChoiceActiveEmpty.formatted(tabText));
+            else
+                s.append(tabChoiceInactiveEmpty.formatted(tabChoice, tabText));
+        }
+        else
+        {
+            if (data.getMenuChoice().equals(tabChoice))
+                s.append(tabChoiceActive.formatted(tabText, choice, tabChoice + "-close"));
+            else
+                s.append(tabChoiceInactive.formatted(tabChoice, tabText, choice, tabChoice + "-close"));
+        }
+    }
+
 }
