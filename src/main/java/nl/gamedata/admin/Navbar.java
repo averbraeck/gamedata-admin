@@ -25,7 +25,7 @@ public class Navbar
                 </button>
 
                 <!-- Brand -->
-                <a class="navbar-brand ps-3" href="#" onclick="clickMenu('home')" style="width:240px;">
+                <a class="navbar-brand ps-3" href="#" onclick="clickMenu('menu-admin-panel')" style="width:240px;">
                   <h2>Game Data</h2>
                 </a>
 
@@ -128,105 +128,107 @@ public class Navbar
     {
         StringBuilder s = new StringBuilder();
         s.append(navbarStart);
-        if (data.getMenuChoice().equals("organization"))
+        if (data.getMenuChoice().equals("menu-organization"))
         {
-            tabChoice(s, data, "organization", "Organization", "TUD");
-            tabChoice(s, data, "user", "User", "");
-            tab(s, data, "user-role", "User Role");
-            tabChoice(s, data, "game", "Game", "");
-            tab(s, data, "game-access", "Game Access");
-            tab(s, data, "private-dashboard", "Dashboard");
-            tab(s, data, "access-token", "Token");
-            tab(s, data, "game-session", "Session");
+            tabChoice(s, data, "tab-organization#organization", "Organization");
+            tabChoice(s, data, "tab-organization#user", "User");
+            tab(s, data, "tab-organization#user-role", "User Role");
+            tabChoice(s, data, "tab-organization#game", "Game");
+            tab(s, data, "tab-organization#game-access", "Game Access");
+            tab(s, data, "tab-organization#private-dashboard", "Dashboard");
+            tab(s, data, "tab-organization#access-token", "Token");
+            tab(s, data, "tab-organization#game-session", "Session");
         }
-        else if (data.getMenuChoice().equals("user"))
+        else if (data.getMenuChoice().equals("menu-user"))
         {
-            tabChoice(s, data, "user", "User", "");
-            tab(s, data, "user-role", "User Role");
-            tabChoice(s, data, "game", "Game", "");
-            tab(s, data, "game-role", "Game Role");
+            tabChoice(s, data, "tab-user#user", "User");
+            tab(s, data, "tab-user#user-role", "User Role");
+            tabChoice(s, data, "tab-user#game", "Game");
+            tab(s, data, "tab-user#game-role", "Game Role");
         }
-        else if (data.getMenuChoice().equals("game"))
+        else if (data.getMenuChoice().equals("menu-game"))
         {
-            tabChoice(s, data, "game", "Game", "");
-            tabChoice(s, data, "game-version", "Game Version", "");
-            tabChoice(s, data, "game-mission", "Game Mission", "");
-            tab(s, data, "public-dashboard", "Dashboard");
-            tab(s, data, "scale", "Scale");
-            tabChoice(s, data, "learning-goal", "Learning Goal", "");
-            tab(s, data, "player-objective", "Player Objective");
-            tab(s, data, "group-objective", "Group Objective");
+            tabChoice(s, data, "tab-game#game", "Game");
+            tabChoice(s, data, "tab-game#game-version", "Game Version");
+            tabChoice(s, data, "tab-game#game-mission", "Game Mission");
+            tab(s, data, "tab-game#public-dashboard", "Dashboard");
+            tab(s, data, "tab-game#scale", "Scale");
+            tabChoice(s, data, "tab-game#learning-goal", "Learning Goal");
+            tab(s, data, "tab-game#player-objective", "Player Objective");
+            tab(s, data, "tab-game#group-objective", "Group Objective");
         }
-        else if (data.getMenuChoice().equals("game-control"))
+        else if (data.getMenuChoice().equals("menu-game-control"))
         {
-            tabChoice(s, data, "game", "Game", "");
-            tab(s, data, "game-access", "Game Access");
-            tab(s, data, "game-token", "Game Token");
+            tabChoice(s, data, "tab-game-control#game", "Game");
+            tab(s, data, "tab-game-control#game-access", "Game Access");
+            tab(s, data, "tab-game-control#game-token", "Game Token");
         }
-        else if (data.getMenuChoice().equals("game-session"))
+        else if (data.getMenuChoice().equals("menu-game-session"))
         {
-            tabChoice(s, data, "game", "Game", "");
-            tabChoice(s, data, "game-version", "Game Version", "");
-            tabChoice(s, data, "game-session", "Session", "");
+            tabChoice(s, data, "tab-game-session#game", "Game");
+            tabChoice(s, data, "tab-game-session#game-version", "Game Version");
+            tabChoice(s, data, "tab-game-session#game-session", "Session");
         }
-        else if (data.getMenuChoice().equals("data-session"))
+        else if (data.getMenuChoice().equals("menu-data-session"))
         {
-            tabChoice(s, data, "game", "Game", "");
-            tabChoice(s, data, "game-version", "Game Version", "");
-            tabChoice(s, data, "game-session", "Session", "");
-            tabChoice(s, data, "game-mission", "Game Mission", "");
-            tab(s, data, "mission-event", "Mission Event");
+            tabChoice(s, data, "tab-data-session#game", "Game");
+            tabChoice(s, data, "tab-data-session#game-version", "Game Version");
+            tabChoice(s, data, "tab-data-session#game-session", "Session");
+            tabChoice(s, data, "tab-data-session#game-mission", "Game Mission");
+            tab(s, data, "tab-data-session#mission-event", "Mission Event");
         }
-        else if (data.getMenuChoice().equals("data-player"))
+        else if (data.getMenuChoice().equals("menu-data-player"))
         {
-            tabChoice(s, data, "game", "Game", "");
-            tabChoice(s, data, "game-version", "Game Version", "");
-            tabChoice(s, data, "game-session", "Session", "");
-            tabChoice(s, data, "player", "Player", "");
-            tabChoice(s, data, "player-attempt", "Player Attempt", "");
-            tab(s, data, "player-score", "Player Score");
-            tab(s, data, "player-event", "Player Event");
-            tab(s, data, "player-group-role", "Group Role");
+            tabChoice(s, data, "tab-data-player#game", "Game");
+            tabChoice(s, data, "tab-data-player#game-version", "Game Version");
+            tabChoice(s, data, "tab-data-player#game-session", "Session");
+            tabChoice(s, data, "tab-data-player#player", "Player");
+            tabChoice(s, data, "tab-data-player#player-attempt", "Player Attempt");
+            tab(s, data, "tab-data-player#player-score", "Player Score");
+            tab(s, data, "tab-data-player#player-event", "Player Event");
+            tab(s, data, "tab-data-player#player-group-role", "Group Role");
         }
-        else if (data.getMenuChoice().equals("data-group"))
+        else if (data.getMenuChoice().equals("menu-data-group"))
         {
-            tabChoice(s, data, "game", "Game", "");
-            tabChoice(s, data, "game-version", "Game Version", "");
-            tabChoice(s, data, "game-session", "Session", "");
-            tabChoice(s, data, "group", "Group", "");
-            tab(s, data, "group-player", "Players");
-            tabChoice(s, data, "group-attempt", "Group Attempt", "");
-            tab(s, data, "group-score", "Group Score");
-            tab(s, data, "group-event", "Group Event");
+            tabChoice(s, data, "tab-data-group#game", "Game");
+            tabChoice(s, data, "tab-data-group#game-version", "Game Version");
+            tabChoice(s, data, "tab-data-group#game-session", "Session");
+            tabChoice(s, data, "tab-data-group#group", "Group");
+            tab(s, data, "tab-data-group#group-player", "Players");
+            tabChoice(s, data, "tab-data-group#group-attempt", "Group Attempt");
+            tab(s, data, "tab-data-group#group-score", "Group Score");
+            tab(s, data, "tab-data-group#group-event", "Group Event");
         }
         s.append(navbarEnd);
         return s.toString();
     }
 
-    private static void tab(final StringBuilder s, final AdminData data, final String tabChoice, final String tabText)
+    private static void tab(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
     {
-        if (data.getMenuChoice().equals(tabChoice))
+        if (data.getMenuChoice().equals(tabName))
             s.append(tabActive.formatted(tabText));
         else
-            s.append(tabInactive.formatted(tabChoice, tabText));
+            s.append(tabInactive.formatted(tabName, tabText));
     }
 
-    private static void tabChoice(final StringBuilder s, final AdminData data, final String tabChoice, final String tabText,
-            final String choice)
+    private static void tabChoice(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
     {
-        if (choice.length() == 0)
+        if (!data.getTabFilterChoices().containsKey(tabName))
         {
-            if (data.getMenuChoice().equals(tabChoice))
+            if (data.getMenuChoice().equals(tabName))
                 s.append(tabChoiceActiveEmpty.formatted(tabText));
             else
-                s.append(tabChoiceInactiveEmpty.formatted(tabChoice, tabText));
+                s.append(tabChoiceInactiveEmpty.formatted(tabName, tabText));
         }
         else
         {
-            if (data.getMenuChoice().equals(tabChoice))
-                s.append(tabChoiceActive.formatted(tabText, choice, tabChoice + "-close"));
+            String choice = data.getTabFilterChoices().get(tabName).name();
+            if (choice.length() > 12)
+                choice = choice.substring(0, 9) + "...";
+            if (data.getMenuChoice().equals(tabName))
+                s.append(tabChoiceActive.formatted(tabText, choice, tabName + "-close"));
             else
-                s.append(tabChoiceInactive.formatted(tabChoice, tabText, choice, tabChoice + "-close"));
+                s.append(tabChoiceInactive.formatted(tabName, tabText, choice, tabName + "-close"));
         }
     }
 

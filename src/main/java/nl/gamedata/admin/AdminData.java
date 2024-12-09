@@ -44,8 +44,8 @@ public class AdminData extends CommonData
     /** Which tab has been chosen, to maintain persistence after a POST. */
     private String tabChoice = "";
 
-    /** The filter choices in the tabs in the navbar. */
-    private Map<String, TableRecord<?>> tabFilterChoices = new HashMap<>();
+    /** Map that links the tab name to a potential filter choice (record and display name) in the navbar. */
+    private Map<String, FilterChoice> tabFilterChoices = new HashMap<>();
 
     /** The sorting order of columns in the tables. The map is from table (tab) to column header to A-Z / Z-A */
     private Map<String, ColumnSort> tableColumnSort = new HashMap<>();
@@ -59,8 +59,13 @@ public class AdminData extends CommonData
     /** Modal window content for popup. */
     private String modalWindowHtml = "";
 
-    /** Record that has the column name and the direction of sorting; A-Z is true. */
-    public record ColumnSort(String columnName, boolean az)
+    /** Record that has the field name and the direction of sorting; A-Z is true, Z-A is false. */
+    public record ColumnSort(String fieldName, boolean az)
+    {
+    }
+
+    /** A filter choice (record and display name), used in the filtering of records in he navbar. */
+    public record FilterChoice(TableRecord<?> record, String name)
     {
     }
 
@@ -263,11 +268,6 @@ public class AdminData extends CommonData
         return this.modalWindowHtml;
     }
 
-    public Map<String, TableRecord<?>> getTabFilterChoices()
-    {
-        return this.tabFilterChoices;
-    }
-
     public void setModalWindowHtml(final String modalWindowHtml)
     {
         this.modalWindowHtml = modalWindowHtml;
@@ -277,4 +277,10 @@ public class AdminData extends CommonData
     {
         return this.tableColumnSort;
     }
+
+    public Map<String, FilterChoice> getTabFilterChoices()
+    {
+        return this.tabFilterChoices;
+    }
+
 }

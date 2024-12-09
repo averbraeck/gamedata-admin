@@ -37,7 +37,7 @@ public class MaintainUser
             <div class="gd-table-caption">
               <div class="gd-table-title"><h3>User</h3></div>
               <div class="gd-button">
-                <button type="button" class="btn btn-primary" onclick="clickMenu('user-new')">New</button>
+                <button type="button" class="btn btn-primary" onclick="clickMenu('record-new')">New</button>
               </div>
             </div>
 
@@ -51,19 +51,19 @@ public class MaintainUser
                   <th class="gd-col-icon" scope="col">&nbsp;</th>
                   <th scope="col">
                     Name &nbsp;
-                    <a href="#" onclick="clickMenu('user-name-za')">
+                    <a href="#" onclick="clickMenu('az-name')">
                       <i class="fas fa-arrow-down-z-a fa-fw"></i>
                     </a>
                   </th>
                   <th scope="col">
                     Email &nbsp;
-                    <a href="#" onclick="clickMenu('user-email-za')">
+                    <a href="#" onclick="clickMenu('az-email')">
                       <i class="fas fa-arrow-down-z-a fa-fw"></i>
                     </a>
                   </th>
                   <th scope="col">
                     Super User &nbsp;
-                    <a href="#" onclick="clickMenu('user-super-user-za')">
+                    <a href="#" onclick="clickMenu('az-super_admin')">
                       <i class="fas fa-arrow-down-z-a fa-fw"></i>
                     </a>
                   </th>
@@ -75,21 +75,21 @@ public class MaintainUser
     private static final String tableRowStart = """
                 <tr>
                   <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickMenu('user-select')">
+                    <a href="#" onclick="clickRecordId('record-select', %d)">
                       <i class="far fa-square fa-fw"></i>
                     </a>
                   </td>
                   <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickMenu('user-view')">
+                    <a href="#" onclick="clickRecordId('record-view', %d)">
                       <i class="far fa-eye fa-fw"></i>
                     </a>
                   </td>
                   <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickMenu('user-edit')">
+                    <a href="#" onclick="clickRecordId('record-edit', %d)">
                       <i class="fas fa-pencil fa-fw"></i></td>
                     </a>
                   <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickMenu('user-delete')">
+                    <a href="#" onclick="clickRecordId('record-delete', %d)">
                       <i class="far fa-trash-can fa-fw"></i></td>
                     </a>
                   <td class="gd-col-icon" scope="col">&nbsp;</td>
@@ -150,7 +150,7 @@ public class MaintainUser
         }
         for (var user : userRecords)
         {
-            s.append(tableRowStart);
+            s.append(tableRowStart.formatted(user.getId(), user.getId(), user.getId(), user.getId()));
             s.append(tableCell.formatted(user.getName()));
             s.append(tableCell.formatted(user.getEmail()));
             s.append(tableCell.formatted(user.getSuperAdmin() == 1 ? "Y" : "N"));

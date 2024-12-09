@@ -49,26 +49,46 @@ public class AdminServlet extends HttpServlet
         data.setShowModalWindow(false);
         data.setModalWindowHtml("");
 
-        switch (click)
+        // state machine
+        if (click.startsWith("menu"))
         {
-            // logoff
-            case "logoff":
-                response.sendRedirect("jsp/admin/login.jsp");
-                return;
+            data.setMenuChoice(click);
+            switch (click)
+            {
+                // logoff
+                case "menu-logoff":
+                    response.sendRedirect("jsp/admin/login.jsp");
+                    return;
 
-            // user - gamerole
-            case "user":
-                MaintainUser.handleMenu(data, request, click, recordNr);
-                break;
+                // user - gamerole
+                case "menu-user":
+                    data.setTabChoice("tab-user#user");
+                    MaintainUser.handleMenu(data, request, click, recordNr);
+                    break;
 
-            // user - gamerole
-            case "organization":
-                MaintainOrganization.handleMenu(data, request, click, recordNr);
-                break;
+                // user - gamerole
+                case "menu-organization":
+                    data.setTabChoice("tab-organization#organization");
+                    MaintainOrganization.handleMenu(data, request, click, recordNr);
+                    break;
 
-            default:
-                System.err.println("Unknown menu choice: " + click);
-                break;
+                default:
+                    System.err.println("Unknown menu choice: " + click + " with recordNr: " + recordNr);
+                    break;
+            }
+        }
+
+        else if (click.startsWith("tab"))
+
+        {
+            data.setTabChoice(click);
+            System.err.println("TAB choice: " + click + " with recordNr: " + recordNr);
+        }
+
+        else
+
+        {
+            System.err.println("Unknown menu choice: " + click + " with recordNr: " + recordNr);
         }
 
         response.sendRedirect("jsp/admin/admin.jsp");
