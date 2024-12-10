@@ -17,8 +17,8 @@ import nl.gamedata.data.tables.records.GameAccessRecord;
 import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameRoleRecord;
 import nl.gamedata.data.tables.records.GameSessionRecord;
+import nl.gamedata.data.tables.records.OrganizationRoleRecord;
 import nl.gamedata.data.tables.records.UserRecord;
-import nl.gamedata.data.tables.records.UserRoleRecord;
 
 public class AdminData extends CommonData
 {
@@ -29,7 +29,7 @@ public class AdminData extends CommonData
     private UserRecord user;
 
     /** the access rights of the user via organizations. */
-    private List<UserRoleRecord> userRoles = new ArrayList<>();
+    private List<OrganizationRoleRecord> organizationRoles = new ArrayList<>();
 
     /** the access right of the user via games. */
     private List<GameRoleRecord> gameRoles = new ArrayList<>();
@@ -96,7 +96,8 @@ public class AdminData extends CommonData
     public void retrieveUserRoles()
     {
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        this.userRoles = dslContext.selectFrom(Tables.USER_ROLE).where(Tables.USER_ROLE.USER_ID.eq(this.user.getId())).fetch();
+        this.organizationRoles = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
     }
 
     public void retrieveGameRoles()
@@ -111,9 +112,9 @@ public class AdminData extends CommonData
         for (GameRoleRecord gameRole : this.gameRoles)
         {
             GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gameRole.getGameId());
-            if (gameRole.getGameAdmin() == 1)
+            if (gameRole.getEdit() == 1)
                 ret.put(game, true);
-            else if (gameRole.getGameViewer() == 1)
+            else if (gameRole.getView() == 1)
                 ret.put(game, false);
         }
         return ret;
@@ -137,7 +138,7 @@ public class AdminData extends CommonData
     {
         Map<GameRecord, Boolean> ret = new HashMap<>();
         ret.putAll(getAdminAccessToGames());
-        for (UserRoleRecord organizationRole : this.userRoles)
+        for (OrganizationRoleRecord organizationRole : this.organizationRoles)
         {
             // TODO: org_admin all, session_admin dependent on games via sessions?
             ret.putAll(getOrganizationAccessToGames(organizationRole.getOrganizationId()));
@@ -160,31 +161,31 @@ public class AdminData extends CommonData
     {
         Map<GameSessionRecord, Boolean> ret = new HashMap<>();
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        for (UserRoleRecord organizationRole : this.userRoles)
+        for (OrganizationRoleRecord organizationRole : this.organizationRoles)
         {
-            if (organizationRole.getOrganizationAdmin() == 1)
+            if (organizationRole.getAdmin() == 1)
             {
                 List<GameAccessRecord> gameAccessRecords = dslContext.selectFrom(Tables.GAME_ACCESS)
                         .where(Tables.GAME_ACCESS.ORGANIZATION_ID.eq(organizationRole.getOrganizationId())).fetch();
                 for (GameAccessRecord gameAccess : gameAccessRecords)
                     ret.putAll(getOrganizationAccessToSessionIds(gameAccess.getId(), true));
             }
-            else if (organizationRole.getSessionGameAccessId() != null)
-            {
-                if (organizationRole.getSessionAdmin() == 1)
-                    ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), true));
-                else if (organizationRole.getSessionViewer() == 1)
-                    ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), false));
-            }
-            else if (organizationRole.getSessionGameSessionId() != null)
-            {
-                GameSessionRecord gameSession =
-                        SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, organizationRole.getSessionGameSessionId());
-                if (organizationRole.getSessionAdmin() == 1)
-                    ret.put(gameSession, true);
-                else if (organizationRole.getSessionViewer() == 1)
-                    ret.put(gameSession, false);
-            }
+//            else if (organizationRole.getSessionGameAccessId() != null)
+//            {
+//                if (organizationRole.getSessionAdmin() == 1)
+//                    ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), true));
+//                else if (organizationRole.getSessionViewer() == 1)
+//                    ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), false));
+//            }
+//            else if (organizationRole.getSessionGameSessionId() != null)
+//            {
+//                GameSessionRecord gameSession =
+//                        SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, organizationRole.getSessionGameSessionId());
+//                if (organizationRole.getSessionAdmin() == 1)
+//                    ret.put(gameSession, true);
+//                else if (organizationRole.getSessionViewer() == 1)
+//                    ret.put(gameSession, false);
+//            }
         }
         return ret;
     }
@@ -213,9 +214,9 @@ public class AdminData extends CommonData
         this.user = user;
     }
 
-    public List<UserRoleRecord> getUserRoles()
+    public List<OrganizationRoleRecord> getOrganizationRoles()
     {
-        return this.userRoles;
+        return this.organizationRoles;
     }
 
     public List<GameRoleRecord> getGameRoles()

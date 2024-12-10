@@ -13,7 +13,7 @@ import org.jooq.impl.DSL;
 
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
-import nl.gamedata.data.tables.records.UserRoleRecord;
+import nl.gamedata.data.tables.records.OrganizationRoleRecord;
 import nl.gamedata.data.tables.records.UserRecord;
 
 /**
@@ -123,21 +123,22 @@ public class MaintainUser
         {
             // see if there are organization(s) for which this user is organization_admin
             Set<Integer> orgIdAdminSet = new HashSet<>();
-            for (var userRole : data.getUserRoles())
+            for (var organizationRole : data.getOrganizationRoles())
             {
-                if (userRole.getOrganizationAdmin() != 0)
-                    orgIdAdminSet.add(userRole.getOrganizationId());
+                if (organizationRole.getAdmin() != 0)
+                    orgIdAdminSet.add(organizationRole.getOrganizationId());
             }
             if (orgIdAdminSet.size() != 0)
             {
-                Set<Integer> userSet = new HashSet<>();
                 // all users with a role with these organizations
+                // note you cannot have any other organizational role unless you are a member of the organization first
+                Set<Integer> userSet = new HashSet<>();
                 for (int orgId : orgIdAdminSet)
                 {
-                    List<UserRoleRecord> userRoleList = dslContext.selectFrom(Tables.USER_ROLE)
-                            .where(Tables.USER_ROLE.ORGANIZATION_ID.eq(orgId)).fetch();
-                    for(var userRole : userRoleList)
-                        userSet.add(userRole.getUserId());
+                    List<OrganizationRoleRecord> organizationRoleList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                            .where(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(orgId)).fetch();
+                    for (var organizationRole : organizationRoleList)
+                        userSet.add(organizationRole.getUserId());
                 }
                 for (int userId : userSet)
                     userRecords.add(SqlUtils.readUserFromUserId(data, userId));
