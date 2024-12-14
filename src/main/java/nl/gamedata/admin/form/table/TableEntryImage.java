@@ -169,7 +169,7 @@ public class TableEntryImage extends AbstractTableEntry<TableEntryImage, byte[]>
         s.append(getTableField().getName());
         s.append("\" id=\"");
         s.append(getTableField().getName());
-        if (isReadOnly())
+        if (isReadOnly() || !getForm().isEdit())
             s.append("'\" readonly />\n");
         else
             s.append("'\" />\n");

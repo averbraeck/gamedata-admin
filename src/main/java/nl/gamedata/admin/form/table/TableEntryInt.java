@@ -138,7 +138,7 @@ public class TableEntryInt extends AbstractTableEntry<TableEntryInt, Integer>
         s.append(getTableField().getName());
         s.append("\" value=\"");
         s.append(getLastEnteredValue() == null ? "" : getLastEnteredValue());
-        if (isReadOnly())
+        if (isReadOnly() || !getForm().isEdit())
             s.append("\" readonly />");
         else
             s.append("\" />");
@@ -148,7 +148,10 @@ public class TableEntryInt extends AbstractTableEntry<TableEntryInt, Integer>
             s.append("&nbsp;&nbsp;<input type=\"checkbox\" name=\"");
             s.append(getTableField().getName() + "-null\" value=\"null\"");
             s.append(getLastEnteredValue() == null ? " checked" : "");
-            s.append(" />");
+            if (isReadOnly() || !getForm().isEdit())
+                s.append(" readonly />");
+            else
+                s.append(" />");
         }
 
         s.append("</td>\n");

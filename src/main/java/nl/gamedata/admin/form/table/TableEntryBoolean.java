@@ -12,6 +12,21 @@ public class TableEntryBoolean extends AbstractTableEntry<TableEntryBoolean, Byt
         super(tableField);
     }
 
+    public TableEntryBoolean setInitialValue(final Byte initialValue, final boolean valueWhenNull)
+    {
+        if (this.tableField.getDataType().nullable() && initialValue == null)
+        {
+            this.initialValue = null;
+            setLastEnteredValue(null);
+        }
+        else
+        {
+            this.initialValue = initialValue != null ? initialValue : valueWhenNull ? (byte) 1 : 0;
+            setLastEnteredValue(codeForEdit(this.initialValue));
+        }
+        return this;
+    }
+
     @Override
     public String codeForEdit(final Byte value)
     {
@@ -55,7 +70,7 @@ public class TableEntryBoolean extends AbstractTableEntry<TableEntryBoolean, Byt
         s.append("\" ");
         s.append(getLastEnteredValue() == null || "0".equals(getLastEnteredValue()) ? "" : "checked");
         s.append(" value=\"1\"");
-        if (isReadOnly())
+        if (isReadOnly() || !getForm().isEdit())
             s.append(" readonly />");
         else
             s.append(" />");
@@ -65,7 +80,10 @@ public class TableEntryBoolean extends AbstractTableEntry<TableEntryBoolean, Byt
             s.append("&nbsp;&nbsp;<input type=\"checkbox\" name=\"");
             s.append(getTableField().getName() + "-null\" value=\"null\"");
             s.append(getLastEnteredValue() == null ? " checked" : "");
-            s.append(" />");
+            if (isReadOnly() || !getForm().isEdit())
+                s.append(" readonly />");
+            else
+                s.append(" />");
         }
 
         s.append("</td>\n");

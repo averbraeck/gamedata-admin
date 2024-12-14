@@ -73,7 +73,7 @@ public class TableEntryEnum<T extends EnumType> extends AbstractTableEntry<Table
         else
             s.append(" name=\"");
         s.append(getTableField().getName());
-        if (isReadOnly())
+        if (isReadOnly() || !getForm().isEdit())
             s.append("\" readonly>\n");
         else
             s.append("\">\n");
@@ -97,7 +97,10 @@ public class TableEntryEnum<T extends EnumType> extends AbstractTableEntry<Table
             s.append("&nbsp;&nbsp;<input type=\"checkbox\" name=\"");
             s.append(getTableField().getName() + "-null\" value=\"null\"");
             s.append(getLastEnteredValue() == null ? " checked" : "");
-            s.append(" />");
+            if (isReadOnly() || !getForm().isEdit())
+                s.append(" readonly />");
+            else
+                s.append(" />");
         }
 
         s.append("      </td>\n");
