@@ -12,6 +12,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
+import nl.gamedata.admin.Table;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRoleRecord;
@@ -34,86 +35,11 @@ import nl.gamedata.data.tables.records.UserRecord;
  */
 public class MaintainUser
 {
-    private static final String tableStart = """
-            <div class="gd-table-caption">
-              <div class="gd-table-title"><h3>User</h3></div>
-              <div class="gd-button">
-                <button type="button" class="btn btn-primary" onclick="clickMenu('record-new')">New</button>
-              </div>
-            </div>
-
-            <table class="table">
-              <thead>
-                <tr>
-                  <th class="gd-col-icon" scope="col"><i class="fas fa-square fa-fw"></i></th>
-                  <th class="gd-col-icon" scope="col"><i class="far fa-eye fa-fw"></i></th>
-                  <th class="gd-col-icon" scope="col"><i class="fas fa-pencil fa-fw"></i></th>
-                  <th class="gd-col-icon" scope="col"><i class="far fa-trash-can fa-fw"></i></th>
-                  <th class="gd-col-icon" scope="col">&nbsp;</th>
-                  <th scope="col">
-                    Name &nbsp;
-                    <a href="#" onclick="clickMenu('az-name')">
-                      <i class="fas fa-arrow-down-z-a fa-fw"></i>
-                    </a>
-                  </th>
-                  <th scope="col">
-                    Email &nbsp;
-                    <a href="#" onclick="clickMenu('az-email')">
-                      <i class="fas fa-arrow-down-z-a fa-fw"></i>
-                    </a>
-                  </th>
-                  <th scope="col">
-                    Super User &nbsp;
-                    <a href="#" onclick="clickMenu('az-super_admin')">
-                      <i class="fas fa-arrow-down-z-a fa-fw"></i>
-                    </a>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-            """;
-
-    private static final String tableRowStart = """
-                <tr>
-                  <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('record-select', %d)">
-                      <i class="far fa-square fa-fw"></i>
-                    </a>
-                  </td>
-                  <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('record-view', %d)">
-                      <i class="far fa-eye fa-fw"></i>
-                    </a>
-                  </td>
-                  <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('record-edit', %d)">
-                      <i class="fas fa-pencil fa-fw"></i></td>
-                    </a>
-                  <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('record-delete', %d)">
-                      <i class="far fa-trash-can fa-fw"></i></td>
-                    </a>
-                  <td class="gd-col-icon" scope="col">&nbsp;</td>
-            """;
-
-    private static final String tableCell = """
-                  <td>%s</td>
-            """;
-
-    private static final String tableRowEnd = """
-                </tr>
-            """;
-
-    private static final String tableEnd = """
-              </tbody>
-            </table>
-            """;
-
     public static void handleMenu(final AdminData data, final HttpServletRequest request, final String menuChoice,
             final int recordNr)
     {
         StringBuilder s = new StringBuilder();
-        s.append(tableStart);
+        Table.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin"}, true, "Name", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<UserRecord> userRecords = new ArrayList<>();
         if (data.isSuperAdmin())
@@ -152,13 +78,9 @@ public class MaintainUser
         }
         for (var user : userRecords)
         {
-            s.append(tableRowStart.formatted(user.getId(), user.getId(), user.getId(), user.getId()));
-            s.append(tableCell.formatted(user.getName()));
-            s.append(tableCell.formatted(user.getEmail()));
-            s.append(tableCell.formatted(user.getSuperAdmin() == 1 ? "Y" : "N"));
-            s.append(tableRowEnd);
+            Table.tableRow(s, user.getId(), new String[] {user.getName(), user.getEmail(), user.getSuperAdmin() == 1 ? "Y" : "N"});
         }
-        s.append(tableEnd);
+        Table.tableEnd(s);
         data.setContent(s.toString());
     }
 }

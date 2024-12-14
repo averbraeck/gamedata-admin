@@ -9,6 +9,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
+import nl.gamedata.admin.Table;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRecord;
 
@@ -22,49 +23,18 @@ import nl.gamedata.data.tables.records.OrganizationRecord;
  */
 public class MaintainOrganization
 {
-    private static final String tableHead = """
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Code</th>
-                  <th scope="col">Name</th>
-                </tr>
-              </thead>
-              <tbody>
-            """;
-
-    private static final String tableRowStart = """
-                <tr>
-            """;
-
-    private static final String tableRow = """
-                  <td>%s</td>
-            """;
-
-    private static final String tableRowEnd = """
-                </tr>
-            """;
-
-    private static final String tableFoot = """
-              </tbody>
-            </table>
-            """;
-
     public static void handleMenu(final AdminData data, final HttpServletRequest request, final String menuChoice,
             final int recordNr)
     {
         StringBuilder s = new StringBuilder();
-        s.append(tableHead);
+        Table.tableStart(s, "Organization", new String[] {"Code", "Name"}, true, "Code", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<OrganizationRecord> organizationRecords = dslContext.selectFrom(Tables.ORGANIZATION).fetch();
         for (var organization : organizationRecords)
         {
-            s.append(tableRowStart);
-            s.append(tableRow.formatted(organization.getCode()));
-            s.append(tableRow.formatted(organization.getName()));
-            s.append(tableRowEnd);
+            Table.tableRow(s, recordNr, new String[] {organization.getCode(), organization.getName()});
         }
-        s.append(tableFoot);
+        Table.tableEnd(s);
         data.setContent(s.toString());
     }
 }
