@@ -10,6 +10,7 @@ import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.Table;
+import nl.gamedata.admin.form.table.TableEntryImage;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.SqlUtils;
@@ -52,8 +53,8 @@ public class MaintainOrganization
                 new TableEntryString(Tables.ORGANIZATION.CODE).setInitialValue(organization.getCode(), "").setLabel("Code"));
         form.addEntry(
                 new TableEntryString(Tables.ORGANIZATION.NAME).setInitialValue(organization.getName(), "").setLabel("Name"));
-        // form.addEntry(new TableEntryImage(Tables.ORGANIZATION.LOGO).setInitialValue(organization.getImage(), "")
-        // .setLabel("Logo"));
+        form.addEntry(
+                new TableEntryImage(Tables.ORGANIZATION.LOGO).setInitialValue(organization.getLogo(), null).setLabel("Logo"));
         form.endForm();
         data.setContent(form.process());
     }
