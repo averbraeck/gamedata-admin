@@ -1,4 +1,4 @@
-package nl.gamedata.admin;
+package nl.gamedata.admin.organization;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
+import nl.gamedata.admin.AdminData;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRecord;
 
