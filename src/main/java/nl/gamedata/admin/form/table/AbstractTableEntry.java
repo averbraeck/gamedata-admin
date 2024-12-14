@@ -8,7 +8,7 @@ import nl.gamedata.admin.form.AbstractFormEntry;
 public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> extends AbstractFormEntry<F, T>
 {
 
-    private final TableField<?, T> tableField;
+    protected final TableField<?, T> tableField;
 
     private String type;
 
@@ -48,6 +48,7 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         return (F) this;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public F setInitialValue(final T initialValue, final T valueWhenNull)
     {
@@ -64,6 +65,7 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         return (F) this;
     }
 
+    @Override
     protected void validate(final String value)
     {
         setLastEnteredValue(value);
