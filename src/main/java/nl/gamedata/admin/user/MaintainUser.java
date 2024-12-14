@@ -13,6 +13,9 @@ import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.Table;
+import nl.gamedata.admin.form.table.TableEntryBoolean;
+import nl.gamedata.admin.form.table.TableEntryString;
+import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRoleRecord;
@@ -78,9 +81,25 @@ public class MaintainUser
         }
         for (var user : userRecords)
         {
-            Table.tableRow(s, user.getId(), new String[] {user.getName(), user.getEmail(), user.getSuperAdmin() == 1 ? "Y" : "N"});
+            Table.tableRow(s, user.getId(),
+                    new String[] {user.getName(), user.getEmail(), user.getSuperAdmin() == 1 ? "Y" : "N"});
         }
         Table.tableEnd(s);
         data.setContent(s.toString());
     }
+
+    public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
+    {
+        UserRecord user = recordId == 0 ? Tables.USER.newRecord() : SqlUtils.readRecordFromId(data, Tables.USER, recordId);
+        TableForm form = new TableForm();
+        form.startForm();
+        form.setHeader("User", click);
+        form.addEntry(new TableEntryString(Tables.USER.NAME).setInitialValue(user.getName(), "").setLabel("Name"));
+        form.addEntry(new TableEntryString(Tables.USER.EMAIL).setInitialValue(user.getEmail(), "").setLabel("Email"));
+        form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN).setInitialValue(user.getSuperAdmin(), false)
+                .setLabel("Super Admin"));
+        form.endForm();
+        data.setContent(form.process());
+    }
+
 }

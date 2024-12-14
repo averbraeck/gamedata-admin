@@ -10,6 +10,9 @@ import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.Table;
+import nl.gamedata.admin.form.table.TableEntryString;
+import nl.gamedata.admin.form.table.TableForm;
+import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRecord;
 
@@ -36,5 +39,22 @@ public class MaintainOrganization
         }
         Table.tableEnd(s);
         data.setContent(s.toString());
+    }
+
+    public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
+    {
+        OrganizationRecord organization = recordId == 0 ? Tables.ORGANIZATION.newRecord()
+                : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, recordId);
+        TableForm form = new TableForm();
+        form.startForm();
+        form.setHeader("Organization", click);
+        form.addEntry(
+                new TableEntryString(Tables.ORGANIZATION.CODE).setInitialValue(organization.getCode(), "").setLabel("Code"));
+        form.addEntry(
+                new TableEntryString(Tables.ORGANIZATION.NAME).setInitialValue(organization.getName(), "").setLabel("Name"));
+        // form.addEntry(new TableEntryImage(Tables.ORGANIZATION.LOGO).setInitialValue(organization.getImage(), "")
+        // .setLabel("Logo"));
+        form.endForm();
+        data.setContent(form.process());
     }
 }
