@@ -116,3 +116,18 @@ body {
   width: 24px !important;
   max-width: 24px !important;
 }
+
+.gd-form-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.gd-admin-form-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
