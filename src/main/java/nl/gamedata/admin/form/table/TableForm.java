@@ -23,19 +23,11 @@ public class TableForm
 
     private String cancelMethod = "";
 
-    private int cancelRecordNr = 0;
-
     private String saveMethod = "";
-
-    private String saveText = "Save";
 
     private String editMethod = "";
 
     private String deleteMethod = "";
-
-    private String deleteButton = "Delete";
-
-    private String deleteText = "";
 
     private List<String> additionalButtons = new ArrayList<>();
 
@@ -51,111 +43,132 @@ public class TableForm
 
     private String fieldLength = "75%";
 
+    /* **************************************************************************************************************** */
+    /* ************************************************* FORM ELEMENTS ************************************************ */
+    /* **************************************************************************************************************** */
+
+    /** start buttonrow. */
+    private static final String htmlStartButtonRow = """
+              <div class="gd-admin-form-buttons">
+            """;
+
+    /** button. 1 = submit string, 2 = record nr, 3 = button text */
+    private static final String htmlButton = """
+              <div class="gd-button">
+                <button type="button" class="btn btn-primary" onClick="submitEditForm('%s', %d); return false;">%s</button>
+              </div>
+            """;
+
+    /** end buttonrow. */
+    private static final String htmlEndButtonRow = """
+              </div>
+            """;
+
+    /** No tags. */
+    private static final String htmlStartMultiPartForm = """
+            <div class="gd-form">
+              <form id="editForm" action="/gamedata-admin/admin" method="POST" enctype="multipart/form-data">
+                <input id="editClick" type="hidden" name="editClick" value="tobefilled" />
+                <input id="editRecordNr" type="hidden" name="editRecordNr" value="0" />
+                """;
+
+    /** No tags. */
+    private static final String htmlStartForm = """
+            <div class="gd-form">
+              <form id="editForm" action="/gamedata-admin/admin" method="POST">
+                <input id="editClick" type="hidden" name="editClick" value="tobefilled" />
+                <input id="editRecordNr" type="hidden" name="editRecordNr" value="0" />
+                """;
+
+    /** No tags. */
+    private static final String htmlStartTable = """
+                <table>
+            """;
+
+    /** end table. */
+    private static final String htmlEndTable = """
+                </table>
+            """;
+
+    /** end form. */
+    private static final String htmlEndForm = """
+               </form>
+             </div>
+            """;
+
+    /* **************************************************************************************************************** */
+    /* **************************************************** METHODS *************************************************** */
+    /* **************************************************************************************************************** */
+
     public TableForm()
     {
         this.s = new StringBuilder();
     }
 
-    public TableForm startMultipartForm()
+    public TableForm setHeader(final String recordType, final String click)
     {
-        this.multipart = true;
-        this.s.append("<div class=\"gd-form\">\n");
-        this.s.append("  <form id=\"editForm\" action=\"/gamedata-admin/admin\" ");
-        this.s.append("method=\"POST\" enctype=\"multipart/form-data\">\n");
-        this.s.append("    <input id=\"editClick\" type=\"hidden\" name=\"editClick\" value=\"tobefilled\" />\n");
-        this.s.append("    <input id=\"editRecordNr\" type=\"hidden\" name=\"editRecordNr\" value=\"0\" />\n");
-        buttonRow();
-        this.s.append("    <fieldset");
-        if (isEdit())
-            this.s.append(">\n");
+        setCancelMethod("record-cancel");
+
+        String header;
+        if (click.equals("record-new") || click.equals("record-edit"))
+        {
+            header = (click.equals("record-new") ? "New " : "Edit ") + recordType;
+            setEdit(true);
+            setSaveMethod("record-save");
+            if (!click.equals("record-new"))
+                setDeleteMethod("record-delete");
+        }
         else
-            this.s.append(" disabled=\"disabled\">\n");
-        this.s.append("    <table width=\"100%\">\n");
+        {
+            header = "View " + recordType;
+            setEdit(false);
+        }
+
+        this.s.append("<div class=\"gd-form-header\">\n");
+        this.s.append("  <h3>");
+        this.s.append(header);
+        this.s.append("</h3>\n");
+        buttonRow();
+        this.s.append("</div>\n");
         return this;
     }
 
-    // Fieldset trick for read only:
-    // https://stackoverflow.com/questions/3507958/how-can-i-make-an-entire-html-form-readonly
+    public TableForm startMultipartForm()
+    {
+        this.multipart = true;
+        this.s.append(htmlStartMultiPartForm);
+        this.s.append(htmlStartTable);
+        return this;
+    }
+
     public TableForm startForm()
     {
         this.multipart = false;
-        this.s.append("<div class=\"gd-form\">\n");
-        this.s.append("  <form id=\"editForm\" action=\"/gamedata-admin/admin\" method=\"POST\" >\n");
-        this.s.append("    <input id=\"editClick\" type=\"hidden\" name=\"editClick\" value=\"tobefilled\" />\n");
-        this.s.append("    <input id=\"editRecordNr\" type=\"hidden\" name=\"editRecordNr\" value=\"0\" />\n");
-        buttonRow();
-        this.s.append("    <fieldset");
-        if (isEdit())
-            this.s.append(">\n");
-        else
-            this.s.append(" disabled=\"disabled\">\n");
-        this.s.append("    <table width=\"100%\">\n");
+        this.s.append(htmlStartForm);
+        this.s.append(htmlStartTable);
         return this;
     }
 
     public TableForm endForm()
     {
-        this.s.append("    </table>\n");
-        this.s.append("    </fieldset>\n");
-        buttonRow();
-        this.s.append("  </form>\n");
-        this.s.append("</div>\n");
+        this.s.append(htmlEndTable);
+        this.s.append(htmlEndForm);
         return this;
     }
 
     private void buttonRow()
     {
-        this.s.append("    <div class=\"gd-admin-form-buttons\">\n");
-        this.s.append("      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
-        this.s.append(this.cancelMethod);
-        this.s.append("', ");
-        if (this.cancelRecordNr > 0)
-            this.s.append(this.cancelRecordNr);
-        else
-            this.s.append(this.recordNr);
-        this.s.append("); return false;\">Cancel</a></span>");
+        this.s.append(htmlStartButtonRow);
+        this.s.append(htmlButton.formatted(this.cancelMethod, this.recordNr, "Cancel"));
         if (this.edit && this.saveMethod.length() > 0)
-        {
-            this.s.append("      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
-            this.s.append(this.saveMethod);
-            this.s.append("', ");
-            this.s.append(this.recordNr);
-            this.s.append("); return false;\">");
-            this.s.append(this.saveText);
-            this.s.append("</a></span>");
-        }
+            this.s.append(htmlButton.formatted(this.saveMethod, this.recordNr, "Save"));
         if (!this.edit && this.editMethod.length() > 0)
-        {
-            this.s.append("      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
-            this.s.append(this.editMethod);
-            this.s.append("', ");
-            this.s.append(this.recordNr);
-            this.s.append("); return false;\">Edit</a></span>");
-        }
+            this.s.append(htmlButton.formatted(this.editMethod, this.recordNr, "Edit"));
         if (this.edit && this.recordNr > 0 && this.deleteMethod.length() > 0)
-        {
-            this.s.append("      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
-            this.s.append(this.deleteMethod);
-            this.s.append("', ");
-            this.s.append(this.recordNr);
-            this.s.append("); return false;\">");
-            this.s.append(this.deleteButton);
-            this.s.append("</a></span>");
-            if (this.deleteText.length() > 0)
-                this.s.append("<i>&nbsp; &nbsp; " + this.deleteText + "</i>");
-        }
-        this.s.append("    </div>\n");
-
+            this.s.append(htmlButton.formatted(this.deleteMethod, this.recordNr, "Delete"));
         for (int i = 0; i < this.additionalButtons.size(); i++)
-        {
-            this.s.append("<br/>      <span class=\"gd-admin-form-button\" /><a href=\"#\" onClick=\"submitEditForm('");
-            this.s.append(this.additionalMethods.get(i));
-            this.s.append("', ");
-            this.s.append(this.recordNr);
-            this.s.append("); return false;\">");
-            this.s.append(this.additionalButtons.get(i));
-            this.s.append("</a></span>\n");
-        }
+            this.s.append(htmlButton.formatted(this.additionalMethods.get(i), this.recordNr, this.additionalButtons.get(i)));
+        this.s.append(htmlEndButtonRow);
     }
 
     public TableForm addEntry(final AbstractTableEntry<?, ?> entry)
@@ -172,28 +185,9 @@ public class TableForm
         return this;
     }
 
-    public TableForm setCancelMethod(final String cancelMethod, final int cancelRecordNr)
-    {
-        this.cancelMethod = cancelMethod;
-        this.cancelRecordNr = cancelRecordNr;
-        return this;
-    }
-
-    public int getCancelRecordNr()
-    {
-        return this.cancelRecordNr;
-    }
-
     public TableForm setSaveMethod(final String saveMethod)
     {
         this.saveMethod = saveMethod;
-        return this;
-    }
-
-    public TableForm setSaveMethod(final String saveMethod, final String saveText)
-    {
-        this.saveMethod = saveMethod;
-        this.saveText = saveText;
         return this;
     }
 
@@ -203,27 +197,9 @@ public class TableForm
         return this;
     }
 
-    public TableForm setDeleteMethod(final String deleteeMethod)
-    {
-        this.deleteMethod = deleteeMethod;
-        this.deleteButton = "Delete";
-        this.deleteText = "";
-        return this;
-    }
-
-    public TableForm setDeleteMethod(final String deleteMethod, final String deleteButton)
+    public TableForm setDeleteMethod(final String deleteMethod)
     {
         this.deleteMethod = deleteMethod;
-        this.deleteButton = deleteButton;
-        this.deleteText = "";
-        return this;
-    }
-
-    public TableForm setDeleteMethod(final String deleteMethod, final String deleteButton, final String deleteText)
-    {
-        this.deleteMethod = deleteMethod;
-        this.deleteButton = deleteButton;
-        this.deleteText = deleteText;
         return this;
     }
 
