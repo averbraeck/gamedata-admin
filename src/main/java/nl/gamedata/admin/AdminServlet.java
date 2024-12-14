@@ -48,7 +48,6 @@ public class AdminServlet extends HttpServlet
 
         System.out.println("Clicked: " + click);
 
-        data.setMenuChoice(click);
         data.setShowModalWindow(false);
         data.setModalWindowHtml("");
 
@@ -86,6 +85,42 @@ public class AdminServlet extends HttpServlet
         {
             data.setTabChoice(click);
             System.err.println("TAB choice: " + click + " with recordNr: " + recordNr);
+        }
+
+        else if (click.startsWith("record"))
+
+        {
+            String menu = data.getMenuChoice().replace("menu-", "");
+            String tab = data.getTabChoice().substring(data.getTabChoice().indexOf('#') + 1);
+            System.err.println("RECORD choice: " + click + " with recordNr: " + recordNr);
+            switch (menu)
+            {
+                case "organization" ->
+                {
+                    switch (tab)
+                    {
+                        case "organization" -> MaintainOrganization.edit(data, request, click, recordNr);
+                        case "user" -> MaintainOrganization.edit(data, request, click, recordNr);
+                        default -> System.err.println("Unexpected value: " + data.getTabChoice());
+                    }
+                    break;
+                }
+                case "user" ->
+                {
+                    switch (tab)
+                    {
+                        case "user" -> MaintainUser.edit(data, request, click, recordNr);
+                    }
+                    break;
+                }
+                default -> System.err.println("Unexpected value: " + data.getMenuChoice());
+            }
+        }
+
+        else if (click.startsWith("az"))
+
+        {
+            System.err.println("AZ choice: " + click + " with recordNr: " + recordNr);
         }
 
         else
