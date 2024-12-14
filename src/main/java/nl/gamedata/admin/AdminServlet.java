@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import nl.gamedata.admin.organization.MaintainOrganization;
+import nl.gamedata.admin.user.MaintainUser;
+
 @WebServlet("/admin")
 @MultipartConfig
 public class AdminServlet extends HttpServlet
