@@ -1,4 +1,4 @@
-package nl.gamedata.admin;
+package nl.gamedata.admin.user;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,6 +11,7 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
+import nl.gamedata.admin.AdminData;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRoleRecord;
