@@ -1,4 +1,4 @@
-package nl.gamedata.admin.organization;
+package nl.gamedata.admin.table;
 
 import java.util.List;
 

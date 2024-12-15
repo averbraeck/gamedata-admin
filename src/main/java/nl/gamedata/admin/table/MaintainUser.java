@@ -1,4 +1,4 @@
-package nl.gamedata.admin.user;
+package nl.gamedata.admin.table;
 
 import java.util.ArrayList;
 import java.util.HashSet;
