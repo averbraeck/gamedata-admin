@@ -24,7 +24,7 @@ function clickRecordId(button, recordId) {
 /* submit edit form */
 function submitEditForm(click, recordId) {
   document.getElementById("editClick").setAttribute("value", click);
-  document.getElementById("editRecordNr").setAttribute("value", recordId);
+  document.getElementById("editRecordId").setAttribute("value", recordId);
   document.getElementById("editForm").submit();
 }
 
