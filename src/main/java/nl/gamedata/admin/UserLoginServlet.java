@@ -146,8 +146,8 @@ public class UserLoginServlet extends HttpServlet
             data.setUser(user);
             data.retrieveGameRoles();
             data.retrieveUserRoles();
-            data.setMenuChoice("menu-admin-panel");
-            data.putTabChoice("menu-admin-panel", "");
+            data.setMenuChoice("admin-panel");
+            data.putTabChoice("admin-panel", "");
             response.sendRedirect("jsp/admin/admin.jsp");
         }
         else
