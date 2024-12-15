@@ -42,7 +42,7 @@ public class AdminData extends CommonData
     private String menuChoice = "";
 
     /** Which tab has been chosen, to maintain persistence after a POST. */
-    private String tabChoice = "";
+    private Map<String, String> tabChoice = new HashMap<>();
 
     /** Map that links the tab name to a potential filter choice (record and display name) in the navbar. */
     private Map<String, FilterChoice> tabFilterChoices = new HashMap<>();
@@ -234,14 +234,14 @@ public class AdminData extends CommonData
         this.menuChoice = menuChoice;
     }
 
-    public String getTabChoice()
+    public String getTabChoice(final String menuChoice)
     {
-        return this.tabChoice;
+        return this.tabChoice.get(menuChoice);
     }
 
-    public void setTabChoice(final String tabChoice)
+    public void putTabChoice(final String menuChoice, final String tabChoice)
     {
-        this.tabChoice = tabChoice;
+        this.tabChoice.put(menuChoice, tabChoice);
     }
 
     public String getContent()
