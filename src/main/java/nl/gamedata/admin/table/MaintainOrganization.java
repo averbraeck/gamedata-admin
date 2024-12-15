@@ -27,7 +27,7 @@ import nl.gamedata.data.tables.records.OrganizationRecord;
  */
 public class MaintainOrganization
 {
-    public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice,
+    public static void tableOrganization(final AdminData data, final HttpServletRequest request, final String menuChoice,
             final int recordId)
     {
         StringBuilder s = new StringBuilder();

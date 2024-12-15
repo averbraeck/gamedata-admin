@@ -38,7 +38,7 @@ import nl.gamedata.data.tables.records.UserRecord;
  */
 public class MaintainUser
 {
-    public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice,
+    public static void tableUser(final AdminData data, final HttpServletRequest request, final String menuChoice,
             final int recordId)
     {
         StringBuilder s = new StringBuilder();

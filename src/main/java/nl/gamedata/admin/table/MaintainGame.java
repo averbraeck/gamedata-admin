@@ -29,7 +29,7 @@ import nl.gamedata.data.tables.records.GameRecord;
  */
 public class MaintainGame
 {
-    public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice,
+    public static void tableGame(final AdminData data, final HttpServletRequest request, final String menuChoice,
             final int recordId)
     {
         StringBuilder s = new StringBuilder();
