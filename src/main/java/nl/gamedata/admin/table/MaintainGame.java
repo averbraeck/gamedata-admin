@@ -48,7 +48,8 @@ public class MaintainGame
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
         GameRecord game = recordId == 0 ? Tables.GAME.newRecord() : SqlUtils.readRecordFromId(data, Tables.GAME, recordId);
-        TableForm form = new TableForm();
+        data.setEditRecord(game);
+        TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game", click, recordId);
         form.addEntry(new TableEntryString(Tables.GAME.CODE).setInitialValue(game.getCode(), "").setLabel("Code"));

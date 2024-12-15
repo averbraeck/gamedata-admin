@@ -339,7 +339,7 @@ public class AdminServlet extends HttpServlet
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD SAVE: " + click + " with recordId: " + recordId);
-
+        data.saveRecord(request);
         // TODO: check, popup for errors -> repair/discard
 
         // TODO: save, popup if error during saving -> repair/discard

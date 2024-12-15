@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.TableRecord;
+import org.jooq.UpdatableRecord;
 import org.jooq.impl.DSL;
 
+import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.CommonData;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
@@ -59,6 +63,15 @@ public class AdminData extends CommonData
     /** Modal window content for popup. */
     private String modalWindowHtml = "";
 
+    /** The form that is currently being used. */
+    private TableForm editForm = null;
+
+    /** The record that is currently being edited. */
+    private UpdatableRecord<?> editRecord = null;
+
+    /** An error occurred during save, delete, or cancel. */
+    private boolean error = false;
+
     /** Record that has the field name and the direction of sorting; A-Z is true, Z-A is false. */
     public record ColumnSort(String fieldName, boolean az)
     {
@@ -102,7 +115,7 @@ public class AdminData extends CommonData
         return Navbar.makeNavbar(this);
     }
 
-    public <R extends org.jooq.UpdatableRecord<R>> int getId(final R record)
+    public <R extends UpdatableRecord<R>> int getId(final R record)
     {
         return Provider.getId(record);
     }
@@ -184,24 +197,92 @@ public class AdminData extends CommonData
                 for (GameAccessRecord gameAccess : gameAccessRecords)
                     ret.putAll(getOrganizationAccessToSessionIds(gameAccess.getId(), true));
             }
-//            else if (organizationRole.getSessionGameAccessId() != null)
-//            {
-//                if (organizationRole.getSessionAdmin() == 1)
-//                    ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), true));
-//                else if (organizationRole.getSessionViewer() == 1)
-//                    ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), false));
-//            }
-//            else if (organizationRole.getSessionGameSessionId() != null)
-//            {
-//                GameSessionRecord gameSession =
-//                        SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, organizationRole.getSessionGameSessionId());
-//                if (organizationRole.getSessionAdmin() == 1)
-//                    ret.put(gameSession, true);
-//                else if (organizationRole.getSessionViewer() == 1)
-//                    ret.put(gameSession, false);
-//            }
+            // else if (organizationRole.getSessionGameAccessId() != null)
+            // {
+            // if (organizationRole.getSessionAdmin() == 1)
+            // ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), true));
+            // else if (organizationRole.getSessionViewer() == 1)
+            // ret.putAll(getOrganizationAccessToSessionIds(organizationRole.getSessionGameAccessId(), false));
+            // }
+            // else if (organizationRole.getSessionGameSessionId() != null)
+            // {
+            // GameSessionRecord gameSession =
+            // SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, organizationRole.getSessionGameSessionId());
+            // if (organizationRole.getSessionAdmin() == 1)
+            // ret.put(gameSession, true);
+            // else if (organizationRole.getSessionViewer() == 1)
+            // ret.put(gameSession, false);
+            // }
         }
         return ret;
+    }
+
+    /* ************************ */
+    /* DATABASE AND FORM ACCESS */
+    /* ************************ */
+
+    public void setEditForm(final TableForm editForm)
+    {
+        this.editForm = editForm;
+    }
+
+    public void setEditRecord(final UpdatableRecord<?> editRecord)
+    {
+        this.editRecord = editRecord;
+    }
+
+    public <R extends org.jooq.UpdatableRecord<R>> int saveRecord(final HttpServletRequest request)
+    {
+        String errors = this.editForm.setFields(this.editRecord, request, this);
+        String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
+        if (errors.length() > 0)
+        {
+            System.err.println(errors);
+            ModalWindowUtils.popup(this, "Error storing record (1)", errors, backToMenu);
+            setError(true);
+            return -1;
+        }
+        else
+        {
+            try
+            {
+                this.editRecord.store();
+            }
+            catch (Exception exception)
+            {
+                System.err.println(exception.getMessage());
+                System.err.println(this.editRecord);
+                ModalWindowUtils.popup(this, "Error storing record (2)", "<p>" + exception.getMessage() + "</p>", backToMenu);
+                setError(true);
+                return -1;
+            }
+        }
+        setError(false);
+        return Integer.valueOf(this.editRecord.get("id").toString());
+    }
+
+    public <R extends org.jooq.UpdatableRecord<R>> void askDeleteRecord()
+    {
+        String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
+        ModalWindowUtils.make2ButtonModalWindow(this, "Delete " + this.editRecord.getTable().getName(),
+                "<p>Delete " + this.editRecord.getTable().getName() + "?</p>", "DELETE",
+                "clickRecordId('OK', " + Provider.getId(this.editRecord) + ")", "Cancel", backToMenu, backToMenu);
+        setShowModalWindow(true);
+    }
+
+    public <R extends org.jooq.UpdatableRecord<R>> void deleteRecordOk()
+    {
+        String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
+        try
+        {
+            this.editRecord.delete();
+            setError(false);
+        }
+        catch (Exception exception)
+        {
+            ModalWindowUtils.popup(this, "Error deleting record", "<p>" + exception.getMessage() + "</p>", backToMenu);
+            setError(true);
+        }
     }
 
     /* ******************* */
@@ -296,6 +377,16 @@ public class AdminData extends CommonData
     public Map<String, FilterChoice> getTabFilterChoices()
     {
         return this.tabFilterChoices;
+    }
+
+    public boolean isError()
+    {
+        return this.error;
+    }
+
+    public void setError(final boolean error)
+    {
+        this.error = error;
     }
 
 }

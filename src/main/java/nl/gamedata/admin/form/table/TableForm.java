@@ -16,7 +16,6 @@ import nl.gamedata.admin.AdminData;
 
 public class TableForm
 {
-
     private StringBuilder s;
 
     private int recordId;
@@ -100,9 +99,10 @@ public class TableForm
     /* **************************************************** METHODS *************************************************** */
     /* **************************************************************************************************************** */
 
-    public TableForm()
+    public TableForm(final AdminData data)
     {
         this.s = new StringBuilder();
+        data.setEditForm(this);
     }
 
     public TableForm setHeader(final String recordType, final String click, final int recordId)

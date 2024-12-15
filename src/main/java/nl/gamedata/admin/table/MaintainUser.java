@@ -91,7 +91,8 @@ public class MaintainUser
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
         UserRecord user = recordId == 0 ? Tables.USER.newRecord() : SqlUtils.readRecordFromId(data, Tables.USER, recordId);
-        TableForm form = new TableForm();
+        data.setEditRecord(user);
+        TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("User", click, recordId);
         form.addEntry(new TableEntryString(Tables.USER.NAME).setInitialValue(user.getName(), "").setLabel("Name"));

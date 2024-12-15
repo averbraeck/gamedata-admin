@@ -46,7 +46,8 @@ public class MaintainOrganization
     {
         OrganizationRecord organization = recordId == 0 ? Tables.ORGANIZATION.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, recordId);
-        TableForm form = new TableForm();
+        data.setEditRecord(organization);
+        TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Organization", click, recordId);
         form.addEntry(
