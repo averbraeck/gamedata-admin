@@ -33,6 +33,9 @@
       </div>
     </div>
     
+    <!-- modal window for the client information within an order -->
+    ${adminData.getModalWindowHtml()}
+
     <form id="clickForm" action="/gamedata-admin/admin" method="POST" style="display:none;">
       <input id="click" type="hidden" name="click" value="tobefilled" />
       <input id="recordId" type="hidden" name="recordId" value="0" />
