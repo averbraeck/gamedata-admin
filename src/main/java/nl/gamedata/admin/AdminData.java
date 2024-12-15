@@ -73,6 +73,20 @@ public class AdminData extends CommonData
     /* GENERIC METHODS FOR THE DATA OBJECT */
     /* =================================== */
 
+    public AdminData()
+    {
+        this.tabChoice.put("admin-panel", "");
+        this.tabChoice.put("organization", "organization");
+        this.tabChoice.put("user", "user");
+        this.tabChoice.put("game", "game");
+        this.tabChoice.put("game-control", "game");
+        this.tabChoice.put("game-session", "game");
+        this.tabChoice.put("data-session", "game");
+        this.tabChoice.put("data-player", "game");
+        this.tabChoice.put("data-group", "game");
+        this.tabChoice.put("settings", "");
+    }
+
     public boolean isSuperAdmin()
     {
         return getUser() == null ? false : getUser().getSuperAdmin() != 0;
