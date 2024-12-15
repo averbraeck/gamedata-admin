@@ -111,22 +111,7 @@ public class UserLoginServlet extends HttpServlet
     {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        MessageDigest md;
-        String hashedPassword;
-        try
-        {
-            // https://www.baeldung.com/java-md5
-            md = MessageDigest.getInstance("MD5");
-            md.update(password.getBytes());
-            byte[] digest = md.digest();
-            hashedPassword = DatatypeConverter.printHexBinary(digest).toLowerCase();
-        }
-        catch (NoSuchAlgorithmException e1)
-        {
-            throw new ServletException(e1);
-        }
         HttpSession session = request.getSession();
-
         AdminData data = new AdminData();
         session.setAttribute("adminData", data);
         try
@@ -139,22 +124,39 @@ public class UserLoginServlet extends HttpServlet
         }
 
         UserRecord user = AdminUtils.readUserFromUsername(data, username);
-        String userPassword = user == null ? "" : user.getPassword() == null ? "" : user.getPassword();
-        if (user != null && userPassword.equals(hashedPassword))
+        if (user != null)
         {
-            data.setUsername(user.getName());
-            data.setUser(user);
-            data.retrieveGameRoles();
-            data.retrieveUserRoles();
-            data.setMenuChoice("admin-panel");
-            data.putTabChoice("admin-panel", "");
-            response.sendRedirect("jsp/admin/admin.jsp");
+            MessageDigest md;
+            String hashedPassword;
+            try
+            {
+                // https://www.baeldung.com/java-md5
+                md = MessageDigest.getInstance("MD5");
+                String saltedPassword = password + user.getSalt();
+                md.update(saltedPassword.getBytes());
+                byte[] digest = md.digest();
+                hashedPassword = DatatypeConverter.printHexBinary(digest).toLowerCase();
+            }
+            catch (NoSuchAlgorithmException e1)
+            {
+                throw new ServletException(e1);
+            }
+
+            String userPassword = user == null ? "" : user.getPassword() == null ? "" : user.getPassword();
+            if (user != null && userPassword.equals(hashedPassword))
+            {
+                data.setUsername(user.getName());
+                data.setUser(user);
+                data.retrieveGameRoles();
+                data.retrieveUserRoles();
+                data.setMenuChoice("admin-panel");
+                data.putTabChoice("admin-panel", "");
+                response.sendRedirect("jsp/admin/admin.jsp");
+                return;
+            }
         }
-        else
-        {
-            session.removeAttribute("adminData");
-            response.sendRedirect("jsp/admin/login.jsp");
-        }
+        session.removeAttribute("adminData");
+        response.sendRedirect("jsp/admin/login.jsp");
     }
 
     @Override

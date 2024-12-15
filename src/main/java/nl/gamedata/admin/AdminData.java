@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.Table;
-import org.jooq.TableField;
 import org.jooq.TableRecord;
 import org.jooq.UpdatableRecord;
 import org.jooq.impl.DSL;
@@ -394,6 +393,16 @@ public class AdminData extends CommonData
     public void setError(final boolean error)
     {
         this.error = error;
+    }
+
+    public TableForm getEditForm()
+    {
+        return this.editForm;
+    }
+
+    public UpdatableRecord<?> getEditRecord()
+    {
+        return this.editRecord;
     }
 
 }
