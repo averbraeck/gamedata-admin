@@ -17,14 +17,14 @@ function clickMenu(button) {
 /* handle click on button with record number */
 function clickRecordId(button, recordId) {
   document.getElementById("click").setAttribute("value", button);
-  document.getElementById("recordNr").setAttribute("value", recordId);
+  document.getElementById("recordId").setAttribute("value", recordId);
   document.getElementById("clickForm").submit();
 }
 
 /* submit edit form */
-function submitEditForm(click, recordNr) {
+function submitEditForm(click, recordId) {
   document.getElementById("editClick").setAttribute("value", click);
-  document.getElementById("editRecordNr").setAttribute("value", recordNr);
+  document.getElementById("editRecordNr").setAttribute("value", recordId);
   document.getElementById("editForm").submit();
 }
 
