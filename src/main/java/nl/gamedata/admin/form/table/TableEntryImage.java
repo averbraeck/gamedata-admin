@@ -16,7 +16,7 @@ public class TableEntryImage extends AbstractTableEntry<TableEntryImage, byte[]>
     private String imageServlet;
 
     /** the record number for retrieving the current image. */
-    private int imageRecordNr;
+    private int imageRecordId;
 
     /** the image number to retrieve if multiple images exist (0 means do not query). */
     private int imageNr;
@@ -84,14 +84,14 @@ public class TableEntryImage extends AbstractTableEntry<TableEntryImage, byte[]>
         return this;
     }
 
-    public int getImageRecordNr()
+    public int getImageRecordId()
     {
-        return this.imageRecordNr;
+        return this.imageRecordId;
     }
 
-    public TableEntryImage setImageRecordNr(final int imageRecordNr)
+    public TableEntryImage setImageRecordId(final int imageRecordId)
     {
-        this.imageRecordNr = imageRecordNr;
+        this.imageRecordId = imageRecordId;
         return this;
     }
 
@@ -179,12 +179,12 @@ public class TableEntryImage extends AbstractTableEntry<TableEntryImage, byte[]>
             s.append("        <div class=\"gd-preview-image-100\">\n");
         s.append("          <img id=\"");
         s.append(getTableField().getName());
-        if (getImageServlet().length() > 0 && getImageRecordNr() > 0)
+        if (getImageServlet().length() > 0 && getImageRecordId() > 0)
         {
             s.append("\" src=\"/gamedata-admin/");
             s.append(getImageServlet());
             s.append("?id=");
-            s.append(getImageRecordNr());
+            s.append(getImageRecordId());
             if (this.imageNr > 0)
             {
                 s.append("&image=");
