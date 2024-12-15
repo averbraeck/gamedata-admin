@@ -48,7 +48,7 @@ public class MaintainOrganization
                 : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, recordId);
         TableForm form = new TableForm();
         form.startForm();
-        form.setHeader("Organization", click);
+        form.setHeader("Organization", click, recordId);
         form.addEntry(
                 new TableEntryString(Tables.ORGANIZATION.CODE).setInitialValue(organization.getCode(), "").setLabel("Code"));
         form.addEntry(

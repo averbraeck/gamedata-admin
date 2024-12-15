@@ -50,7 +50,7 @@ public class MaintainGame
         GameRecord game = recordId == 0 ? Tables.GAME.newRecord() : SqlUtils.readRecordFromId(data, Tables.GAME, recordId);
         TableForm form = new TableForm();
         form.startForm();
-        form.setHeader("Game", click);
+        form.setHeader("Game", click, recordId);
         form.addEntry(new TableEntryString(Tables.GAME.CODE).setInitialValue(game.getCode(), "").setLabel("Code"));
         form.addEntry(new TableEntryString(Tables.GAME.NAME).setInitialValue(game.getName(), "").setLabel("Name"));
         form.addEntry(

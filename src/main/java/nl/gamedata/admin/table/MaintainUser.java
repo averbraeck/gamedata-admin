@@ -93,7 +93,7 @@ public class MaintainUser
         UserRecord user = recordId == 0 ? Tables.USER.newRecord() : SqlUtils.readRecordFromId(data, Tables.USER, recordId);
         TableForm form = new TableForm();
         form.startForm();
-        form.setHeader("User", click);
+        form.setHeader("User", click, recordId);
         form.addEntry(new TableEntryString(Tables.USER.NAME).setInitialValue(user.getName(), "").setLabel("Name"));
         form.addEntry(new TableEntryString(Tables.USER.EMAIL).setInitialValue(user.getEmail(), "").setLabel("Email"));
         form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN).setInitialValue(user.getSuperAdmin(), false)

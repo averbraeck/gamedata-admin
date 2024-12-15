@@ -105,9 +105,10 @@ public class TableForm
         this.s = new StringBuilder();
     }
 
-    public TableForm setHeader(final String recordType, final String click)
+    public TableForm setHeader(final String recordType, final String click, final int recordId)
     {
         setCancelMethod("record-cancel");
+        setRecordId(recordId);
 
         String header;
         if (click.equals("record-new") || click.equals("record-edit"))
@@ -210,7 +211,7 @@ public class TableForm
         return this;
     }
 
-    public TableForm setRecordNr(final int recordId)
+    public TableForm setRecordId(final int recordId)
     {
         this.recordId = recordId;
         return this;
