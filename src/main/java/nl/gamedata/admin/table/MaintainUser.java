@@ -12,7 +12,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
-import nl.gamedata.admin.Table;
+import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
@@ -42,7 +42,7 @@ public class MaintainUser
             final int recordId)
     {
         StringBuilder s = new StringBuilder();
-        Table.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin"}, true, "Name", true);
+        AdminTable.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin"}, true, "Name", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<UserRecord> userRecords = new ArrayList<>();
         if (data.isSuperAdmin())
@@ -81,10 +81,10 @@ public class MaintainUser
         }
         for (var user : userRecords)
         {
-            Table.tableRow(s, user.getId(),
+            AdminTable.tableRow(s, user.getId(),
                     new String[] {user.getName(), user.getEmail(), user.getSuperAdmin() == 1 ? "Y" : "N"});
         }
-        Table.tableEnd(s);
+        AdminTable.tableEnd(s);
         data.setContent(s.toString());
     }
 

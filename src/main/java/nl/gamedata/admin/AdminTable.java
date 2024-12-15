@@ -8,7 +8,7 @@ package nl.gamedata.admin;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class Table
+public class AdminTable
 {
     /** 1 = Title, 2 = visible/hidden for New button. */
     private static final String tableTitle = """

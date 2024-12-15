@@ -9,7 +9,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
-import nl.gamedata.admin.Table;
+import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryImage;
 import nl.gamedata.admin.form.table.TableEntryString;
@@ -33,15 +33,15 @@ public class MaintainGame
             final int recordId)
     {
         StringBuilder s = new StringBuilder();
-        Table.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, true, "Code", true);
+        AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, true, "Code", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<GameRecord> gameRecords = dslContext.selectFrom(Tables.GAME).fetch();
         for (var game : gameRecords)
         {
             String archived = game.getArchived() == 0 ? "N" : "Y";
-            Table.tableRow(s, recordId, new String[] {game.getCode(), game.getName(), archived});
+            AdminTable.tableRow(s, recordId, new String[] {game.getCode(), game.getName(), archived});
         }
-        Table.tableEnd(s);
+        AdminTable.tableEnd(s);
         data.setContent(s.toString());
     }
 
