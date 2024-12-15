@@ -81,12 +81,12 @@ public class AdminServlet extends HttpServlet
         {
             case "menu-user":
                 data.setTabChoice("tab-user#user");
-                MaintainUser.handleMenu(data, request, click, recordId);
+                MaintainUser.table(data, request, click, recordId);
                 break;
 
             case "menu-organization":
                 data.setTabChoice("tab-organization#organization");
-                MaintainOrganization.handleMenu(data, request, click, recordId);
+                MaintainOrganization.table(data, request, click, recordId);
                 break;
 
             case "menu-game":
