@@ -29,8 +29,7 @@ import nl.gamedata.data.tables.records.GameRecord;
  */
 public class MaintainGame
 {
-    public static void tableGame(final AdminData data, final HttpServletRequest request, final String menuChoice,
-            final int recordId)
+    public static void tableGame(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, true, "Code", true);
@@ -39,7 +38,7 @@ public class MaintainGame
         for (var game : gameRecords)
         {
             String archived = game.getArchived() == 0 ? "N" : "Y";
-            AdminTable.tableRow(s, recordId, new String[] {game.getCode(), game.getName(), archived});
+            AdminTable.tableRow(s, game.getId(), new String[] {game.getCode(), game.getName(), archived});
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());

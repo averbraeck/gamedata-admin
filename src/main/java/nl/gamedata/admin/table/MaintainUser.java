@@ -38,8 +38,7 @@ import nl.gamedata.data.tables.records.UserRecord;
  */
 public class MaintainUser
 {
-    public static void tableUser(final AdminData data, final HttpServletRequest request, final String menuChoice,
-            final int recordId)
+    public static void tableUser(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin"}, true, "Name", true);

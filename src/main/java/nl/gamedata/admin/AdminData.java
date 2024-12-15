@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
+import org.jooq.Table;
+import org.jooq.TableField;
 import org.jooq.TableRecord;
 import org.jooq.UpdatableRecord;
 import org.jooq.impl.DSL;
@@ -231,9 +233,14 @@ public class AdminData extends CommonData
         this.editRecord = editRecord;
     }
 
-    public <R extends org.jooq.UpdatableRecord<R>> int saveRecord(final HttpServletRequest request)
+    @SuppressWarnings("unchecked")
+    public <R extends org.jooq.UpdatableRecord<R>> int saveRecord(final HttpServletRequest request, final int recordId)
     {
-        String errors = this.editForm.setFields(this.editRecord, request, this);
+        Table<R> table = (Table<R>) this.editRecord.getTable();
+        DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
+        R record = recordId == 0 ? dslContext.newRecord(table) : (R) this.editRecord;
+        // dslContext.selectFrom(table).where(((TableField<R, Integer>) table.field("id")).eq(recordId)).fetchOne();
+        String errors = this.editForm.setFields(record, request, this);
         String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
         if (errors.length() > 0)
         {
@@ -246,19 +253,19 @@ public class AdminData extends CommonData
         {
             try
             {
-                this.editRecord.store();
+                record.store();
             }
             catch (Exception exception)
             {
                 System.err.println(exception.getMessage());
-                System.err.println(this.editRecord);
+                System.err.println(record);
                 ModalWindowUtils.popup(this, "Error storing record (2)", "<p>" + exception.getMessage() + "</p>", backToMenu);
                 setError(true);
                 return -1;
             }
         }
         setError(false);
-        return Integer.valueOf(this.editRecord.get("id").toString());
+        return Integer.valueOf(record.get("id").toString());
     }
 
     public <R extends org.jooq.UpdatableRecord<R>> void askDeleteRecord()

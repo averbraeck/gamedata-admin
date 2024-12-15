@@ -27,8 +27,7 @@ import nl.gamedata.data.tables.records.OrganizationRecord;
  */
 public class MaintainOrganization
 {
-    public static void tableOrganization(final AdminData data, final HttpServletRequest request, final String menuChoice,
-            final int recordId)
+    public static void tableOrganization(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "Organization", new String[] {"Code", "Name"}, true, "Code", true);
@@ -36,7 +35,7 @@ public class MaintainOrganization
         List<OrganizationRecord> organizationRecords = dslContext.selectFrom(Tables.ORGANIZATION).fetch();
         for (var organization : organizationRecords)
         {
-            AdminTable.tableRow(s, recordId, new String[] {organization.getCode(), organization.getName()});
+            AdminTable.tableRow(s, organization.getId(), new String[] {organization.getCode(), organization.getName()});
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
