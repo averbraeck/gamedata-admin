@@ -49,8 +49,8 @@ public class MaintainOrganization
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Organization", click, recordId);
-        form.addEntry(new TableEntryString(Tables.ORGANIZATION.CODE, organization));
-        form.addEntry(new TableEntryString(Tables.ORGANIZATION.NAME, organization));
+        form.addEntry(new TableEntryString(Tables.ORGANIZATION.CODE, organization).setMinLength(2));
+        form.addEntry(new TableEntryString(Tables.ORGANIZATION.NAME, organization).setMinLength(2));
         form.addEntry(new TableEntryImage(Tables.ORGANIZATION.LOGO, organization));
         form.endForm();
         data.setContent(form.process());

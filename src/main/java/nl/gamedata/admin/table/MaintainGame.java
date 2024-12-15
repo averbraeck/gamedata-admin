@@ -51,10 +51,10 @@ public class MaintainGame
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game", click, recordId);
-        form.addEntry(new TableEntryString(Tables.GAME.CODE, game));
-        form.addEntry(new TableEntryString(Tables.GAME.NAME, game));
+        form.addEntry(new TableEntryString(Tables.GAME.CODE, game).setMinLength(2));
+        form.addEntry(new TableEntryString(Tables.GAME.NAME, game).setMinLength(2));
         form.addEntry(new TableEntryText(Tables.GAME.DESCRIPTION, game));
-        form.addEntry(new TableEntryBoolean(Tables.GAME.TOKEN_FORCED, game));
+        form.addEntry(new TableEntryBoolean(Tables.GAME.TOKEN_FORCED, game).setLabel("Token forced?"));
         form.addEntry(new TableEntryBoolean(Tables.GAME.ARCHIVED, game).setLabel("Archived?"));
         form.addEntry(new TableEntryImage(Tables.GAME.LOGO, game));
         form.endForm();
