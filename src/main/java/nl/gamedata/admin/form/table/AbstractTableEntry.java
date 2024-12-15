@@ -19,7 +19,23 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         super(tableField.getName(), tableField.getName());
         this.tableField = tableField;
         this.type = this.tableField.getType().getName().toUpperCase();
-        setRequired(false);
+        setRequired(!this.tableField.getDataType().nullable());
+        char[] name = this.tableField.getName().toLowerCase().toCharArray();
+        boolean upper = true;
+        for (int i = 0; i < name.length; i++)
+        {
+            if (upper)
+            {
+                name[i] = Character.toUpperCase(Character.valueOf(name[i]));
+                upper = false;
+            }
+            else if (name[i] == '-' || name[i] == '_')
+            {
+                name[i] = ' ';
+                upper = true;
+            }
+        }
+        setLabel(String.valueOf(name));
         setReadOnly(false);
         this.errors = "";
     }
