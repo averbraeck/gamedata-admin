@@ -1,16 +1,23 @@
 package nl.gamedata.admin.form.table;
 
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryString extends AbstractTableEntry<TableEntryString, String>
 {
 
     int maxChars;
 
-    public TableEntryString(final TableField<?, String> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryString(final TableField<R, String> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
         this.maxChars = tableField.getDataType().length();
+    }
+
+    @Override
+    protected String getDefaultValue()
+    {
+        return "";
     }
 
     public int getMaxChars()

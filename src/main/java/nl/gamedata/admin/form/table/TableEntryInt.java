@@ -1,6 +1,7 @@
 package nl.gamedata.admin.form.table;
 
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryInt extends AbstractTableEntry<TableEntryInt, Integer>
 {
@@ -13,13 +14,19 @@ public class TableEntryInt extends AbstractTableEntry<TableEntryInt, Integer>
 
     String pattern;
 
-    public TableEntryInt(final TableField<?, Integer> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryInt(final TableField<R, Integer> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
         this.min = -Integer.MAX_VALUE;
         this.max = Integer.MAX_VALUE;
         this.step = 1;
         this.pattern = "\\d+";
+    }
+
+    @Override
+    protected Integer getDefaultValue()
+    {
+        return 0;
     }
 
     public int getMin()

@@ -3,15 +3,22 @@ package nl.gamedata.admin.form.table;
 import java.util.List;
 
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryPickList extends AbstractTableEntry<TableEntryPickList, String>
 {
 
     private String[] pickListEntries;
 
-    public TableEntryPickList(final TableField<?, String> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryPickList(final TableField<R, String> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
+    }
+
+    @Override
+    protected String getDefaultValue()
+    {
+        return this.pickListEntries[0];
     }
 
     @Override

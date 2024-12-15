@@ -1,6 +1,7 @@
 package nl.gamedata.admin.form.table;
 
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryDouble extends AbstractTableEntry<TableEntryDouble, Double>
 {
@@ -11,12 +12,18 @@ public class TableEntryDouble extends AbstractTableEntry<TableEntryDouble, Doubl
 
     Double step;
 
-    public TableEntryDouble(final TableField<?, Double> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryDouble(final TableField<R, Double> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
         this.min = -Double.MAX_VALUE;
         this.max = Double.MAX_VALUE;
         this.step = Double.NaN;
+    }
+
+    @Override
+    protected Double getDefaultValue()
+    {
+        return 0.0d;
     }
 
     public double getMin()

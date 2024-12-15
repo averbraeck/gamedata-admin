@@ -2,29 +2,21 @@ package nl.gamedata.admin.form.table;
 
 import org.jooq.Record;
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryBoolean extends AbstractTableEntry<TableEntryBoolean, Byte>
 {
 
     // assumes boolean is coded as TINYINT
-    public TableEntryBoolean(final TableField<?, Byte> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryBoolean(final TableField<R, Byte> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
     }
 
-    public TableEntryBoolean setInitialValue(final Byte initialValue, final boolean valueWhenNull)
+    @Override
+    protected Byte getDefaultValue()
     {
-        if (this.tableField.getDataType().nullable() && initialValue == null)
-        {
-            this.initialValue = null;
-            setLastEnteredValue(null);
-        }
-        else
-        {
-            this.initialValue = initialValue != null ? initialValue : valueWhenNull ? (byte) 1 : 0;
-            setLastEnteredValue(codeForEdit(this.initialValue));
-        }
-        return this;
+        return Byte.valueOf((byte) 0);
     }
 
     @Override

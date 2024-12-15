@@ -2,15 +2,22 @@ package nl.gamedata.admin.form.table;
 
 import org.jooq.EnumType;
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryEnum<T extends EnumType> extends AbstractTableEntry<TableEntryEnum<T>, T>
 {
 
     private T[] pickListEntries;
 
-    public TableEntryEnum(final TableField<?, T> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryEnum(final TableField<R, T> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
+    }
+
+    @Override
+    protected T getDefaultValue()
+    {
+        return this.pickListEntries[0];
     }
 
     @Override

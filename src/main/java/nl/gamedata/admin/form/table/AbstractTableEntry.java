@@ -2,6 +2,7 @@ package nl.gamedata.admin.form.table;
 
 import org.jooq.Record;
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 import nl.gamedata.admin.form.AbstractFormEntry;
 
@@ -14,7 +15,7 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
 
     private boolean noWrite = false;
 
-    public AbstractTableEntry(final TableField<?, T> tableField)
+    public <R extends UpdatableRecord<R>> AbstractTableEntry(final TableField<R, T> tableField, final UpdatableRecord<R> record)
     {
         super(tableField.getName(), tableField.getName());
         this.tableField = tableField;
@@ -37,6 +38,7 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         }
         setLabel(String.valueOf(name));
         setReadOnly(false);
+        setInitialValue(record);
         this.errors = "";
     }
 
@@ -64,9 +66,8 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         return (F) this;
     }
 
-    @Override
     @SuppressWarnings("unchecked")
-    public F setInitialValue(final T initialValue, final T valueWhenNull)
+    public F setInitialValue(final T initialValue)
     {
         if (this.tableField.getDataType().nullable() && initialValue == null)
         {
@@ -75,11 +76,18 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         }
         else
         {
-            this.initialValue = initialValue != null ? initialValue : valueWhenNull;
+            this.initialValue = initialValue != null ? initialValue : getDefaultValue();
             setLastEnteredValue(codeForEdit(this.initialValue));
         }
         return (F) this;
     }
+
+    public F setInitialValue(final UpdatableRecord<?> record)
+    {
+        return setInitialValue(record.get(this.tableField));
+    }
+
+    protected abstract T getDefaultValue();
 
     @Override
     protected void validate(final String value)

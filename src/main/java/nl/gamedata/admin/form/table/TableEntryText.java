@@ -1,6 +1,7 @@
 package nl.gamedata.admin.form.table;
 
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryText extends AbstractTableEntry<TableEntryText, String>
 {
@@ -9,11 +10,17 @@ public class TableEntryText extends AbstractTableEntry<TableEntryText, String>
 
     int rows;
 
-    public TableEntryText(final TableField<?, String> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryText(final TableField<R, String> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
         this.maxChars = 65535;
         this.rows = 10;
+    }
+
+    @Override
+    protected String getDefaultValue()
+    {
+        return "";
     }
 
     public int getMaxChars()

@@ -51,15 +51,12 @@ public class MaintainGame
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game", click, recordId);
-        form.addEntry(new TableEntryString(Tables.GAME.CODE).setInitialValue(game.getCode(), "").setLabel("Code"));
-        form.addEntry(new TableEntryString(Tables.GAME.NAME).setInitialValue(game.getName(), "").setLabel("Name"));
-        form.addEntry(
-                new TableEntryText(Tables.GAME.DESCRIPTION).setInitialValue(game.getDescription(), "").setLabel("Description"));
-        form.addEntry(new TableEntryBoolean(Tables.GAME.TOKEN_FORCED).setInitialValue(game.getTokenForced(), false)
-                .setLabel("Token forced?"));
-        form.addEntry(
-                new TableEntryBoolean(Tables.GAME.ARCHIVED).setInitialValue(game.getArchived(), false).setLabel("Archived?"));
-        form.addEntry(new TableEntryImage(Tables.GAME.LOGO).setInitialValue(game.getLogo(), null).setLabel("Logo"));
+        form.addEntry(new TableEntryString(Tables.GAME.CODE, game));
+        form.addEntry(new TableEntryString(Tables.GAME.NAME, game));
+        form.addEntry(new TableEntryText(Tables.GAME.DESCRIPTION, game));
+        form.addEntry(new TableEntryBoolean(Tables.GAME.TOKEN_FORCED, game));
+        form.addEntry(new TableEntryBoolean(Tables.GAME.ARCHIVED, game).setLabel("Archived?"));
+        form.addEntry(new TableEntryImage(Tables.GAME.LOGO, game));
         form.endForm();
         data.setContent(form.process());
     }

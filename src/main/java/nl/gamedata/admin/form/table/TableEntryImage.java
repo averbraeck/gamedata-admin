@@ -2,6 +2,7 @@ package nl.gamedata.admin.form.table;
 
 import org.jooq.Record;
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryImage extends AbstractTableEntry<TableEntryImage, byte[]>
 {
@@ -24,13 +25,19 @@ public class TableEntryImage extends AbstractTableEntry<TableEntryImage, byte[]>
     /** large image (200x200). */
     private boolean largeImage;
 
-    public TableEntryImage(final TableField<?, byte[]> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryImage(final TableField<R, byte[]> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
         this.filename = "";
         this.imageServlet = "";
         this.largeImage = false;
         this.imageNr = 0;
+    }
+
+    @Override
+    protected byte[] getDefaultValue()
+    {
+        return null;
     }
 
     @Override

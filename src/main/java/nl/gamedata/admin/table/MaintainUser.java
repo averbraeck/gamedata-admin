@@ -101,11 +101,11 @@ public class MaintainUser
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("User", click, recordId);
-        form.addEntry(new TableEntryString(Tables.USER.NAME));
-        form.addEntry(new TableEntryString(Tables.USER.EMAIL).setInitialValue(user.getEmail(), ""));
-        form.addEntry(new TableEntryString(Tables.USER.PASSWORD).setInitialValue("", "").setRequired(recordId == 0));
-        form.addEntry(new TableEntryString(Tables.USER.SALT).setInitialValue(salt, salt).setHidden());
-        form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN).setInitialValue(user.getSuperAdmin(), false));
+        form.addEntry(new TableEntryString(Tables.USER.NAME, user));
+        form.addEntry(new TableEntryString(Tables.USER.EMAIL, user));
+        form.addEntry(new TableEntryString(Tables.USER.PASSWORD, user).setInitialValue("", "").setRequired(recordId == 0));
+        form.addEntry(new TableEntryString(Tables.USER.SALT, user).setInitialValue(salt).setHidden());
+        form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN, user).setInitialValue(user.getSuperAdmin()));
         form.endForm();
         data.setContent(form.process());
     }

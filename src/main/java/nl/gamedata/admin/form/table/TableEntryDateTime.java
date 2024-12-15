@@ -3,13 +3,20 @@ package nl.gamedata.admin.form.table;
 import java.time.LocalDateTime;
 
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 
 public class TableEntryDateTime extends AbstractTableEntry<TableEntryDateTime, LocalDateTime>
 {
 
-    public TableEntryDateTime(final TableField<?, LocalDateTime> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryDateTime(final TableField<R, LocalDateTime> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
+    }
+
+    @Override
+    protected LocalDateTime getDefaultValue()
+    {
+        return LocalDateTime.now();
     }
 
     @Override

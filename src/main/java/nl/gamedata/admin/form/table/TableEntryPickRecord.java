@@ -10,6 +10,7 @@ import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.UpdatableRecord;
 import org.jooq.impl.DSL;
 import org.jooq.types.UInteger;
 
@@ -21,9 +22,15 @@ public class TableEntryPickRecord extends AbstractTableEntry<TableEntryPickRecor
     /** Entries alphabetically sorted on pick name. */
     private SortedMap<String, Integer> records = new TreeMap<>();
 
-    public TableEntryPickRecord(final TableField<?, Integer> tableField)
+    public <R extends UpdatableRecord<R>> TableEntryPickRecord(final TableField<R, Integer> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField);
+        super(tableField, record);
+    }
+
+    @Override
+    protected Integer getDefaultValue()
+    {
+        return 0;
     }
 
     @Override
