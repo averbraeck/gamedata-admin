@@ -105,9 +105,9 @@ public class Table
         s.append(tableHeaderBottom);
     }
 
-    public static void tableRow(final StringBuilder s, final int recordNr, final String[] content)
+    public static void tableRow(final StringBuilder s, final int recordId, final String[] content)
     {
-        s.append(tableRowStart.formatted(recordNr, recordNr, recordNr, recordNr));
+        s.append(tableRowStart.formatted(recordId, recordId, recordId, recordId));
         for (String c : content)
         {
             s.append(tableCell.formatted(c));

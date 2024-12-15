@@ -19,7 +19,7 @@ public class TableForm
 
     private StringBuilder s;
 
-    private int recordNr;
+    private int recordId;
 
     private String cancelMethod = "";
 
@@ -159,15 +159,15 @@ public class TableForm
     private void buttonRow()
     {
         this.s.append(htmlStartButtonRow);
-        this.s.append(htmlButton.formatted(this.cancelMethod, this.recordNr, "Cancel"));
+        this.s.append(htmlButton.formatted(this.cancelMethod, this.recordId, "Cancel"));
         if (this.edit && this.saveMethod.length() > 0)
-            this.s.append(htmlButton.formatted(this.saveMethod, this.recordNr, "Save"));
+            this.s.append(htmlButton.formatted(this.saveMethod, this.recordId, "Save"));
         if (!this.edit && this.editMethod.length() > 0)
-            this.s.append(htmlButton.formatted(this.editMethod, this.recordNr, "Edit"));
-        if (this.edit && this.recordNr > 0 && this.deleteMethod.length() > 0)
-            this.s.append(htmlButton.formatted(this.deleteMethod, this.recordNr, "Delete"));
+            this.s.append(htmlButton.formatted(this.editMethod, this.recordId, "Edit"));
+        if (this.edit && this.recordId > 0 && this.deleteMethod.length() > 0)
+            this.s.append(htmlButton.formatted(this.deleteMethod, this.recordId, "Delete"));
         for (int i = 0; i < this.additionalButtons.size(); i++)
-            this.s.append(htmlButton.formatted(this.additionalMethods.get(i), this.recordNr, this.additionalButtons.get(i)));
+            this.s.append(htmlButton.formatted(this.additionalMethods.get(i), this.recordId, this.additionalButtons.get(i)));
         this.s.append(htmlEndButtonRow);
     }
 
@@ -210,9 +210,9 @@ public class TableForm
         return this;
     }
 
-    public TableForm setRecordNr(final int recordNr)
+    public TableForm setRecordNr(final int recordId)
     {
-        this.recordNr = recordNr;
+        this.recordId = recordId;
         return this;
     }
 
