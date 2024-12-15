@@ -96,8 +96,11 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         this.errors = "";
         if (value == null && !this.tableField.getDataType().nullable())
             addError("should not be null");
-        else if (value.length() == 0 && isRequired())
-            addError("should not be empty");
+        else if (value != null)
+        {
+            if (value.length() < this.minLength)
+                addError("should not be empty");
+        }
     }
 
     public String setRecordValue(final Record record, final String value)

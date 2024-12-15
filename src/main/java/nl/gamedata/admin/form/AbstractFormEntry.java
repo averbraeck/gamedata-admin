@@ -21,6 +21,8 @@ public abstract class AbstractFormEntry<F extends AbstractFormEntry<F, T>, T>
 
     protected String errors; // cumulative error register
 
+    protected int minLength; // minimum "typed" length in nr of characters
+
     protected T initialValue; // to be able to reset the form
 
     protected String lastEnteredValue; // to restore the form after error
@@ -32,6 +34,7 @@ public abstract class AbstractFormEntry<F extends AbstractFormEntry<F, T>, T>
         this.required = false;
         this.readOnly = false;
         this.errors = "";
+        this.minLength = 0;
     }
 
     public TableForm getForm()
@@ -102,13 +105,25 @@ public abstract class AbstractFormEntry<F extends AbstractFormEntry<F, T>, T>
         return setHidden(true);
     }
 
+    public int getMinLength()
+    {
+        return this.minLength;
+    }
+
+    @SuppressWarnings("unchecked")
+    public F setMinLength(final int minLength)
+    {
+        this.minLength = minLength;
+        return (F) this;
+    }
+
     public T getInitialValue()
     {
         return this.initialValue;
     }
 
     @SuppressWarnings("unchecked")
-    public F setInitialValue(final T initialValue, final T valueWhenNull)
+    protected F setInitialValue(final T initialValue, final T valueWhenNull)
     {
         this.initialValue = initialValue != null ? initialValue : valueWhenNull;
         setLastEnteredValue(codeForEdit(this.initialValue));
@@ -164,8 +179,11 @@ public abstract class AbstractFormEntry<F extends AbstractFormEntry<F, T>, T>
         this.errors = "";
         if (value == null && isRequired())
             addError("should not be null");
-        else if (value.length() == 0 && isRequired())
-            addError("should not be empty");
+        else if (value != null)
+        {
+            if (value.length() < this.minLength)
+                addError("should not be empty");
+        }
     }
 
     public abstract String makeHtml();

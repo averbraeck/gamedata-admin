@@ -96,16 +96,16 @@ public class MaintainUser
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
         UserRecord user = recordId == 0 ? Tables.USER.newRecord() : SqlUtils.readRecordFromId(data, Tables.USER, recordId);
-        String salt = recordId == 0 ? user.getSalt() : UUID.randomUUID().toString();
+        String salt = recordId == 0 ? UUID.randomUUID().toString() : user.getSalt();
         data.setEditRecord(user);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("User", click, recordId);
         form.addEntry(new TableEntryString(Tables.USER.NAME, user));
         form.addEntry(new TableEntryString(Tables.USER.EMAIL, user));
-        form.addEntry(new TableEntryString(Tables.USER.PASSWORD, user).setInitialValue("", "").setRequired(recordId == 0));
+        form.addEntry(new TableEntryString(Tables.USER.PASSWORD, user).setInitialValue("").setRequired(recordId == 0));
         form.addEntry(new TableEntryString(Tables.USER.SALT, user).setInitialValue(salt).setHidden());
-        form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN, user).setInitialValue(user.getSuperAdmin()));
+        form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN, user));
         form.endForm();
         data.setContent(form.process());
     }
@@ -121,6 +121,7 @@ public class MaintainUser
         if (errors.length() > 0)
         {
             ModalWindowUtils.popup(data, "Error in user entries for user", errors, backToMenu);
+            System.err.println("Error in user entries for user - " + errors);
             return -1;
         }
         else
@@ -141,6 +142,7 @@ public class MaintainUser
                 {
                     ModalWindowUtils.popup(data, "Error storing user record (MD5 not found)", "<p>" + e1.getMessage() + "</p>",
                             backToMenu);
+                    System.err.println("rror storing user record (MD5 not found) - " + e1.getMessage());
                     return -1;
                 }
             }
@@ -153,6 +155,7 @@ public class MaintainUser
             catch (DataAccessException exception)
             {
                 ModalWindowUtils.popup(data, "Error storing record", "<p>" + exception.getMessage() + "</p>", backToMenu);
+                System.err.println("Error storing record - " + exception.getMessage());
                 return -1;
             }
             return user.getId();
