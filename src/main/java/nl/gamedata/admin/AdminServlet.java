@@ -42,8 +42,8 @@ public class AdminServlet extends HttpServlet
             click = request.getParameter("editClick").toString();
 
         int recordId = 0;
-        if (request.getParameter("recordNr") != null)
-            recordId = Integer.parseInt(request.getParameter("recordNr"));
+        if (request.getParameter("recordId") != null)
+            recordId = Integer.parseInt(request.getParameter("recordId"));
         else if (request.getParameter("editRecordNr") != null)
             recordId = Integer.parseInt(request.getParameter("editRecordNr"));
 
@@ -68,7 +68,7 @@ public class AdminServlet extends HttpServlet
         else if (click.startsWith("az"))
             handleSort(request, response, click, data, recordId);
         else
-            System.err.println("Unknown menu choice: " + click + " with recordNr: " + recordId);
+            System.err.println("Unknown menu choice: " + click + " with recordId: " + recordId);
 
         response.sendRedirect("jsp/admin/admin.jsp");
     }
@@ -80,22 +80,22 @@ public class AdminServlet extends HttpServlet
         switch (click)
         {
             case "menu-user":
-                data.setTabChoice("tab-user#user");
-                MaintainUser.table(data, request, click, recordId);
+                data.putTabChoice("user", "user");
+                MaintainUser.tableUser(data, request, click, recordId);
                 break;
 
             case "menu-organization":
-                data.setTabChoice("tab-organization#organization");
-                MaintainOrganization.table(data, request, click, recordId);
+                data.putTabChoice("organization", "organization");
+                MaintainOrganization.tableOrganization(data, request, click, recordId);
                 break;
 
             case "menu-game":
-                data.setTabChoice("tab-game#game");
-                MaintainGame.table(data, request, click, recordId);
+                data.putTabChoice("game", "game");
+                MaintainGame.tableGame(data, request, click, recordId);
                 break;
 
             default:
-                System.err.println("Unknown menu choice: " + click + " with recordNr: " + recordId);
+                System.err.println("Unknown menu choice: " + click + " with recordId: " + recordId);
                 break;
         }
     }
@@ -103,16 +103,16 @@ public class AdminServlet extends HttpServlet
     private void handleTab(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
-        data.setTabChoice(click);
-        System.err.println("TAB choice: " + click + " with recordNr: " + recordId);
+        data.putTabChoice(data.getMenuChoice(), click.replace("tab-", ""));
+        System.err.println("TAB choice: " + click + " with recordId: " + recordId);
     }
 
     private void handleRecord(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
-        String menu = data.getMenuChoice().replace("menu-", "");
-        String tab = data.getTabChoice().substring(data.getTabChoice().indexOf('#') + 1);
-        System.err.println("RECORD choice: " + click + " with recordNr: " + recordId);
+        String menu = data.getMenuChoice();
+        String tab = data.getTabChoice(menu);
+        System.err.println("RECORD choice: " + click + " with recordId: " + recordId);
         switch (menu)
         {
             case "organization" ->
@@ -121,7 +121,7 @@ public class AdminServlet extends HttpServlet
                 {
                     case "organization" -> MaintainOrganization.edit(data, request, click, recordId);
                     case "user" -> MaintainOrganization.edit(data, request, click, recordId);
-                    default -> System.err.println("Unexpected value: " + data.getTabChoice());
+                    default -> System.err.println("Unexpected tab value: " + tab);
                 }
                 break;
             }
@@ -130,17 +130,18 @@ public class AdminServlet extends HttpServlet
                 switch (tab)
                 {
                     case "user" -> MaintainUser.edit(data, request, click, recordId);
+                    default -> System.err.println("Unexpected tab value: " + tab);
                 }
                 break;
             }
-            default -> System.err.println("Unexpected value: " + data.getMenuChoice());
+            default -> System.err.println("Unexpected menu value: " + menu);
         }
     }
 
     private void handleSort(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
-        System.err.println("AZ choice: " + click + " with recordNr: " + recordId);
+        System.err.println("AZ choice: " + click + " with recordId: " + recordId);
     }
 
 }
