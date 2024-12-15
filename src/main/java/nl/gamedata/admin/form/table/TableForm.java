@@ -69,7 +69,7 @@ public class TableForm
             <div class="gd-form">
               <form id="editForm" action="/gamedata-admin/admin" method="POST" enctype="multipart/form-data">
                 <input id="editClick" type="hidden" name="editClick" value="tobefilled" />
-                <input id="editRecordNr" type="hidden" name="editRecordNr" value="0" />
+                <input id="editRecordId" type="hidden" name="editRecordId" value="0" />
                 """;
 
     /** No tags. */
@@ -77,7 +77,7 @@ public class TableForm
             <div class="gd-form">
               <form id="editForm" action="/gamedata-admin/admin" method="POST">
                 <input id="editClick" type="hidden" name="editClick" value="tobefilled" />
-                <input id="editRecordNr" type="hidden" name="editRecordNr" value="0" />
+                <input id="editRecordId" type="hidden" name="editRecordId" value="0" />
                 """;
 
     /** No tags. */
