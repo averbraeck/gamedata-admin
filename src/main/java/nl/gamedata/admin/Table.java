@@ -14,7 +14,7 @@ public class Table
     private static final String tableTitle = """
             <div class="gd-table-caption">
               <div class="gd-table-title"><h3>%s</h3></div>
-              <div class="gd-button" style="visibiliy:%s;">
+              <div class="gd-button" style="visibility:%s;">
                 <button type="button" class="btn btn-primary" onclick="clickMenu('record-new')">New</button>
               </div>
             </div>
