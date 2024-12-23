@@ -140,6 +140,11 @@ public class AdminData extends CommonData
         return getUser() == null ? false : getUser().getSuperAdmin() != 0;
     }
 
+    public boolean isGameAdmin()
+    {
+        return getUser() == null ? false : getUser().getGameAdmin() != 0;
+    }
+
     public Map<OrganizationRecord, Access> getOrganizationRoles()
     {
         if (this.organizationRoles == null)
