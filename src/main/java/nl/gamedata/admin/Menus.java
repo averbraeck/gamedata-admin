@@ -182,7 +182,7 @@ public class Menus
         Set<Integer> roles = new HashSet<>();
         if (data.isSuperAdmin())
             roles.add(0);
-        if (data.getGameRoles().size() > 0 || data.isGameAdmin())
+        if (data.getGameAccess().size() > 0 || data.isGameAdmin())
             roles.add(1);
         if (data.getOrganizationAccess().size() > 0)
             roles.add(2);

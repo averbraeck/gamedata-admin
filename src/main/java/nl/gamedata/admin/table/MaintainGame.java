@@ -28,8 +28,9 @@ public class MaintainGame
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, data.isSuperAdmin() || data.isGameAdmin(),
                 "Code", true);
-        for (var game : data.getGameRoles().keySet())
+        for (var gameId : data.getGameAccess().keySet())
         {
+            var game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
             String archived = game.getArchived() == 0 ? "N" : "Y";
             AdminTable.tableRow(s, game.getId(), new String[] {game.getCode(), game.getName(), archived});
         }

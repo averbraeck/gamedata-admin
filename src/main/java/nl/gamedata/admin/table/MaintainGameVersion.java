@@ -15,9 +15,9 @@ import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
+import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
-import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameVersionRecord;
 
 /**
@@ -39,9 +39,9 @@ public class MaintainGameVersion
                 .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var gv : gvList)
         {
-            for (GameRecord gr : data.getGameRoles().keySet())
+            for (Integer gameId : data.getGameAccess().keySet())
             {
-                if (gr.getId().equals(gv.getValue(Tables.GAME.ID)))
+                if (gameId.equals(gv.getValue(Tables.GAME.ID)))
                 {
                     int id = gv.getValue(Tables.GAME_VERSION.ID);
                     String game = gv.getValue(Tables.GAME.CODE);
@@ -65,7 +65,7 @@ public class MaintainGameVersion
         form.startForm();
         form.setHeader("Game Version", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.GAME_VERSION.GAME_ID, gameVersion)
-                .setPickTable(data, data.getGameRolesEdit(), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
+                .setPickTable(data, data.getGamePicklist(Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
         form.addEntry(new TableEntryString(Tables.GAME_VERSION.NAME, gameVersion).setMinLength(2));
         form.addEntry(new TableEntryBoolean(Tables.GAME_VERSION.ARCHIVED, gameVersion).setLabel("Archived?"));
         form.endForm();

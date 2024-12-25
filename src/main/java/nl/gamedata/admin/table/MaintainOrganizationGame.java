@@ -70,7 +70,7 @@ public class MaintainOrganizationGame
         form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME.ORGANIZATION_ID, og).setPickTable(data,
                 data.getOrganizationPicklist(Access.EDIT), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE));
         form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME.GAME_ID, og).setPickTable(data,
-                data.getGameRoles().keySet(), Tables.GAME.ID, Tables.GAME.CODE));
+                data.getGamePicklist(Access.VIEW), Tables.GAME.ID, Tables.GAME.CODE));
         form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_GAME.TOKEN_FORCED, og));
         form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_GAME.ANONYMOUS_SESSIONS, og));
         form.endForm();
