@@ -95,6 +95,9 @@ public class AdminServlet extends HttpServlet
         data.putTabChoice(data.getMenuChoice(), tab);
         String menu = data.getMenuChoice();
         System.err.println("TAB choice: " + click + " with recordId: " + recordId);
+        Menus.table(data, request, click);
+
+        /*-
         switch (menu)
         {
             // accessible for OrganizationAdmin and SuperAdmin
@@ -103,13 +106,13 @@ public class AdminServlet extends HttpServlet
                 if (Menus.showMenu(data, menu))
                     switch (tab)
                     {
-                        case "organization" -> MaintainOrganization.tableOrganization(data, request, click);
-                        case "user" -> MaintainUser.tableUser(data, request, click);
-                        case "user-role" -> MaintainOrganization.tableOrganization(data, request, click);
-                        case "game" -> MaintainGame.tableGame(data, request, click);
-                        case "game-access" -> MaintainOrganization.tableOrganization(data, request, click);
-                        case "access-token" -> MaintainOrganization.tableOrganization(data, request, click);
-                        case "game-session" -> MaintainOrganization.tableOrganization(data, request, click);
+                        case "organization" -> MaintainOrganization.table(data, request, click);
+                        case "user" -> MaintainUser.table(data, request, click);
+                        case "user-role" -> MaintainOrganization.table(data, request, click);
+                        case "game" -> MaintainGame.table(data, request, click);
+                        case "game-access" -> MaintainOrganization.table(data, request, click);
+                        case "access-token" -> MaintainOrganization.table(data, request, click);
+                        case "game-session" -> MaintainOrganization.table(data, request, click);
                         default -> System.err.println("Unexpected tab value: " + tab);
                     }
                 break;
@@ -119,10 +122,10 @@ public class AdminServlet extends HttpServlet
                 if (Menus.showMenu(data, menu))
                     switch (tab)
                     {
-                        case "user" -> MaintainUser.tableUser(data, request, click);
-                        case "user-role" -> MaintainUser.tableUser(data, request, click);
-                        case "game" -> MaintainGame.tableGame(data, request, click);
-                        case "game-role" -> MaintainUser.tableUser(data, request, click);
+                        case "user" -> MaintainUser.table(data, request, click);
+                        case "user-role" -> MaintainUser.table(data, request, click);
+                        case "game" -> MaintainGame.table(data, request, click);
+                        case "game-role" -> MaintainUser.table(data, request, click);
                         default -> System.err.println("Unexpected tab value: " + tab);
                     }
                 break;
@@ -132,13 +135,13 @@ public class AdminServlet extends HttpServlet
                 if (Menus.showMenu(data, menu))
                     switch (tab)
                     {
-                        case "game" -> MaintainGame.tableGame(data, request, click);
-                        case "game-version" -> MaintainGame.tableGame(data, request, click);
-                        case "game-mission" -> MaintainGame.tableGame(data, request, click);
-                        case "scale" -> MaintainGame.tableGame(data, request, click);
-                        case "learning-goal" -> MaintainGame.tableGame(data, request, click);
-                        case "player-objective" -> MaintainGame.tableGame(data, request, click);
-                        case "group-objective" -> MaintainGame.tableGame(data, request, click);
+                        case "game" -> MaintainGame.table(data, request, click);
+                        case "game-version" -> MaintainGame.table(data, request, click);
+                        case "game-mission" -> MaintainGame.table(data, request, click);
+                        case "scale" -> MaintainGame.table(data, request, click);
+                        case "learning-goal" -> MaintainGame.table(data, request, click);
+                        case "player-objective" -> MaintainGame.table(data, request, click);
+                        case "group-objective" -> MaintainGame.table(data, request, click);
                         default -> System.err.println("Unexpected tab value: " + tab);
                     }
                 break;
@@ -148,9 +151,9 @@ public class AdminServlet extends HttpServlet
                 if (Menus.showMenu(data, menu))
                     switch (tab)
                     {
-                        case "game" -> MaintainGame.tableGame(data, request, click);
-                        case "game-access" -> MaintainGame.tableGame(data, request, click);
-                        case "game-token" -> MaintainGame.tableGame(data, request, click);
+                        case "game" -> MaintainGame.table(data, request, click);
+                        case "game-access" -> MaintainGame.table(data, request, click);
+                        case "game-token" -> MaintainGame.table(data, request, click);
                         default -> System.err.println("Unexpected tab value: " + tab);
                     }
                 break;
@@ -160,9 +163,9 @@ public class AdminServlet extends HttpServlet
                 if (Menus.showMenu(data, menu))
                     switch (tab)
                     {
-                        case "game" -> MaintainGame.tableGame(data, request, click);
-                        case "game-version" -> MaintainGame.tableGame(data, request, click);
-                        case "game-session" -> MaintainGame.tableGame(data, request, click);
+                        case "game" -> MaintainGame.table(data, request, click);
+                        case "game-version" -> MaintainGame.table(data, request, click);
+                        case "game-session" -> MaintainGame.table(data, request, click);
                         default -> System.err.println("Unexpected tab value: " + tab);
                     }
                 break;
@@ -172,11 +175,11 @@ public class AdminServlet extends HttpServlet
                 if (Menus.showMenu(data, menu))
                     switch (tab)
                     {
-                        case "game" -> MaintainGame.tableGame(data, request, click);
-                        case "game-version" -> MaintainGame.tableGame(data, request, click);
-                        case "game-session" -> MaintainGame.tableGame(data, request, click);
-                        case "game-mission" -> MaintainGame.tableGame(data, request, click);
-                        case "mission-event" -> MaintainGame.tableGame(data, request, click);
+                        case "game" -> MaintainGame.table(data, request, click);
+                        case "game-version" -> MaintainGame.table(data, request, click);
+                        case "game-session" -> MaintainGame.table(data, request, click);
+                        case "game-mission" -> MaintainGame.table(data, request, click);
+                        case "mission-event" -> MaintainGame.table(data, request, click);
                         default -> System.err.println("Unexpected tab value: " + tab);
                     }
                 break;
@@ -186,14 +189,14 @@ public class AdminServlet extends HttpServlet
                 if (Menus.showMenu(data, menu))
                     switch (tab)
                     {
-                        case "game" -> MaintainGame.tableGame(data, request, click);
-                        case "game-version" -> MaintainGame.tableGame(data, request, click);
-                        case "game-session" -> MaintainGame.tableGame(data, request, click);
-                        case "player" -> MaintainGame.tableGame(data, request, click);
-                        case "player-attempt" -> MaintainGame.tableGame(data, request, click);
-                        case "player-score" -> MaintainGame.tableGame(data, request, click);
-                        case "player-event" -> MaintainGame.tableGame(data, request, click);
-                        case "player-group-role" -> MaintainGame.tableGame(data, request, click);
+                        case "game" -> MaintainGame.table(data, request, click);
+                        case "game-version" -> MaintainGame.table(data, request, click);
+                        case "game-session" -> MaintainGame.table(data, request, click);
+                        case "player" -> MaintainGame.table(data, request, click);
+                        case "player-attempt" -> MaintainGame.table(data, request, click);
+                        case "player-score" -> MaintainGame.table(data, request, click);
+                        case "player-event" -> MaintainGame.table(data, request, click);
+                        case "player-group-role" -> MaintainGame.table(data, request, click);
                         default -> System.err.println("Unexpected tab value: " + tab);
                     }
                 break;
@@ -203,20 +206,21 @@ public class AdminServlet extends HttpServlet
                 if (Menus.showMenu(data, menu))
                     switch (tab)
                     {
-                        case "game" -> MaintainGame.tableGame(data, request, click);
-                        case "game-version" -> MaintainGame.tableGame(data, request, click);
-                        case "game-session" -> MaintainGame.tableGame(data, request, click);
-                        case "group" -> MaintainGame.tableGame(data, request, click);
-                        case "group-player" -> MaintainGame.tableGame(data, request, click);
-                        case "group-attempt" -> MaintainGame.tableGame(data, request, click);
-                        case "group-score" -> MaintainGame.tableGame(data, request, click);
-                        case "group-event" -> MaintainGame.tableGame(data, request, click);
+                        case "game" -> MaintainGame.table(data, request, click);
+                        case "game-version" -> MaintainGame.table(data, request, click);
+                        case "game-session" -> MaintainGame.table(data, request, click);
+                        case "group" -> MaintainGame.table(data, request, click);
+                        case "group-player" -> MaintainGame.table(data, request, click);
+                        case "group-attempt" -> MaintainGame.table(data, request, click);
+                        case "group-score" -> MaintainGame.table(data, request, click);
+                        case "group-event" -> MaintainGame.table(data, request, click);
                         default -> System.err.println("Unexpected tab value: " + tab);
                     }
                 break;
             }
             default -> System.err.println("Unexpected menu value: " + menu);
         }
+        */
     }
 
     private void handleRecordEdit(final HttpServletRequest request, final HttpServletResponse response, final String click,
@@ -225,19 +229,22 @@ public class AdminServlet extends HttpServlet
         String menu = data.getMenuChoice();
         String tab = data.getTabChoice(menu);
         System.err.println("RECORD choice: " + click + " with recordId: " + recordId);
+        Menus.edit(data, request, click, recordId);
+
+        /*-
         switch (menu)
         {
             case "organization" ->
             {
                 switch (tab)
                 {
-                    case "organization" -> MaintainOrganization.editOrganization(data, request, click, recordId);
-                    case "user" -> MaintainOrganization.editOrganization(data, request, click, recordId);
-                    case "user-role" -> MaintainOrganization.editOrganization(data, request, click, recordId);
-                    case "game" -> MaintainOrganization.editOrganization(data, request, click, recordId);
-                    case "game-access" -> MaintainOrganization.editOrganization(data, request, click, recordId);
-                    case "access-token" -> MaintainOrganization.editOrganization(data, request, click, recordId);
-                    case "game-session" -> MaintainOrganization.editOrganization(data, request, click, recordId);
+                    case "organization" -> MaintainOrganization.edit(data, request, click, recordId);
+                    case "user" -> MaintainOrganization.edit(data, request, click, recordId);
+                    case "user-role" -> MaintainOrganization.edit(data, request, click, recordId);
+                    case "game" -> MaintainOrganization.edit(data, request, click, recordId);
+                    case "game-access" -> MaintainOrganization.edit(data, request, click, recordId);
+                    case "access-token" -> MaintainOrganization.edit(data, request, click, recordId);
+                    case "game-session" -> MaintainOrganization.edit(data, request, click, recordId);
                     default -> System.err.println("Unexpected tab value: " + tab);
                 }
                 break;
@@ -338,6 +345,7 @@ public class AdminServlet extends HttpServlet
             }
             default -> System.err.println("Unexpected menu value: " + menu);
         }
+        */
     }
 
     private void handleRecordSave(final HttpServletRequest request, final HttpServletResponse response, final String click,
