@@ -15,6 +15,7 @@ import nl.gamedata.admin.table.MaintainDashboardRole;
 import nl.gamedata.admin.table.MaintainGame;
 import nl.gamedata.admin.table.MaintainGameRole;
 import nl.gamedata.admin.table.MaintainGameSessionRole;
+import nl.gamedata.admin.table.MaintainGameVersion;
 import nl.gamedata.admin.table.MaintainOrganization;
 import nl.gamedata.admin.table.MaintainOrganizationGame;
 import nl.gamedata.admin.table.MaintainOrganizationGameRole;
@@ -74,7 +75,8 @@ public class Menus
         List<Tab> gameTabs = new ArrayList<>();
         menuMap.put("game", new Menu("fa-dice", "game", "Game", gameTabs, Set.of(0, 1)));
         gameTabs.add(new Tab("game", "Game", true, Set.of(0, 1), MaintainGame::table, MaintainGame::edit));
-        // gameTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 1)));
+        gameTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 1), MaintainGameVersion::table,
+                MaintainGameVersion::edit));
         // gameTabs.add(new Tab("game-mission", "Game Mission", true, Set.of(0, 1)));
         // gameTabs.add(new Tab("scale", "Scale", false, Set.of(0, 1)));
         // gameTabs.add(new Tab("learning-goal", "Learning Goal", true, Set.of(0, 1)));
@@ -97,7 +99,8 @@ public class Menus
         menuMap.put("game-session",
                 new Menu("fa-calendar-check", "game-session", "Game Session", gameSessionTabs, Set.of(0, 4)));
         gameSessionTabs.add(new Tab("game", "Game", true, Set.of(0, 4), MaintainGame::table, MaintainGame::edit));
-        // gameSessionTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4)));
+        gameSessionTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4), MaintainGameVersion::table,
+                MaintainGameVersion::edit));
         // gameSessionTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4)));
         // gameSessionTabs.add(new Tab("session-dashboard", "Session Dashboard", false, Set.of(0, 4)));
 
@@ -112,7 +115,8 @@ public class Menus
         List<Tab> dashboardTabs = new ArrayList<>();
         menuMap.put("dashboard", new Menu("fa-table-cells-large", "dashboard", "Dashboard", dashboardTabs, Set.of(0, 5)));
         dashboardTabs.add(new Tab("game", "Game", true, Set.of(0, 5), MaintainGame::table, MaintainGame::edit));
-        // dashboardTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 5)));
+        dashboardTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 5), MaintainGameVersion::table,
+                MaintainGameVersion::edit));
         // dashboardTabs.add(new Tab("dashboard-template", "Dashboard Template", true, Set.of(0, 5)));
         // dashboardTabs.add(new Tab("template-element", "Template Element", true, Set.of(0, 5)));
         // dashboardTabs.add(new Tab("property-value", "Property Value", false, Set.of(0, 5)));
@@ -124,7 +128,8 @@ public class Menus
         List<Tab> dataSessionTabs = new ArrayList<>();
         menuMap.put("data-session", new Menu("fa-chart-pie", "data-session", "Data Session", dataSessionTabs, Set.of(0, 4)));
         dataSessionTabs.add(new Tab("game", "Game", true, Set.of(0, 4), MaintainGame::table, MaintainGame::edit));
-        // dataSessionTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4)));
+        dataSessionTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4), MaintainGameVersion::table,
+                MaintainGameVersion::edit));
         // dataSessionTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4)));
         // dataSessionTabs.add(new Tab("game-mission", "Game Mission", true, Set.of(0, 4)));
         // dataSessionTabs.add(new Tab("mission-event", "Mission Event", false, Set.of(0, 4)));
@@ -133,7 +138,8 @@ public class Menus
         List<Tab> dataPlayerTabs = new ArrayList<>();
         menuMap.put("data-player", new Menu("fa-chart-line", "data-player", "Data Player", dataPlayerTabs, Set.of(0, 4)));
         dataPlayerTabs.add(new Tab("game", "Game", true, Set.of(0, 4), MaintainGame::table, MaintainGame::edit));
-        // dataPlayerTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4)));
+        dataPlayerTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4), MaintainGameVersion::table,
+                MaintainGameVersion::edit));
         // dataPlayerTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4)));
         // dataPlayerTabs.add(new Tab("player", "Player", true, Set.of(0, 4)));
         // dataPlayerTabs.add(new Tab("player-attempt", "Player Attempt", true, Set.of(0, 4)));
