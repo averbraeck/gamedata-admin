@@ -42,7 +42,7 @@ public class AdminData extends CommonData
     private UserRecord user;
 
     /** the access rights of the user via OrganizationRole. Lazy loading. */
-    private Map<OrganizationRecord, Access> organizationRoles = null;
+    private Map<Integer, Access> organizationAccess = null;
 
     /** the access right of the user via GameRole. Lazy loading. */
     private Map<GameRecord, Access> gameRoles = null;
@@ -144,25 +144,25 @@ public class AdminData extends CommonData
      */
     public void resetRoles()
     {
-        this.organizationRoles = null;
+        this.organizationAccess = null;
         this.gameRoles = null;
         this.organizationGameRoles = null;
         this.gameSessionRoles = null;
         this.dashboardTemplateRoles = null;
     }
 
-    public Map<OrganizationRecord, Access> getOrganizationRoles()
+    public Map<Integer, Access> getOrganizationAccess()
     {
-        if (this.organizationRoles == null)
+        if (this.organizationAccess == null)
         {
-            this.organizationRoles = new HashMap<>();
+            this.organizationAccess = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
             if (isSuperAdmin())
             {
                 List<OrganizationRecord> orgList = dslContext.selectFrom(Tables.ORGANIZATION).fetch();
                 for (var organization : orgList)
                 {
-                    this.organizationRoles.put(organization, Access.ADMIN);
+                    this.organizationAccess.put(organization.getId(), Access.ADMIN);
                 }
             }
             else
@@ -171,27 +171,39 @@ public class AdminData extends CommonData
                         .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var or : orList)
                 {
-                    OrganizationRecord organization =
-                            SqlUtils.readRecordFromId(this, Tables.ORGANIZATION, or.getOrganizationId());
                     if (or.getAdmin() != 0)
-                        this.organizationRoles.put(organization, Access.ADMIN);
+                        this.organizationAccess.put(or.getOrganizationId(), Access.ADMIN);
                     else if (or.getEdit() != 0)
-                        this.organizationRoles.put(organization, Access.EDIT);
+                        this.organizationAccess.put(or.getOrganizationId(), Access.EDIT);
                     else if (or.getView() != 0)
-                        this.organizationRoles.put(organization, Access.VIEW);
+                        this.organizationAccess.put(or.getOrganizationId(), Access.VIEW);
                 }
             }
         }
-        return this.organizationRoles;
+        return this.organizationAccess;
     }
 
-    public Set<OrganizationRecord> getOrganizationRolesEdit()
+    public Set<Integer> getOrganizationAccessEdit()
     {
-        Set<OrganizationRecord> ret = new HashSet<>();
-        for (var entry : getOrganizationRoles().entrySet())
+        Set<Integer> ret = new HashSet<>();
+        for (var entry : getOrganizationAccess().entrySet())
         {
             if (entry.getValue().edit())
                 ret.add(entry.getKey());
+        }
+        return ret;
+    }
+
+    public Set<OrganizationRecord> getOrganizationPicklist(final Access access)
+    {
+        Set<OrganizationRecord> ret = new HashSet<>();
+        for (var organizationEntry : getOrganizationAccess().entrySet())
+        {
+            if (organizationEntry.getValue().ordinal() <= access.ordinal())
+            {
+                var organization = SqlUtils.readRecordFromId(this, Tables.ORGANIZATION, organizationEntry.getKey());
+                ret.add(organization);
+            }
         }
         return ret;
     }

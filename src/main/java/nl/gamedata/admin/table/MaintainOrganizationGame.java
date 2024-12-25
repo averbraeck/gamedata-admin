@@ -15,6 +15,7 @@ import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
+import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationGameRecord;
@@ -67,7 +68,7 @@ public class MaintainOrganizationGame
         form.setHeader("Game Access for Organization", click, recordId);
         form.addEntry(new TableEntryString(Tables.ORGANIZATION_GAME.NAME, og));
         form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME.ORGANIZATION_ID, og).setPickTable(data,
-                data.getOrganizationRoles().keySet(), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE));
+                data.getOrganizationPicklist(Access.EDIT), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE));
         form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME.GAME_ID, og).setPickTable(data,
                 data.getGameRoles().keySet(), Tables.GAME.ID, Tables.GAME.CODE));
         form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_GAME.TOKEN_FORCED, og));

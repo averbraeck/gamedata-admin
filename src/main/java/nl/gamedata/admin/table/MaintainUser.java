@@ -58,10 +58,10 @@ public class MaintainUser
         {
             // see if there are organization(s) for which this user is organization_admin
             Set<Integer> orgIdAdminSet = new HashSet<>();
-            for (var organizationRole : data.getOrganizationRoles().entrySet())
+            for (var organizationRole : data.getOrganizationAccess().entrySet())
             {
                 if (organizationRole.getValue().admin())
-                    orgIdAdminSet.add(organizationRole.getKey().getId());
+                    orgIdAdminSet.add(organizationRole.getKey());
             }
             if (orgIdAdminSet.size() != 0)
             {

@@ -14,6 +14,7 @@ import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableForm;
+import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationGameRecord;
@@ -67,7 +68,7 @@ public class MaintainOrganizationGameRole
         form.startForm();
         form.setHeader("User-Role for Organization-Game", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID, ogr).setPickTable(data,
-                data.getOrganizationRoles().keySet(), Tables.ORGANIZATION_GAME.ID, Tables.ORGANIZATION_GAME.NAME)
+                data.getOrganizationPicklist(Access.EDIT), Tables.ORGANIZATION_GAME.ID, Tables.ORGANIZATION_GAME.NAME)
                 .setLabel("Organization-Game"));
         form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME_ROLE.USER_ID, ogr)
                 .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));

@@ -38,9 +38,10 @@ public class MaintainOrganization
     {
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "Organization", new String[] {"Code", "Name"}, true, "Code", true);
-        for (var organization : data.getOrganizationRoles().keySet())
+        for (var organizationId : data.getOrganizationAccess().keySet())
         {
-            AdminTable.tableRow(s, organization.getId(), new String[] {organization.getCode(), organization.getName()});
+            OrganizationRecord organization = SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, organizationId);
+            AdminTable.tableRow(s, organizationId, new String[] {organization.getCode(), organization.getName()});
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());

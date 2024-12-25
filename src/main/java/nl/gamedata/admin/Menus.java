@@ -184,7 +184,7 @@ public class Menus
             roles.add(0);
         if (data.getGameRoles().size() > 0 || data.isGameAdmin())
             roles.add(1);
-        if (data.getOrganizationRoles().size() > 0)
+        if (data.getOrganizationAccess().size() > 0)
             roles.add(2);
         if (data.getOrganizationGameRoles().size() > 0)
             roles.add(3);
