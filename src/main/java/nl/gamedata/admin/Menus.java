@@ -151,7 +151,8 @@ public class Menus
         List<Tab> dataGroupTabs = new ArrayList<>();
         menuMap.put("data-group", new Menu("fa-chart-simple", "data-group", "Data Group", dataGroupTabs, Set.of(0, 4)));
         dataGroupTabs.add(new Tab("game", "Game", true, Set.of(0, 4), MaintainGame::table, MaintainGame::edit));
-        // dataGroupTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4)));
+        dataGroupTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4), MaintainGameVersion::table,
+                MaintainGameVersion::edit));
         // dataGroupTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4)));
         // dataGroupTabs.add(new Tab("group", "Group", true, Set.of(0, 4)));
         // dataGroupTabs.add(new Tab("group-player", "Group Player", false, Set.of(0, 4)));
