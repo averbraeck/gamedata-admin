@@ -16,6 +16,7 @@ import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
+import nl.gamedata.data.tables.records.OrganizationRecord;
 import nl.gamedata.data.tables.records.OrganizationRoleRecord;
 
 /**
@@ -39,13 +40,20 @@ public class MaintainOrganizationRole
                 .on(Tables.ORGANIZATION_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
         for (var or : orList)
         {
-            int id = or.getValue(Tables.ORGANIZATION_ROLE.ID);
-            String org = or.getValue(Tables.ORGANIZATION.CODE);
-            String user = or.getValue(Tables.USER.NAME);
-            String admin = or.getValue(Tables.ORGANIZATION_ROLE.ADMIN) == 0 ? "N" : "Y";
-            String edit = or.getValue(Tables.ORGANIZATION_ROLE.EDIT) == 0 ? "N" : "Y";
-            String view = or.getValue(Tables.ORGANIZATION_ROLE.VIEW) == 0 ? "N" : "Y";
-            AdminTable.tableRow(s, id, new String[] {org, user, admin, edit, view});
+            for (OrganizationRecord organization : data.getOrganizationRoles().keySet())
+            {
+                if (organization.getId().equals(or.getValue(Tables.ORGANIZATION.ID)))
+                {
+                    int id = or.getValue(Tables.ORGANIZATION_ROLE.ID);
+                    String org = or.getValue(Tables.ORGANIZATION.CODE);
+                    String user = or.getValue(Tables.USER.NAME);
+                    String admin = or.getValue(Tables.ORGANIZATION_ROLE.ADMIN) == 0 ? "N" : "Y";
+                    String edit = or.getValue(Tables.ORGANIZATION_ROLE.EDIT) == 0 ? "N" : "Y";
+                    String view = or.getValue(Tables.ORGANIZATION_ROLE.VIEW) == 0 ? "N" : "Y";
+                    AdminTable.tableRow(s, id, new String[] {org, user, admin, edit, view});
+                    break;
+                }
+            }
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
