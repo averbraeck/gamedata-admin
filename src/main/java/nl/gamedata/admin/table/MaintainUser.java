@@ -147,7 +147,7 @@ public class MaintainUser
                 {
                     ModalWindowUtils.popup(data, "Error storing user record (MD5 not found)", "<p>" + e1.getMessage() + "</p>",
                             backToMenu);
-                    System.err.println("rror storing user record (MD5 not found) - " + e1.getMessage());
+                    System.err.println("Error storing user record (MD5 not found) - " + e1.getMessage());
                     return -1;
                 }
             }
