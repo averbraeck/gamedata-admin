@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import nl.gamedata.admin.table.IEdit;
 import nl.gamedata.admin.table.ITable;
 import nl.gamedata.admin.table.MaintainGame;
+import nl.gamedata.admin.table.MaintainGameRole;
 import nl.gamedata.admin.table.MaintainOrganization;
 import nl.gamedata.admin.table.MaintainOrganizationGame;
 import nl.gamedata.admin.table.MaintainOrganizationRole;
@@ -58,7 +59,7 @@ public class Menus
         userTabs.add(new Tab("game", "Game", true, Set.of(0, 1), MaintainGame::table, MaintainGame::edit));
         userTabs.add(new Tab("organization-role", "Organization Role", false, Set.of(0, 2), MaintainOrganizationRole::table,
                 MaintainOrganizationRole::edit));
-        // userTabs.add(new Tab("game-role", "Game Role", false, Set.of(0, 1)));
+        userTabs.add(new Tab("game-role", "Game Role", false, Set.of(0, 1), MaintainGameRole::table, MaintainGameRole::edit));
         // userTabs.add(new Tab("org-game-role", "Org-Game Role", false, Set.of(0, 2)));
         // userTabs.add(new Tab("game-session-role", "Game Session Role", false, Set.of(0, 2)));
         // userTabs.add(new Tab("dashboard-role", "Dashboard Role", false, Set.of(0, 1, 2)));
