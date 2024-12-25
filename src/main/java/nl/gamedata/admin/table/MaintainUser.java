@@ -47,7 +47,7 @@ public class MaintainUser
     public static void tableUser(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin"}, true, "Name", true);
+        AdminTable.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin", "Game Admin"}, true, "Name", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<UserRecord> userRecords = new ArrayList<>();
         if (data.isSuperAdmin())
@@ -58,10 +58,10 @@ public class MaintainUser
         {
             // see if there are organization(s) for which this user is organization_admin
             Set<Integer> orgIdAdminSet = new HashSet<>();
-            for (var organizationRole : data.getOrganizationRoles())
+            for (var organizationRole : data.getOrganizationRoles().entrySet())
             {
-                if (organizationRole.getAdmin() != 0)
-                    orgIdAdminSet.add(organizationRole.getOrganizationId());
+                if (organizationRole.getValue().admin())
+                    orgIdAdminSet.add(organizationRole.getKey().getId());
             }
             if (orgIdAdminSet.size() != 0)
             {
@@ -86,8 +86,8 @@ public class MaintainUser
         }
         for (var user : userRecords)
         {
-            AdminTable.tableRow(s, user.getId(),
-                    new String[] {user.getName(), user.getEmail(), user.getSuperAdmin() == 1 ? "Y" : "N"});
+            AdminTable.tableRow(s, user.getId(), new String[] {user.getName(), user.getEmail(),
+                    user.getSuperAdmin() == 1 ? "Y" : "N", user.getGameAdmin() == 1 ? "Y" : "N"});
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
@@ -106,7 +106,11 @@ public class MaintainUser
         form.addEntry(new TableEntryString(Tables.USER.PASSWORD, user).setInitialValue("").setRequired(recordId == 0)
                 .setMinLength(recordId == 0 ? 8 : 0));
         form.addEntry(new TableEntryString(Tables.USER.SALT, user).setInitialValue(salt).setHidden());
-        form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN, user));
+        if (data.isSuperAdmin())
+        {
+            form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN, user));
+            form.addEntry(new TableEntryBoolean(Tables.USER.GAME_ADMIN, user));
+        }
         form.endForm();
         data.setContent(form.process());
     }
