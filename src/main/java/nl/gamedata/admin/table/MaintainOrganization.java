@@ -18,7 +18,8 @@ import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRecord;
 
 /**
- * MaintainOrganization takes care of the organization screen.
+ * MaintainOrganization takes care of the organization screen. The organization screen is only visible for SuperAdmin and
+ * OrganizationAdmin users.
  * <p>
  * Copyright (c) 2024-2024 Delft University of Technology, PO Box 5, 2600 AA, Delft, the Netherlands. All rights reserved. <br>
  * BSD-style license. See <a href="https://github.com/averbraeck/gamedata-admin/LICENSE">GameData project License</a>.
@@ -27,6 +28,16 @@ import nl.gamedata.data.tables.records.OrganizationRecord;
  */
 public class MaintainOrganization
 {
+    /**
+     * Filter the Organization table based on access rights and filter settings.
+     * @param data the admin data with the filters and access rights
+     * @return a list of Organization records
+     */
+    public static List<OrganizationRecord> filterOrganization(final AdminData data)
+    {
+        return null;
+    }
+
     public static void tableOrganization(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
@@ -41,7 +52,7 @@ public class MaintainOrganization
         data.setContent(s.toString());
     }
 
-    public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
+    public static void editOrganization(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
         OrganizationRecord organization = recordId == 0 ? Tables.ORGANIZATION.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, recordId);
