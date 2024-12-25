@@ -1,5 +1,7 @@
 package nl.gamedata.admin;
 
+import nl.gamedata.admin.Menus.Menu;
+
 /**
  * Sidebar.java.
  * <p>
@@ -47,17 +49,11 @@ public class Sidebar
         StringBuilder s = new StringBuilder();
         s.append(sidebarTop);
         s.append(sidebarUser.formatted(data.getUsername()));
-        item(s, data, "fa-house", "admin-panel", "Admin panel");
-        item(s, data, "fa-sitemap", "organization", "Organization");
-        item(s, data, "fa-user", "user", "User");
-        item(s, data, "fa-dice", "game", "Game");
-        item(s, data, "fa-square-binary", "game-control", "Game Control");
-        item(s, data, "fa-calendar-check", "game-session", "Game Session");
-        item(s, data, "fa-chart-pie", "data-session", "Data Session");
-        item(s, data, "fa-chart-line", "data-player", "Data Player");
-        item(s, data, "fa-chart-simple", "data-group", "Data Group");
-        item(s, data, "fa-user-gear", "settings", "Settings");
-        item(s, data, "fa-sign-out", "logoff", "Logoff");
+        for (String menuName : Menus.menuList)
+        {
+            Menu menu = Menus.menuMap.get(menuName);
+            item(s, data, menu.icon(), menu.menuChoice(), menu.menuText());
+        }
         s.append(sidebarBottom);
         return s.toString();
     }
@@ -65,9 +61,12 @@ public class Sidebar
     private static void item(final StringBuilder s, final AdminData data, final String faIcon, final String menuChoice,
             final String menuText)
     {
-        if (data.getMenuChoice().equals(menuChoice))
-            s.append(sidebarItem.formatted("active", "true", "menu-" + menuChoice, faIcon, menuText));
-        else
-            s.append(sidebarItem.formatted("", "false", "menu-" + menuChoice, faIcon, menuText));
+        if (Menus.showMenu(data, menuChoice))
+        {
+            if (data.getMenuChoice().equals(menuChoice))
+                s.append(sidebarItem.formatted("active", "true", "menu-" + menuChoice, faIcon, menuText));
+            else
+                s.append(sidebarItem.formatted("", "false", "menu-" + menuChoice, faIcon, menuText));
+        }
     }
 }

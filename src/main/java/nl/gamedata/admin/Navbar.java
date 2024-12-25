@@ -1,5 +1,9 @@
 package nl.gamedata.admin;
 
+import java.util.List;
+
+import nl.gamedata.admin.Menus.Tab;
+
 /**
  * Navbar.java.
  * <p>
@@ -128,76 +132,17 @@ public class Navbar
     {
         StringBuilder s = new StringBuilder();
         s.append(navbarStart);
-        if (data.getMenuChoice().equals("organization"))
+        String menuChoice = data.getMenuChoice();
+        List<Tab> tabList = Menus.menuMap.get(menuChoice).tabs();
+        for (Tab tab : tabList)
         {
-            tabChoice(s, data, "organization", "Organization");
-            tabChoice(s, data, "user", "User");
-            tab(s, data, "user-role", "User Role");
-            tabChoice(s, data, "game", "Game");
-            tab(s, data, "game-access", "Game Access");
-            tab(s, data, "private-dashboard", "Dashboard");
-            tab(s, data, "access-token", "Token");
-            tab(s, data, "game-session", "Session");
-        }
-        else if (data.getMenuChoice().equals("user"))
-        {
-            tabChoice(s, data, "user", "User");
-            tab(s, data, "user-role", "User Role");
-            tabChoice(s, data, "game", "Game");
-            tab(s, data, "game-role", "Game Role");
-        }
-        else if (data.getMenuChoice().equals("game"))
-        {
-            tabChoice(s, data, "game", "Game");
-            tabChoice(s, data, "game-version", "Game Version");
-            tabChoice(s, data, "game-mission", "Game Mission");
-            tab(s, data, "public-dashboard", "Dashboard");
-            tab(s, data, "scale", "Scale");
-            tabChoice(s, data, "learning-goal", "Learning Goal");
-            tab(s, data, "player-objective", "Player Objective");
-            tab(s, data, "group-objective", "Group Objective");
-        }
-        else if (data.getMenuChoice().equals("game-control"))
-        {
-            tabChoice(s, data, "game", "Game");
-            tab(s, data, "game-access", "Game Access");
-            tab(s, data, "game-token", "Game Token");
-        }
-        else if (data.getMenuChoice().equals("game-session"))
-        {
-            tabChoice(s, data, "game", "Game");
-            tabChoice(s, data, "game-version", "Game Version");
-            tabChoice(s, data, "game-session", "Session");
-        }
-        else if (data.getMenuChoice().equals("data-session"))
-        {
-            tabChoice(s, data, "game", "Game");
-            tabChoice(s, data, "game-version", "Game Version");
-            tabChoice(s, data, "game-session", "Session");
-            tabChoice(s, data, "game-mission", "Game Mission");
-            tab(s, data, "mission-event", "Mission Event");
-        }
-        else if (data.getMenuChoice().equals("data-player"))
-        {
-            tabChoice(s, data, "game", "Game");
-            tabChoice(s, data, "game-version", "Game Version");
-            tabChoice(s, data, "game-session", "Session");
-            tabChoice(s, data, "player", "Player");
-            tabChoice(s, data, "player-attempt", "Player Attempt");
-            tab(s, data, "player-score", "Player Score");
-            tab(s, data, "player-event", "Player Event");
-            tab(s, data, "player-group-role", "Group Role");
-        }
-        else if (data.getMenuChoice().equals("data-group"))
-        {
-            tabChoice(s, data, "game", "Game");
-            tabChoice(s, data, "game-version", "Game Version");
-            tabChoice(s, data, "game-session", "Session");
-            tabChoice(s, data, "group", "Group");
-            tab(s, data, "group-player", "Players");
-            tabChoice(s, data, "group-attempt", "Group Attempt");
-            tab(s, data, "group-score", "Group Score");
-            tab(s, data, "group-event", "Group Event");
+            if (Menus.showTab(data, menuChoice, data.getTabChoice(menuChoice)))
+            {
+                if (tab.select())
+                    tabChoice(s, data, tab.tabChoice(), tab.tabText());
+                else
+                    tab(s, data, tab.tabChoice(), tab.tabText());
+            }
         }
         s.append(navbarEnd);
         return s.toString();
