@@ -17,6 +17,7 @@ import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.DashboardRoleRecord;
+import nl.gamedata.data.tables.records.DashboardTemplateRecord;
 
 /**
  * MaintainDashboardRole takes care of the dashboard role screen.
@@ -38,12 +39,19 @@ public class MaintainDashboardRole
                 .on(Tables.DASHBOARD_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
         for (var dashboardRole : dashboardRoleList)
         {
-            int id = dashboardRole.getValue(Tables.DASHBOARD_ROLE.ID);
-            String template = dashboardRole.getValue(Tables.DASHBOARD_TEMPLATE.NAME);
-            String user = dashboardRole.getValue(Tables.USER.NAME);
-            String edit = dashboardRole.getValue(Tables.DASHBOARD_ROLE.EDIT) == 0 ? "N" : "Y";
-            String view = dashboardRole.getValue(Tables.DASHBOARD_ROLE.VIEW) == 0 ? "N" : "Y";
-            AdminTable.tableRow(s, id, new String[] {template, user, edit, view});
+            for (DashboardTemplateRecord dt : data.getDashboardRoles().keySet())
+            {
+                if (dt.getId().equals(dashboardRole.getValue(Tables.DASHBOARD_TEMPLATE.ID)))
+                {
+                    int id = dashboardRole.getValue(Tables.DASHBOARD_ROLE.ID);
+                    String template = dashboardRole.getValue(Tables.DASHBOARD_TEMPLATE.NAME);
+                    String user = dashboardRole.getValue(Tables.USER.NAME);
+                    String edit = dashboardRole.getValue(Tables.DASHBOARD_ROLE.EDIT) == 0 ? "N" : "Y";
+                    String view = dashboardRole.getValue(Tables.DASHBOARD_ROLE.VIEW) == 0 ? "N" : "Y";
+                    AdminTable.tableRow(s, id, new String[] {template, user, edit, view});
+                    break;
+                }
+            }
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
