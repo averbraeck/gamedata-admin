@@ -54,7 +54,7 @@ public class AdminData extends CommonData
     private Map<GameSessionRecord, Access> gameSessionRoles = null;
 
     /** the access right of the user via DashboardRole. Lazy loading. */
-    private Map<DashboardTemplateRecord, Access> dashboardRoles = null;
+    private Map<DashboardTemplateRecord, Access> dashboardTemplateRoles = null;
 
     /* ================================================ */
     /* PERSISTENT DATA ABOUT CHOICES MADE ON THE SCREEN */
@@ -106,16 +106,7 @@ public class AdminData extends CommonData
 
     public AdminData()
     {
-        this.tabChoice.put("admin-panel", "");
-        this.tabChoice.put("organization", "organization");
-        this.tabChoice.put("user", "user");
-        this.tabChoice.put("game", "game");
-        this.tabChoice.put("game-control", "game");
-        this.tabChoice.put("game-session", "game");
-        this.tabChoice.put("data-session", "game");
-        this.tabChoice.put("data-player", "game");
-        this.tabChoice.put("data-group", "game");
-        this.tabChoice.put("settings", "");
+        Menus.initializeTabChoices(this);
     }
 
     public String getSidebar()
@@ -157,7 +148,7 @@ public class AdminData extends CommonData
         this.gameRoles = null;
         this.organizationGameRoles = null;
         this.gameSessionRoles = null;
-        this.dashboardRoles = null;
+        this.dashboardTemplateRoles = null;
     }
 
     public Map<OrganizationRecord, Access> getOrganizationRoles()
@@ -479,9 +470,9 @@ public class AdminData extends CommonData
 
     public Map<DashboardTemplateRecord, Access> getDashboardRoles()
     {
-        if (this.dashboardRoles == null)
+        if (this.dashboardTemplateRoles == null)
         {
-            this.dashboardRoles = new HashMap<>();
+            this.dashboardTemplateRoles = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
             if (isSuperAdmin())
@@ -489,7 +480,7 @@ public class AdminData extends CommonData
                 List<DashboardTemplateRecord> dashboardList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE).fetch();
                 for (var dt : dashboardList)
                 {
-                    this.dashboardRoles.put(dt, Access.EDIT);
+                    this.dashboardTemplateRoles.put(dt, Access.EDIT);
                 }
             }
 
@@ -555,7 +546,7 @@ public class AdminData extends CommonData
                 }
             }
         }
-        return this.dashboardRoles;
+        return this.dashboardTemplateRoles;
     }
 
     public Set<DashboardTemplateRecord> getDashboardRolesEdit()
@@ -591,11 +582,11 @@ public class AdminData extends CommonData
 
     private void addDashboardRole(final DashboardTemplateRecord gameSession, final Access access)
     {
-        Access oldAccess = this.dashboardRoles.get(gameSession);
+        Access oldAccess = this.dashboardTemplateRoles.get(gameSession);
         if (oldAccess == null)
-            this.dashboardRoles.put(gameSession, access);
+            this.dashboardTemplateRoles.put(gameSession, access);
         else if (oldAccess.ordinal() > access.ordinal())
-            this.dashboardRoles.put(gameSession, access);
+            this.dashboardTemplateRoles.put(gameSession, access);
     }
 
     /* ************************ */
