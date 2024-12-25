@@ -14,6 +14,7 @@ import nl.gamedata.admin.table.ITable;
 import nl.gamedata.admin.table.MaintainDashboardRole;
 import nl.gamedata.admin.table.MaintainGame;
 import nl.gamedata.admin.table.MaintainGameRole;
+import nl.gamedata.admin.table.MaintainGameSessionRole;
 import nl.gamedata.admin.table.MaintainOrganization;
 import nl.gamedata.admin.table.MaintainOrganizationGame;
 import nl.gamedata.admin.table.MaintainOrganizationGameRole;
@@ -64,7 +65,8 @@ public class Menus
         userTabs.add(new Tab("game-role", "Game Role", false, Set.of(0, 1), MaintainGameRole::table, MaintainGameRole::edit));
         userTabs.add(new Tab("org-game-role", "Org-Game Role", false, Set.of(0, 2), MaintainOrganizationGameRole::table,
                 MaintainOrganizationGameRole::edit));
-        // userTabs.add(new Tab("game-session-role", "Game Session Role", false, Set.of(0, 2)));
+        userTabs.add(new Tab("game-session-role", "Game Session Role", false, Set.of(0, 2), MaintainGameSessionRole::table,
+                MaintainGameSessionRole::edit));
         userTabs.add(new Tab("dashboard-role", "Dashboard Role", false, Set.of(0, 1, 2), MaintainDashboardRole::table,
                 MaintainDashboardRole::edit));
 
