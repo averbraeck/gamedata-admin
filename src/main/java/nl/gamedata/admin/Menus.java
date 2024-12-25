@@ -235,6 +235,23 @@ public class Menus
         tab.editRef.edit(data, request, click, recordId);
     }
 
+    public static void initializeTabChoices(final AdminData data)
+    {
+        data.putTabChoice("admin-panel", "");
+        data.putTabChoice("organization", "organization");
+        data.putTabChoice("user", "user");
+        data.putTabChoice("game", "game");
+        data.putTabChoice("game-control", "game");
+        data.putTabChoice("game-session", "game");
+        data.putTabChoice("layout", "dashboard-layout");
+        data.putTabChoice("dashboard", "dashboard-template");
+        data.putTabChoice("data-session", "game");
+        data.putTabChoice("data-player", "game");
+        data.putTabChoice("data-group", "game");
+        data.putTabChoice("settings", "");
+
+    }
+
     public static record Menu(String icon, String menuChoice, String menuText, List<Tab> tabs, Set<Integer> access)
     {
     }
