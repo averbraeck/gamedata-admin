@@ -7,6 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import nl.gamedata.admin.table.IEdit;
+import nl.gamedata.admin.table.ITable;
+import nl.gamedata.admin.table.MaintainGame;
+import nl.gamedata.admin.table.MaintainOrganization;
+import nl.gamedata.admin.table.MaintainUser;
+
 /**
  * AdminMenus.java.
  * <p>
@@ -30,10 +38,13 @@ public class Menus
         menuList.add("organization");
         List<Tab> organizationTabs = new ArrayList<>();
         menuMap.put("organization", new Menu("fa-sitemap", "organization", "Organization", organizationTabs, Set.of(0, 2)));
-        organizationTabs.add(new Tab("organization", "Organization", true, Set.of(0, 2)));
-        organizationTabs.add(new Tab("user", "User", true, Set.of(0, 2)));
-        organizationTabs.add(new Tab("user-role", "User Role", false, Set.of(0, 2)));
-        organizationTabs.add(new Tab("game", "Game", true, Set.of(0, 2)));
+        organizationTabs.add(new Tab("organization", "Organization", true, Set.of(0, 2), MaintainOrganization::table,
+                MaintainOrganization::edit));
+        organizationTabs.add(new Tab("user", "User", true, Set.of(0, 2), MaintainUser::table, MaintainUser::edit));
+        // organizationTabs.add(new Tab("user-role", "User Role", false, Set.of(0, 2)));
+        organizationTabs.add(new Tab("game", "Game", true, Set.of(0, 2), MaintainGame::table, MaintainGame::edit));
+
+        /*-
         organizationTabs.add(new Tab("organization-game", "Game Access", false, Set.of(0, 2)));
         organizationTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 2)));
         organizationTabs.add(new Tab("game-session", "Game Session", false, Set.of(0, 2)));
@@ -130,6 +141,7 @@ public class Menus
         dataGroupTabs.add(new Tab("group-score", "Group Score", false, Set.of(0, 4)));
         dataGroupTabs.add(new Tab("group-event", "Group Event", false, Set.of(0, 4)));
 
+        */
         menuList.add("settings");
         menuMap.put("settings", new Menu("fa-user-gear", "settings", "Settings", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5)));
 
@@ -192,11 +204,26 @@ public class Menus
         return !roles.isEmpty();
     }
 
+    public static void table(final AdminData data, final HttpServletRequest request, final String click)
+    {
+        String menuChoice = data.getMenuChoice();
+        Tab tab = getTab(menuChoice, data.getTabChoice(menuChoice));
+        tab.tableRef.table(data, request, menuChoice);
+    }
+
+    public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
+    {
+        String menuChoice = data.getMenuChoice();
+        Tab tab = getTab(menuChoice, data.getTabChoice(menuChoice));
+        tab.editRef.edit(data, request, click, recordId);
+    }
+
     public static record Menu(String icon, String menuChoice, String menuText, List<Tab> tabs, Set<Integer> access)
     {
     }
 
-    public static record Tab(String tabChoice, String tabText, boolean select, Set<Integer> access)
+    public static record Tab(String tabChoice, String tabText, boolean select, Set<Integer> access, ITable tableRef,
+            IEdit editRef)
     {
     }
 }
