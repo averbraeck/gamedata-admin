@@ -1,12 +1,6 @@
 package nl.gamedata.admin.table;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
