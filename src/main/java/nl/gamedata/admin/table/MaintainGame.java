@@ -29,7 +29,7 @@ import nl.gamedata.data.tables.records.GameRecord;
  */
 public class MaintainGame
 {
-    public static void tableGame(final AdminData data, final HttpServletRequest request, final String menuChoice)
+    public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, true, "Code", true);

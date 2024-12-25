@@ -38,7 +38,7 @@ public class MaintainOrganization
         return null;
     }
 
-    public static void tableOrganization(final AdminData data, final HttpServletRequest request, final String menuChoice)
+    public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "Organization", new String[] {"Code", "Name"}, true, "Code", true);
@@ -52,7 +52,7 @@ public class MaintainOrganization
         data.setContent(s.toString());
     }
 
-    public static void editOrganization(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
+    public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
         OrganizationRecord organization = recordId == 0 ? Tables.ORGANIZATION.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, recordId);
