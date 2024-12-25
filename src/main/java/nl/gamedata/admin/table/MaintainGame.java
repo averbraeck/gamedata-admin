@@ -33,9 +33,7 @@ public class MaintainGame
     {
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, true, "Code", true);
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<GameRecord> gameRecords = dslContext.selectFrom(Tables.GAME).fetch();
-        for (var game : gameRecords)
+        for (var game : data.getGameRoles().keySet())
         {
             String archived = game.getArchived() == 0 ? "N" : "Y";
             AdminTable.tableRow(s, game.getId(), new String[] {game.getCode(), game.getName(), archived});
