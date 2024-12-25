@@ -16,6 +16,7 @@ import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
+import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameRoleRecord;
 
 /**
@@ -38,12 +39,19 @@ public class MaintainGameRole
                         .join(Tables.USER).on(Tables.GAME_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
         for (var gameRole : gameRoleList)
         {
-            int id = gameRole.getValue(Tables.GAME_ROLE.ID);
-            String game = gameRole.getValue(Tables.GAME.CODE);
-            String user = gameRole.getValue(Tables.USER.NAME);
-            String edit = gameRole.getValue(Tables.GAME_ROLE.EDIT) == 0 ? "N" : "Y";
-            String view = gameRole.getValue(Tables.GAME_ROLE.VIEW) == 0 ? "N" : "Y";
-            AdminTable.tableRow(s, id, new String[] {game, user, edit, view});
+            for (GameRecord gr : data.getGameRoles().keySet())
+            {
+                if (gr.getId().equals(gameRole.getValue(Tables.GAME.ID)))
+                {
+                    int id = gameRole.getValue(Tables.GAME_ROLE.ID);
+                    String game = gameRole.getValue(Tables.GAME.CODE);
+                    String user = gameRole.getValue(Tables.USER.NAME);
+                    String edit = gameRole.getValue(Tables.GAME_ROLE.EDIT) == 0 ? "N" : "Y";
+                    String view = gameRole.getValue(Tables.GAME_ROLE.VIEW) == 0 ? "N" : "Y";
+                    AdminTable.tableRow(s, id, new String[] {game, user, edit, view});
+                    break;
+                }
+            }
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
@@ -57,10 +65,10 @@ public class MaintainGameRole
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game Role", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_ROLE.GAME_ID, gameRole).setPickTable(data, data.getGameRoles().keySet(),
-                Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_ROLE.USER_ID, gameRole).setPickTable(data, Tables.USER, Tables.USER.ID,
-                Tables.USER.NAME).setLabel("User"));
+        form.addEntry(new TableEntryPickRecord(Tables.GAME_ROLE.GAME_ID, gameRole)
+                .setPickTable(data, data.getGameRoles().keySet(), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
+        form.addEntry(new TableEntryPickRecord(Tables.GAME_ROLE.USER_ID, gameRole)
+                .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));
         form.addEntry(new TableEntryBoolean(Tables.GAME_ROLE.EDIT, gameRole));
         form.addEntry(new TableEntryBoolean(Tables.GAME_ROLE.VIEW, gameRole));
         form.endForm();
