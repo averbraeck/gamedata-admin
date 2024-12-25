@@ -16,6 +16,8 @@ import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
+import nl.gamedata.data.tables.records.GameRecord;
+import nl.gamedata.data.tables.records.GameSessionRecord;
 import nl.gamedata.data.tables.records.GameSessionRoleRecord;
 
 /**
@@ -40,12 +42,19 @@ public class MaintainGameSessionRole
                 .on(Tables.GAME_SESSION_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
         for (var gameSessionRole : gameSessionRoleList)
         {
-            int id = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.ID);
-            String template = gameSessionRole.getValue(Tables.GAME_SESSION.NAME);
-            String user = gameSessionRole.getValue(Tables.USER.NAME);
-            String edit = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.EDIT) == 0 ? "N" : "Y";
-            String view = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.VIEW) == 0 ? "N" : "Y";
-            AdminTable.tableRow(s, id, new String[] {template, user, edit, view});
+            for (GameSessionRecord gsr : data.getGameSessionRoles().keySet())
+            {
+                if (gsr.getId().equals(gameSessionRole.getValue(Tables.GAME_SESSION.ID)))
+                {
+                    int id = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.ID);
+                    String template = gameSessionRole.getValue(Tables.GAME_SESSION.NAME);
+                    String user = gameSessionRole.getValue(Tables.USER.NAME);
+                    String edit = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.EDIT) == 0 ? "N" : "Y";
+                    String view = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.VIEW) == 0 ? "N" : "Y";
+                    AdminTable.tableRow(s, id, new String[] {template, user, edit, view});
+                    break;
+                }
+            }
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
