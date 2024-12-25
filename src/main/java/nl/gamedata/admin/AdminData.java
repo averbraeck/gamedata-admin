@@ -145,23 +145,48 @@ public class AdminData extends CommonData
         return getUser() == null ? false : getUser().getGameAdmin() != 0;
     }
 
+    /**
+     * Call this method after adding or deleting users, organizations, games, organization-game combinations, game sessions,
+     * dashboard templates, or after adding, changing or deleting roles.
+     */
+    public void resetRoles()
+    {
+        this.organizationRoles = null;
+        this.gameRoles = null;
+        this.organizationGameRoles = null;
+        this.gameSessionRoles = null;
+        this.dashboardRoles = null;
+    }
+
     public Map<OrganizationRecord, Access> getOrganizationRoles()
     {
         if (this.organizationRoles == null)
         {
             this.organizationRoles = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-            List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
-                    .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var or : orList)
+            if (isSuperAdmin())
             {
-                OrganizationRecord organization = SqlUtils.readRecordFromId(this, Tables.ORGANIZATION, or.getOrganizationId());
-                if (or.getAdmin() != 0)
+                List<OrganizationRecord> orgList = dslContext.selectFrom(Tables.ORGANIZATION).fetch();
+                for (var organization : orgList)
+                {
                     this.organizationRoles.put(organization, Access.ADMIN);
-                else if (or.getEdit() != 0)
-                    this.organizationRoles.put(organization, Access.EDIT);
-                else if (or.getView() != 0)
-                    this.organizationRoles.put(organization, Access.VIEW);
+                }
+            }
+            else
+            {
+                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                        .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var or : orList)
+                {
+                    OrganizationRecord organization =
+                            SqlUtils.readRecordFromId(this, Tables.ORGANIZATION, or.getOrganizationId());
+                    if (or.getAdmin() != 0)
+                        this.organizationRoles.put(organization, Access.ADMIN);
+                    else if (or.getEdit() != 0)
+                        this.organizationRoles.put(organization, Access.EDIT);
+                    else if (or.getView() != 0)
+                        this.organizationRoles.put(organization, Access.VIEW);
+                }
             }
         }
         return this.organizationRoles;
@@ -174,67 +199,81 @@ public class AdminData extends CommonData
             this.gameRoles = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
-            // direct game roles
-            List<GameRoleRecord> grList =
-                    dslContext.selectFrom(Tables.GAME_ROLE).where(Tables.GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var gr : grList)
+            if (isSuperAdmin())
             {
-                GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gr.getGameId());
-                if (gr.getEdit() != 0)
-                    addGameRole(game, Access.EDIT);
-                else if (gr.getView() != 0)
-                    addGameRole(game, Access.VIEW);
-            }
-
-            // indirect game roles via game_access for all organizations where user is a member
-            List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
-                    .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var or : orList)
-            {
-                List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
-                        .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
-                for (var og : ogList)
+                List<GameRecord> gameList = dslContext.selectFrom(Tables.GAME).fetch();
+                for (var game : gameList)
                 {
-                    GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, og.getGameId());
-                    if (or.getEdit() != 0 || or.getAdmin() != 0 || or.getView() != 0)
-                        addGameRole(game, Access.VIEW);
+                    this.gameRoles.put(game, Access.EDIT);
                 }
             }
 
-            // indirect game roles via direct game_access role
-            List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
-                    .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var ogr : ogrList)
-            {
-                OrganizationGameRecord ga = SqlUtils.readRecordFromId(this, Tables.ORGANIZATION_GAME, ogr.getOrganizationGameId());
-                GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, ga.getGameId());
-                if (ogr.getEdit() != 0 || ogr.getView() != 0)
-                    addGameRole(game, Access.VIEW);
-            }
+            else
 
-            // indirect game roles via session_role
-            List<GameSessionRoleRecord> gsrList =
-                    dslContext.selectFrom(Tables.GAME_SESSION_ROLE).where(Tables.GAME_SESSION_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var gsr : gsrList)
             {
-                GameSessionRecord gs = SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, gsr.getGameSessionId());
-                GameVersionRecord gv = SqlUtils.readRecordFromId(this, Tables.GAME_VERSION, gs.getGameVersionId());
-                GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gv.getGameId());
-                if (gsr.getEdit() != 0 || gsr.getView() != 0)
-                    addGameRole(game, Access.VIEW);
-            }
+                // direct game roles
+                List<GameRoleRecord> grList =
+                        dslContext.selectFrom(Tables.GAME_ROLE).where(Tables.GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var gr : grList)
+                {
+                    GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gr.getGameId());
+                    if (gr.getEdit() != 0)
+                        addGameRole(game, Access.EDIT);
+                    else if (gr.getView() != 0)
+                        addGameRole(game, Access.VIEW);
+                }
 
-            // indirect game roles via dashboard_role
-            List<DashboardRoleRecord> drList = dslContext.selectFrom(Tables.DASHBOARD_ROLE)
-                    .where(Tables.DASHBOARD_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var dr : drList)
-            {
-                DashboardTemplateRecord dt =
-                        SqlUtils.readRecordFromId(this, Tables.DASHBOARD_TEMPLATE, dr.getDashboardTemplateId());
-                GameVersionRecord gv = SqlUtils.readRecordFromId(this, Tables.GAME_VERSION, dt.getGameVersionId());
-                GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gv.getGameId());
-                if (dr.getEdit() != 0 || dr.getView() != 0)
-                    addGameRole(game, Access.VIEW);
+                // indirect game roles via game_access for all organizations where user is a member
+                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                        .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var or : orList)
+                {
+                    List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
+                            .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
+                    for (var og : ogList)
+                    {
+                        GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, og.getGameId());
+                        if (or.getEdit() != 0 || or.getAdmin() != 0 || or.getView() != 0)
+                            addGameRole(game, Access.VIEW);
+                    }
+                }
+
+                // indirect game roles via direct game_access role
+                List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
+                        .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var ogr : ogrList)
+                {
+                    OrganizationGameRecord ga =
+                            SqlUtils.readRecordFromId(this, Tables.ORGANIZATION_GAME, ogr.getOrganizationGameId());
+                    GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, ga.getGameId());
+                    if (ogr.getEdit() != 0 || ogr.getView() != 0)
+                        addGameRole(game, Access.VIEW);
+                }
+
+                // indirect game roles via session_role
+                List<GameSessionRoleRecord> gsrList = dslContext.selectFrom(Tables.GAME_SESSION_ROLE)
+                        .where(Tables.GAME_SESSION_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var gsr : gsrList)
+                {
+                    GameSessionRecord gs = SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, gsr.getGameSessionId());
+                    GameVersionRecord gv = SqlUtils.readRecordFromId(this, Tables.GAME_VERSION, gs.getGameVersionId());
+                    GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gv.getGameId());
+                    if (gsr.getEdit() != 0 || gsr.getView() != 0)
+                        addGameRole(game, Access.VIEW);
+                }
+
+                // indirect game roles via dashboard_role
+                List<DashboardRoleRecord> drList = dslContext.selectFrom(Tables.DASHBOARD_ROLE)
+                        .where(Tables.DASHBOARD_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var dr : drList)
+                {
+                    DashboardTemplateRecord dt =
+                            SqlUtils.readRecordFromId(this, Tables.DASHBOARD_TEMPLATE, dr.getDashboardTemplateId());
+                    GameVersionRecord gv = SqlUtils.readRecordFromId(this, Tables.GAME_VERSION, dt.getGameVersionId());
+                    GameRecord game = SqlUtils.readRecordFromId(this, Tables.GAME, gv.getGameId());
+                    if (dr.getEdit() != 0 || dr.getView() != 0)
+                        addGameRole(game, Access.VIEW);
+                }
             }
         }
         return this.gameRoles;
@@ -256,31 +295,45 @@ public class AdminData extends CommonData
             this.organizationGameRoles = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
-            // direct game access roles
-            List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
-                    .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var ogr : ogrList)
+            if (isSuperAdmin())
             {
-                OrganizationGameRecord organizationGame = SqlUtils.readRecordFromId(this, Tables.ORGANIZATION_GAME, ogr.getOrganizationGameId());
-                if (ogr.getEdit() != 0)
-                    addOrganizationGameRole(organizationGame, Access.EDIT);
-                else if (ogr.getView() != 0)
-                    addOrganizationGameRole(organizationGame, Access.VIEW);
-            }
-
-            // indirect game_access roles for all organizations where user is a member
-            List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
-                    .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var or : orList)
-            {
-                List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
-                        .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
+                List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME).fetch();
                 for (var og : ogList)
                 {
-                    if (or.getEdit() != 0 || or.getAdmin() != 0)
-                        addOrganizationGameRole(og, Access.EDIT);
-                    if (or.getView() != 0)
-                        addOrganizationGameRole(og, Access.VIEW);
+                    this.organizationGameRoles.put(og, Access.EDIT);
+                }
+            }
+
+            else
+
+            {
+                // direct game access roles
+                List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
+                        .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var ogr : ogrList)
+                {
+                    OrganizationGameRecord organizationGame =
+                            SqlUtils.readRecordFromId(this, Tables.ORGANIZATION_GAME, ogr.getOrganizationGameId());
+                    if (ogr.getEdit() != 0)
+                        addOrganizationGameRole(organizationGame, Access.EDIT);
+                    else if (ogr.getView() != 0)
+                        addOrganizationGameRole(organizationGame, Access.VIEW);
+                }
+
+                // indirect game_access roles for all organizations where user is a member
+                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                        .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var or : orList)
+                {
+                    List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
+                            .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
+                    for (var og : ogList)
+                    {
+                        if (or.getEdit() != 0 || or.getAdmin() != 0)
+                            addOrganizationGameRole(og, Access.EDIT);
+                        if (or.getView() != 0)
+                            addOrganizationGameRole(og, Access.VIEW);
+                    }
                 }
             }
         }
@@ -303,51 +356,65 @@ public class AdminData extends CommonData
             this.gameSessionRoles = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
-            // direct game session roles
-            List<GameSessionRoleRecord> gsrList =
-                    dslContext.selectFrom(Tables.GAME_SESSION_ROLE).where(Tables.GAME_SESSION_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var gsr : gsrList)
+            if (isSuperAdmin())
             {
-                GameSessionRecord gameSession = SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, gsr.getGameSessionId());
-                if (gsr.getEdit() != 0)
-                    addGameGameSessionRole(gameSession, Access.EDIT);
-                else if (gsr.getView() != 0)
-                    addGameGameSessionRole(gameSession, Access.VIEW);
-            }
-
-            // indirect game session roles via game_access roles
-            List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
-                    .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var ogr : ogrList)
-            {
-                List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION)
-                        .where(Tables.GAME_SESSION.ORGANIZATION_GAME_ID.eq(ogr.getOrganizationGameId())).fetch();
+                List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION).fetch();
                 for (var gs : gsList)
                 {
-                    if (ogr.getEdit() != 0)
-                        addGameGameSessionRole(gs, Access.EDIT);
-                    else if (ogr.getView() != 0)
-                        addGameGameSessionRole(gs, Access.VIEW);
+                    this.gameSessionRoles.put(gs, Access.EDIT);
                 }
             }
 
-            // indirect game session roles for all organizations where user is a member
-            List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
-                    .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var or : orList)
+            else
+
             {
-                List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
-                        .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
-                for (var og : ogList)
+                // direct game session roles
+                List<GameSessionRoleRecord> gsrList = dslContext.selectFrom(Tables.GAME_SESSION_ROLE)
+                        .where(Tables.GAME_SESSION_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var gsr : gsrList)
+                {
+                    GameSessionRecord gameSession =
+                            SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, gsr.getGameSessionId());
+                    if (gsr.getEdit() != 0)
+                        addGameGameSessionRole(gameSession, Access.EDIT);
+                    else if (gsr.getView() != 0)
+                        addGameGameSessionRole(gameSession, Access.VIEW);
+                }
+
+                // indirect game session roles via game_access roles
+                List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
+                        .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var ogr : ogrList)
                 {
                     List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION)
-                            .where(Tables.GAME_SESSION.ORGANIZATION_GAME_ID.eq(og.getId())).fetch();
+                            .where(Tables.GAME_SESSION.ORGANIZATION_GAME_ID.eq(ogr.getOrganizationGameId())).fetch();
                     for (var gs : gsList)
                     {
-                        if (or.getEdit() != 0)
+                        if (ogr.getEdit() != 0)
                             addGameGameSessionRole(gs, Access.EDIT);
-                        else if (or.getView() != 0)
+                        else if (ogr.getView() != 0)
                             addGameGameSessionRole(gs, Access.VIEW);
+                    }
+                }
+
+                // indirect game session roles for all organizations where user is a member
+                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                        .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var or : orList)
+                {
+                    List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
+                            .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
+                    for (var og : ogList)
+                    {
+                        List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION)
+                                .where(Tables.GAME_SESSION.ORGANIZATION_GAME_ID.eq(og.getId())).fetch();
+                        for (var gs : gsList)
+                        {
+                            if (or.getEdit() != 0)
+                                addGameGameSessionRole(gs, Access.EDIT);
+                            else if (or.getView() != 0)
+                                addGameGameSessionRole(gs, Access.VIEW);
+                        }
                     }
                 }
             }
@@ -371,60 +438,74 @@ public class AdminData extends CommonData
             this.dashboardRoles = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
-            // direct dashboard roles
-            List<DashboardRoleRecord> drList = dslContext.selectFrom(Tables.DASHBOARD_ROLE)
-                    .where(Tables.DASHBOARD_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var dr : drList)
+            if (isSuperAdmin())
             {
-                DashboardTemplateRecord dt =
-                        SqlUtils.readRecordFromId(this, Tables.DASHBOARD_TEMPLATE, dr.getDashboardTemplateId());
-                if (dr.getEdit() != 0)
-                    addDashboardRole(dt, Access.EDIT);
-                else if (dr.getView() != 0)
-                    addDashboardRole(dt, Access.VIEW);
+                List<DashboardTemplateRecord> dashboardList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE).fetch();
+                for (var dt : dashboardList)
+                {
+                    this.dashboardRoles.put(dt, Access.EDIT);
+                }
             }
 
-            // indirect dashboard roles via game_access roles
-            List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
-                    .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var ogr : ogrList)
+            else
+
             {
-                List<DashboardTemplateRecord> dtList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE)
-                        .where(Tables.DASHBOARD_TEMPLATE.ORGANIZATION_GAME_ID.eq(ogr.getOrganizationGameId())).fetch();
-                for (var dt : dtList)
+                // direct dashboard roles
+                List<DashboardRoleRecord> drList = dslContext.selectFrom(Tables.DASHBOARD_ROLE)
+                        .where(Tables.DASHBOARD_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var dr : drList)
                 {
-                    if (ogr.getEdit() != 0)
+                    DashboardTemplateRecord dt =
+                            SqlUtils.readRecordFromId(this, Tables.DASHBOARD_TEMPLATE, dr.getDashboardTemplateId());
+                    if (dr.getEdit() != 0)
                         addDashboardRole(dt, Access.EDIT);
-                    else if (ogr.getView() != 0)
+                    else if (dr.getView() != 0)
                         addDashboardRole(dt, Access.VIEW);
                 }
 
-                // add the public templates for the accessible games as well (view-only)
-                OrganizationGameRecord og = SqlUtils.readRecordFromId(this, Tables.ORGANIZATION_GAME, ogr.getOrganizationGameId());
-                addDashboardRole(og);
-            }
-
-            // indirect dashboard roles for all organizations where user is a member
-            List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
-                    .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
-            for (var or : orList)
-            {
-                List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
-                        .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
-                for (var og : ogList)
+                // indirect dashboard roles via game_access roles
+                List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
+                        .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var ogr : ogrList)
                 {
                     List<DashboardTemplateRecord> dtList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE)
-                            .where(Tables.DASHBOARD_TEMPLATE.ORGANIZATION_GAME_ID.eq(og.getId())).fetch();
+                            .where(Tables.DASHBOARD_TEMPLATE.ORGANIZATION_GAME_ID.eq(ogr.getOrganizationGameId())).fetch();
                     for (var dt : dtList)
                     {
-                        if (or.getEdit() != 0)
+                        if (ogr.getEdit() != 0)
                             addDashboardRole(dt, Access.EDIT);
-                        else if (or.getView() != 0)
+                        else if (ogr.getView() != 0)
                             addDashboardRole(dt, Access.VIEW);
                     }
 
                     // add the public templates for the accessible games as well (view-only)
+                    OrganizationGameRecord og =
+                            SqlUtils.readRecordFromId(this, Tables.ORGANIZATION_GAME, ogr.getOrganizationGameId());
                     addDashboardRole(og);
+                }
+
+                // indirect dashboard roles for all organizations where user is a member
+                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                        .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                for (var or : orList)
+                {
+                    List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
+                            .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
+                    for (var og : ogList)
+                    {
+                        List<DashboardTemplateRecord> dtList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE)
+                                .where(Tables.DASHBOARD_TEMPLATE.ORGANIZATION_GAME_ID.eq(og.getId())).fetch();
+                        for (var dt : dtList)
+                        {
+                            if (or.getEdit() != 0)
+                                addDashboardRole(dt, Access.EDIT);
+                            else if (or.getView() != 0)
+                                addDashboardRole(dt, Access.VIEW);
+                        }
+
+                        // add the public templates for the accessible games as well (view-only)
+                        addDashboardRole(og);
+                    }
                 }
             }
         }
