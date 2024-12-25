@@ -4,10 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.table.TableEntryImage;
@@ -42,9 +38,7 @@ public class MaintainOrganization
     {
         StringBuilder s = new StringBuilder();
         AdminTable.tableStart(s, "Organization", new String[] {"Code", "Name"}, true, "Code", true);
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<OrganizationRecord> organizationRecords = dslContext.selectFrom(Tables.ORGANIZATION).fetch();
-        for (var organization : organizationRecords)
+        for (var organization : data.getOrganizationRoles().keySet())
         {
             AdminTable.tableRow(s, organization.getId(), new String[] {organization.getCode(), organization.getName()});
         }
