@@ -32,19 +32,26 @@ public class MaintainOrganizationGame
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "Game Access for Organizations", new String[] {"Name", "Organization", "Game"},
-                true, "Name", true);
+        AdminTable.tableStart(s, "Game Access for Organizations", new String[] {"Name", "Organization", "Game"}, true, "Name",
+                true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME.join(Tables.ORGANIZATION)
                 .on(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID)).join(Tables.GAME)
                 .on(Tables.ORGANIZATION_GAME.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var og : ogList)
         {
-            int id = og.getValue(Tables.ORGANIZATION_GAME.ID);
-            String name = og.getValue(Tables.ORGANIZATION_GAME.NAME);
-            String org = og.getValue(Tables.ORGANIZATION.CODE);
-            String game = og.getValue(Tables.GAME.CODE);
-            AdminTable.tableRow(s, id, new String[] {name, org, game});
+            for (OrganizationGameRecord ogAccess : data.getOrganizationGameRoles().keySet())
+            {
+                if (ogAccess.getId().equals(og.getValue(Tables.ORGANIZATION_GAME.ID)))
+                {
+                    int id = og.getValue(Tables.ORGANIZATION_GAME.ID);
+                    String name = og.getValue(Tables.ORGANIZATION_GAME.NAME);
+                    String org = og.getValue(Tables.ORGANIZATION.CODE);
+                    String game = og.getValue(Tables.GAME.CODE);
+                    AdminTable.tableRow(s, id, new String[] {name, org, game});
+                    break;
+                }
+            }
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
