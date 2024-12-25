@@ -39,11 +39,11 @@ public class MaintainGameRole
         for (var gameRole : gameRoleList)
         {
             int id = gameRole.getValue(Tables.GAME_ROLE.ID);
-            String org = gameRole.getValue(Tables.GAME.CODE);
+            String game = gameRole.getValue(Tables.GAME.CODE);
             String user = gameRole.getValue(Tables.USER.NAME);
             String edit = gameRole.getValue(Tables.GAME_ROLE.EDIT) == 0 ? "N" : "Y";
             String view = gameRole.getValue(Tables.GAME_ROLE.VIEW) == 0 ? "N" : "Y";
-            AdminTable.tableRow(s, id, new String[] {org, user, edit, view});
+            AdminTable.tableRow(s, id, new String[] {game, user, edit, view});
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
@@ -58,9 +58,9 @@ public class MaintainGameRole
         form.startForm();
         form.setHeader("Game Role", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.GAME_ROLE.GAME_ID, gameRole).setPickTable(data, data.getGameRoles().keySet(),
-                Tables.GAME.ID, Tables.GAME.CODE));
+                Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
         form.addEntry(new TableEntryPickRecord(Tables.GAME_ROLE.USER_ID, gameRole).setPickTable(data, Tables.USER, Tables.USER.ID,
-                Tables.USER.NAME));
+                Tables.USER.NAME).setLabel("User"));
         form.addEntry(new TableEntryBoolean(Tables.GAME_ROLE.EDIT, gameRole));
         form.addEntry(new TableEntryBoolean(Tables.GAME_ROLE.VIEW, gameRole));
         form.endForm();
