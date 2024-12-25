@@ -26,7 +26,8 @@ public class MaintainGame
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, true, "Code", true);
+        AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, data.isSuperAdmin() || data.isGameAdmin(),
+                "Code", true);
         for (var game : data.getGameRoles().keySet())
         {
             String archived = game.getArchived() == 0 ? "N" : "Y";
