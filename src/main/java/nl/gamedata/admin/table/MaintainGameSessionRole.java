@@ -16,7 +16,6 @@ import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
-import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameSessionRecord;
 import nl.gamedata.data.tables.records.GameSessionRoleRecord;
 
