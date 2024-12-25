@@ -59,10 +59,11 @@ public class MaintainOrganizationRole
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("User-Role in Organization", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID, or).setPickTable(data,
-                data.getOrganizationRoles().keySet(), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE));
-        form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_ROLE.USER_ID, or).setPickTable(data, Tables.USER,
-                Tables.USER.ID, Tables.USER.NAME));
+        form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID, or)
+                .setPickTable(data, data.getOrganizationRoles().keySet(), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE)
+                .setLabel("Organization"));
+        form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_ROLE.USER_ID, or)
+                .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));
         form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_ROLE.ADMIN, or));
         form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_ROLE.EDIT, or));
         form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_ROLE.VIEW, or));
