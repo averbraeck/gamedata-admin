@@ -1,8 +1,10 @@
 package nl.gamedata.admin;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -192,6 +194,17 @@ public class AdminData extends CommonData
         return this.organizationRoles;
     }
 
+    public Set<OrganizationRecord> getOrganizationRolesEdit()
+    {
+        Set<OrganizationRecord> ret = new HashSet<>();
+        for (var entry : getOrganizationRoles().entrySet())
+        {
+            if (entry.getValue().edit())
+                ret.add(entry.getKey());
+        }
+        return ret;
+    }
+
     public Map<GameRecord, Access> getGameRoles()
     {
         if (this.gameRoles == null)
@@ -279,6 +292,17 @@ public class AdminData extends CommonData
         return this.gameRoles;
     }
 
+    public Set<GameRecord> getGameRolesEdit()
+    {
+        Set<GameRecord> ret = new HashSet<>();
+        for (var entry : getGameRoles().entrySet())
+        {
+            if (entry.getValue().edit())
+                ret.add(entry.getKey());
+        }
+        return ret;
+    }
+
     private void addGameRole(final GameRecord game, final Access access)
     {
         Access oldAccess = this.gameRoles.get(game);
@@ -338,6 +362,17 @@ public class AdminData extends CommonData
             }
         }
         return this.organizationGameRoles;
+    }
+
+    public Set<OrganizationGameRecord> getOrganizationGameRolesEdit()
+    {
+        Set<OrganizationGameRecord> ret = new HashSet<>();
+        for (var entry : getOrganizationGameRoles().entrySet())
+        {
+            if (entry.getValue().edit())
+                ret.add(entry.getKey());
+        }
+        return ret;
     }
 
     private void addOrganizationGameRole(final OrganizationGameRecord organizationGame, final Access access)
@@ -420,6 +455,17 @@ public class AdminData extends CommonData
             }
         }
         return this.gameSessionRoles;
+    }
+
+    public Set<GameSessionRecord> getGameSessionRolesEdit()
+    {
+        Set<GameSessionRecord> ret = new HashSet<>();
+        for (var entry : getGameSessionRoles().entrySet())
+        {
+            if (entry.getValue().edit())
+                ret.add(entry.getKey());
+        }
+        return ret;
     }
 
     private void addGameGameSessionRole(final GameSessionRecord gameSession, final Access access)
@@ -510,6 +556,17 @@ public class AdminData extends CommonData
             }
         }
         return this.dashboardRoles;
+    }
+
+    public Set<DashboardTemplateRecord> getDashboardRolesEdit()
+    {
+        Set<DashboardTemplateRecord> ret = new HashSet<>();
+        for (var entry : getDashboardRoles().entrySet())
+        {
+            if (entry.getValue().edit())
+                ret.add(entry.getKey());
+        }
+        return ret;
     }
 
     private void addDashboardRole(final OrganizationGameRecord og)
