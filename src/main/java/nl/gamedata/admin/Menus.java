@@ -13,6 +13,7 @@ import nl.gamedata.admin.table.IEdit;
 import nl.gamedata.admin.table.ITable;
 import nl.gamedata.admin.table.MaintainGame;
 import nl.gamedata.admin.table.MaintainOrganization;
+import nl.gamedata.admin.table.MaintainOrganizationGame;
 import nl.gamedata.admin.table.MaintainOrganizationRole;
 import nl.gamedata.admin.table.MaintainUser;
 
@@ -45,7 +46,8 @@ public class Menus
         organizationTabs.add(new Tab("user-role", "User Role", false, Set.of(0, 2), MaintainOrganizationRole::table,
                 MaintainOrganizationRole::edit));
         organizationTabs.add(new Tab("game", "Game", true, Set.of(0, 2), MaintainGame::table, MaintainGame::edit));
-        // organizationTabs.add(new Tab("organization-game", "Game Access", false, Set.of(0, 2)));
+        organizationTabs.add(new Tab("organization-game", "Game Access", false, Set.of(0, 2), MaintainOrganizationGame::table,
+                MaintainOrganizationGame::edit));
         // organizationTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 2)));
         // organizationTabs.add(new Tab("game-session", "Game Session", false, Set.of(0, 2)));
 
@@ -79,7 +81,8 @@ public class Menus
         gameControlTabs.add(new Tab("game", "Game", true, Set.of(0, 3), MaintainGame::table, MaintainGame::edit));
         gameControlTabs.add(new Tab("organization", "Organization", true, Set.of(0, 3), MaintainOrganization::table,
                 MaintainOrganization::edit));
-        // gameControlTabs.add(new Tab("organization-game", "Game Access", true, Set.of(0, 3)));
+        gameControlTabs.add(new Tab("organization-game", "Game Access", true, Set.of(0, 3), MaintainOrganizationGame::table,
+                MaintainOrganizationGame::edit));
         // gameControlTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 3)));
 
         menuList.add("game-session");
