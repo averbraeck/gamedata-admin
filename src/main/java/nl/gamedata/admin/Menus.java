@@ -103,14 +103,14 @@ public class Menus
 
         menuList.add("layout");
         List<Tab> layoutTabs = new ArrayList<>();
-        menuMap.put("layout", new Menu("fa-screen", "layout", "Layout", layoutTabs, Set.of(0)));
+        menuMap.put("layout", new Menu("fa-display", "layout", "Layout", layoutTabs, Set.of(0)));
         // layoutTabs.add(new Tab("dashboard-layout", "Dashboard Layout", true, Set.of(0)));
         // layoutTabs.add(new Tab("dashboard-element", "Dashboard Element", true, Set.of(0)));
         // layoutTabs.add(new Tab("element-property", "Element Property", true, Set.of(0)));
 
         menuList.add("dashboard");
         List<Tab> dashboardTabs = new ArrayList<>();
-        menuMap.put("dashboard", new Menu("fa-chart-diagram", "dashboard", "Dashboard", dashboardTabs, Set.of(0, 5)));
+        menuMap.put("dashboard", new Menu("fa-table-cells-large", "dashboard", "Dashboard", dashboardTabs, Set.of(0, 5)));
         dashboardTabs.add(new Tab("game", "Game", true, Set.of(0, 5), MaintainGame::table, MaintainGame::edit));
         // dashboardTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 5)));
         // dashboardTabs.add(new Tab("dashboard-template", "Dashboard Template", true, Set.of(0, 5)));
