@@ -17,7 +17,6 @@ import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
-import nl.gamedata.data.tables.records.OrganizationGameRecord;
 import nl.gamedata.data.tables.records.OrganizationGameRoleRecord;
 
 /**
@@ -41,9 +40,9 @@ public class MaintainOrganizationGameRole
                 .on(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
         for (var ogr : ogrList)
         {
-            for (OrganizationGameRecord ogAccess : data.getOrganizationGameRoles().keySet())
+            for (Integer ogId : data.getOrganizationGameAccess().keySet())
             {
-                if (ogAccess.getId().equals(ogr.getValue(Tables.ORGANIZATION_GAME.ID)))
+                if (ogId.equals(ogr.getValue(Tables.ORGANIZATION_GAME.ID)))
                 {
                     int id = ogr.getValue(Tables.ORGANIZATION_GAME_ROLE.ID);
                     String org = ogr.getValue(Tables.ORGANIZATION_GAME.NAME);
@@ -68,7 +67,7 @@ public class MaintainOrganizationGameRole
         form.startForm();
         form.setHeader("User-Role for Organization-Game", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID, ogr).setPickTable(data,
-                data.getOrganizationPicklist(Access.EDIT), Tables.ORGANIZATION_GAME.ID, Tables.ORGANIZATION_GAME.NAME)
+                data.getOrganizationGamePicklist(Access.EDIT), Tables.ORGANIZATION_GAME.ID, Tables.ORGANIZATION_GAME.NAME)
                 .setLabel("Organization-Game"));
         form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME_ROLE.USER_ID, ogr)
                 .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));

@@ -186,7 +186,7 @@ public class Menus
             roles.add(1);
         if (data.getOrganizationAccess().size() > 0)
             roles.add(2);
-        if (data.getOrganizationGameRoles().size() > 0)
+        if (data.getOrganizationGameAccess().size() > 0)
             roles.add(3);
         if (data.getGameSessionRoles().size() > 0)
             roles.add(4);

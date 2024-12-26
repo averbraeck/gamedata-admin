@@ -41,9 +41,9 @@ public class MaintainOrganizationGame
                 .on(Tables.ORGANIZATION_GAME.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var og : ogList)
         {
-            for (OrganizationGameRecord ogAccess : data.getOrganizationGameRoles().keySet())
+            for (Integer ogId : data.getOrganizationGameAccess().keySet())
             {
-                if (ogAccess.getId().equals(og.getValue(Tables.ORGANIZATION_GAME.ID)))
+                if (ogId.equals(og.getValue(Tables.ORGANIZATION_GAME.ID)))
                 {
                     int id = og.getValue(Tables.ORGANIZATION_GAME.ID);
                     String name = og.getValue(Tables.ORGANIZATION_GAME.NAME);
