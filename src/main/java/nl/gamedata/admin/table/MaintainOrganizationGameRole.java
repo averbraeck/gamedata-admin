@@ -32,7 +32,8 @@ public class MaintainOrganizationGameRole
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "User Roles for Organization Games", new String[] {"Org-Game", "User", "Edit", "View"}, true,
+        boolean newButton = data.isSuperAdmin() || data.hasOrganizationAccess(Access.ADMIN);
+        AdminTable.tableStart(s, "User Roles for Organization Games", new String[] {"Org-Game", "User", "Edit", "View"}, newButton,
                 "Org-Game", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE.join(Tables.ORGANIZATION_GAME)

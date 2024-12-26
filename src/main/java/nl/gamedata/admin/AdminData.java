@@ -138,6 +138,58 @@ public class AdminData extends CommonData
         return getUser() == null ? false : getUser().getGameAdmin() != 0;
     }
 
+    public boolean hasOrganizationAccess(final Access access)
+    {
+        for (Access oa : getOrganizationAccess().values())
+        {
+            if (oa.ordinal() <= access.ordinal())
+                return true;
+        }
+        return false;
+    }
+
+    public boolean hasOrganizationGameAccess(final Access access)
+    {
+        for (Access oga : getOrganizationGameAccess().values())
+        {
+            if (oga.ordinal() <= access.ordinal())
+                return true;
+        }
+        return false;
+    }
+
+    public boolean hasGameAccess(final Access access)
+    {
+        if (isGameAdmin())
+            return true;
+        for (Access ga : getGameAccess().values())
+        {
+            if (ga.ordinal() <= access.ordinal())
+                return true;
+        }
+        return false;
+    }
+
+    public boolean hasGameSessionAccess(final Access access)
+    {
+        for (Access gsa : getGameSessionAccess().values())
+        {
+            if (gsa.ordinal() <= access.ordinal())
+                return true;
+        }
+        return false;
+    }
+
+    public boolean hasDashboardTemplateAccess(final Access access)
+    {
+        for (Access dta : getDashboardTemplateAccess().values())
+        {
+            if (dta.ordinal() <= access.ordinal())
+                return true;
+        }
+        return false;
+    }
+
     /**
      * Call this method after adding or deleting users, organizations, games, organization-game combinations, game sessions,
      * dashboard templates, or after adding, changing or deleting roles.

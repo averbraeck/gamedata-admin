@@ -33,7 +33,8 @@ public class MaintainOrganizationGame
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "Game Access for Organizations", new String[] {"Name", "Organization", "Game"}, true, "Name",
+        boolean newButton = data.isSuperAdmin() || data.isGameAdmin();
+        AdminTable.tableStart(s, "Game Access for Organizations", new String[] {"Name", "Organization", "Game"}, newButton, "Name",
                 true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME.join(Tables.ORGANIZATION)

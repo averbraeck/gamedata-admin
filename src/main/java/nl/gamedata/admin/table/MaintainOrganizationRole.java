@@ -32,8 +32,9 @@ public class MaintainOrganizationRole
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
+        boolean newButton = data.isSuperAdmin() || data.hasOrganizationAccess(Access.ADMIN);
         AdminTable.tableStart(s, "User Roles in Organizations", new String[] {"Organization", "User", "Admin", "Edit", "View"},
-                true, "Organization", true);
+                newButton, "Organization", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE.join(Tables.ORGANIZATION)
                 .on(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID)).join(Tables.USER)

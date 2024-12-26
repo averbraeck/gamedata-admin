@@ -33,7 +33,8 @@ public class MaintainGameSessionRole
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "Game Session Roles", new String[] {"Game Session", "User", "Edit", "View"}, true,
+        boolean newButton = data.isSuperAdmin() || data.hasOrganizationAccess(Access.ADMIN);
+        AdminTable.tableStart(s, "Game Session Roles", new String[] {"Game Session", "User", "Edit", "View"}, newButton,
                 "Game Session", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> gameSessionRoleList = dslContext.selectFrom(Tables.GAME_SESSION_ROLE.join(Tables.GAME_SESSION)

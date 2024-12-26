@@ -26,8 +26,8 @@ public class MaintainGame
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, data.isSuperAdmin() || data.isGameAdmin(),
-                "Code", true);
+        boolean newButton = data.isSuperAdmin() || data.isGameAdmin();
+        AdminTable.tableStart(s, "Game", new String[] {"Code", "Name", "Archived"}, newButton, "Code", true);
         for (var gameId : data.getGameAccess().keySet())
         {
             var game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);

@@ -32,7 +32,8 @@ public class MaintainGameRole
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "Game Roles", new String[] {"Game", "User", "Edit", "View"}, true, "Game", true);
+        boolean newButton = data.isSuperAdmin() || data.isGameAdmin();
+        AdminTable.tableStart(s, "Game Roles", new String[] {"Game", "User", "Edit", "View"}, newButton, "Game", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> gameRoleList =
                 dslContext.selectFrom(Tables.GAME_ROLE.join(Tables.GAME).on(Tables.GAME_ROLE.GAME_ID.eq(Tables.GAME.ID))

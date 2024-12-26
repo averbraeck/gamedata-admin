@@ -33,7 +33,8 @@ public class MaintainGameVersion
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "Game Version", new String[] {"Game", "Version", "Archived"}, true, "Game", true);
+        boolean newButton = data.isSuperAdmin() || data.isGameAdmin();
+        AdminTable.tableStart(s, "Game Version", new String[] {"Game", "Version", "Archived"}, newButton, "Game", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> gvList = dslContext
                 .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();

@@ -3,9 +3,7 @@ package nl.gamedata.admin.table;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +20,7 @@ import nl.gamedata.admin.ModalWindowUtils;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
+import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRoleRecord;
@@ -46,9 +45,11 @@ public class MaintainUser
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin", "Game Admin"}, true, "Name", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
+        StringBuilder s = new StringBuilder();
+        boolean newButton = data.isSuperAdmin() || data.isGameAdmin() || data.hasOrganizationAccess(Access.ADMIN);
+        AdminTable.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin", "Game Admin"}, newButton, "Name", true);
+
         List<UserRecord> userRecords = new ArrayList<>();
         if (data.isSuperAdmin())
         {
@@ -56,34 +57,26 @@ public class MaintainUser
         }
         else
         {
-            // see if there are organization(s) for which this user is organization_admin
-            Set<Integer> orgIdAdminSet = new HashSet<>();
-            for (var organizationRole : data.getOrganizationAccess().entrySet())
+            // all users with a role in the organizations to which this user has admin access
+            for (var entry : data.getOrganizationAccess().entrySet())
             {
-                if (organizationRole.getValue().admin())
-                    orgIdAdminSet.add(organizationRole.getKey());
-            }
-            if (orgIdAdminSet.size() != 0)
-            {
-                // all users with a role with these organizations
-                // note you cannot have any other organizational role unless you are a member of the organization first
-                Set<Integer> userSet = new HashSet<>();
-                for (int orgId : orgIdAdminSet)
+                if (entry.getValue().admin())
                 {
                     List<OrganizationRoleRecord> organizationRoleList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
-                            .where(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(orgId)).fetch();
+                            .where(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(entry.getKey())).fetch();
                     for (var organizationRole : organizationRoleList)
-                        userSet.add(organizationRole.getUserId());
+                    {
+                        var user = SqlUtils.readUserFromUserId(data, organizationRole.getUserId());
+                        if (!userRecords.contains(data.getUser()))
+                            userRecords.add(user);
+                    }
                 }
-                for (int userId : userSet)
-                    userRecords.add(SqlUtils.readUserFromUserId(data, userId));
-            }
-            else
-            {
-                // only self
-                userRecords.add(data.getUser());
             }
         }
+        // always self
+        if (!userRecords.contains(data.getUser()))
+            userRecords.add(data.getUser());
+
         for (var user : userRecords)
         {
             AdminTable.tableRow(s, user.getId(), new String[] {user.getName(), user.getEmail(),

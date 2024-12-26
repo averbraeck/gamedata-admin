@@ -37,7 +37,8 @@ public class MaintainOrganization
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        AdminTable.tableStart(s, "Organization", new String[] {"Code", "Name"}, true, "Code", true);
+        boolean newButton = data.isSuperAdmin();
+        AdminTable.tableStart(s, "Organization", new String[] {"Code", "Name"}, newButton, "Code", true);
         for (var organizationId : data.getOrganizationAccess().keySet())
         {
             OrganizationRecord organization = SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, organizationId);
