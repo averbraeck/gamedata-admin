@@ -14,10 +14,10 @@ import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableForm;
+import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.DashboardRoleRecord;
-import nl.gamedata.data.tables.records.DashboardTemplateRecord;
 
 /**
  * MaintainDashboardRole takes care of the dashboard role screen.
@@ -39,9 +39,9 @@ public class MaintainDashboardRole
                 .on(Tables.DASHBOARD_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
         for (var dashboardRole : dashboardRoleList)
         {
-            for (DashboardTemplateRecord dt : data.getDashboardRoles().keySet())
+            for (Integer dtId : data.getDashboardTemplateAccess().keySet())
             {
-                if (dt.getId().equals(dashboardRole.getValue(Tables.DASHBOARD_TEMPLATE.ID)))
+                if (dtId.equals(dashboardRole.getValue(Tables.DASHBOARD_TEMPLATE.ID)))
                 {
                     int id = dashboardRole.getValue(Tables.DASHBOARD_ROLE.ID);
                     String template = dashboardRole.getValue(Tables.DASHBOARD_TEMPLATE.NAME);
@@ -66,7 +66,7 @@ public class MaintainDashboardRole
         form.startForm();
         form.setHeader("Dashboard Role", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.DASHBOARD_ROLE.DASHBOARD_TEMPLATE_ID, dashboardRole).setPickTable(data,
-                data.getDashboardRoles().keySet(), Tables.DASHBOARD_TEMPLATE.ID, Tables.DASHBOARD_TEMPLATE.NAME)
+                data.getDashboardTemplatePicklist(Access.EDIT), Tables.DASHBOARD_TEMPLATE.ID, Tables.DASHBOARD_TEMPLATE.NAME)
                 .setLabel("Template"));
         form.addEntry(new TableEntryPickRecord(Tables.DASHBOARD_ROLE.USER_ID, dashboardRole)
                 .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));

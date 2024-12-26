@@ -54,7 +54,7 @@ public class AdminData extends CommonData
     private Map<Integer, Access> gameSessionAccess = null;
 
     /** the access right of the user via DashboardRole. Lazy loading. */
-    private Map<DashboardTemplateRecord, Access> dashboardTemplateRoles = null;
+    private Map<Integer, Access> dashboardTemplateAccess = null;
 
     /* ================================================ */
     /* PERSISTENT DATA ABOUT CHOICES MADE ON THE SCREEN */
@@ -148,7 +148,7 @@ public class AdminData extends CommonData
         this.gameAccess = null;
         this.organizationGameAccess = null;
         this.gameSessionAccess = null;
-        this.dashboardTemplateRoles = null;
+        this.dashboardTemplateAccess = null;
     }
 
     public Map<Integer, Access> getOrganizationAccess()
@@ -488,7 +488,6 @@ public class AdminData extends CommonData
             this.gameSessionAccess.put(gameSessionId, access);
     }
 
-
     public Set<Integer> getGameSessionAccess(final Access access)
     {
         Set<Integer> ret = new HashSet<>();
@@ -514,11 +513,11 @@ public class AdminData extends CommonData
         return ret;
     }
 
-    public Map<DashboardTemplateRecord, Access> getDashboardRoles()
+    public Map<Integer, Access> getDashboardTemplateAccess()
     {
-        if (this.dashboardTemplateRoles == null)
+        if (this.dashboardTemplateAccess == null)
         {
-            this.dashboardTemplateRoles = new HashMap<>();
+            this.dashboardTemplateAccess = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
             if (isSuperAdmin())
@@ -526,7 +525,7 @@ public class AdminData extends CommonData
                 List<DashboardTemplateRecord> dashboardList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE).fetch();
                 for (var dt : dashboardList)
                 {
-                    this.dashboardTemplateRoles.put(dt, Access.EDIT);
+                    this.dashboardTemplateAccess.put(dt.getId(), Access.EDIT);
                 }
             }
 
@@ -538,12 +537,10 @@ public class AdminData extends CommonData
                         .where(Tables.DASHBOARD_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var dr : drList)
                 {
-                    DashboardTemplateRecord dt =
-                            SqlUtils.readRecordFromId(this, Tables.DASHBOARD_TEMPLATE, dr.getDashboardTemplateId());
                     if (dr.getEdit() != 0)
-                        addDashboardRole(dt, Access.EDIT);
+                        addDashboardTemplateAccess(dr.getDashboardTemplateId(), Access.EDIT);
                     else if (dr.getView() != 0)
-                        addDashboardRole(dt, Access.VIEW);
+                        addDashboardTemplateAccess(dr.getDashboardTemplateId(), Access.VIEW);
                 }
 
                 // indirect dashboard roles via game_access roles
@@ -556,15 +553,15 @@ public class AdminData extends CommonData
                     for (var dt : dtList)
                     {
                         if (ogr.getEdit() != 0)
-                            addDashboardRole(dt, Access.EDIT);
+                            addDashboardTemplateAccess(dt.getId(), Access.EDIT);
                         else if (ogr.getView() != 0)
-                            addDashboardRole(dt, Access.VIEW);
+                            addDashboardTemplateAccess(dt.getId(), Access.VIEW);
                     }
 
                     // add the public templates for the accessible games as well (view-only)
                     OrganizationGameRecord og =
                             SqlUtils.readRecordFromId(this, Tables.ORGANIZATION_GAME, ogr.getOrganizationGameId());
-                    addDashboardRole(og);
+                    addDashboardTemplateAccess(og);
                 }
 
                 // indirect dashboard roles for all organizations where user is a member
@@ -581,32 +578,21 @@ public class AdminData extends CommonData
                         for (var dt : dtList)
                         {
                             if (or.getEdit() != 0)
-                                addDashboardRole(dt, Access.EDIT);
+                                addDashboardTemplateAccess(dt.getId(), Access.EDIT);
                             else if (or.getView() != 0)
-                                addDashboardRole(dt, Access.VIEW);
+                                addDashboardTemplateAccess(dt.getId(), Access.VIEW);
                         }
 
                         // add the public templates for the accessible games as well (view-only)
-                        addDashboardRole(og);
+                        addDashboardTemplateAccess(og);
                     }
                 }
             }
         }
-        return this.dashboardTemplateRoles;
+        return this.dashboardTemplateAccess;
     }
 
-    public Set<DashboardTemplateRecord> getDashboardRolesEdit()
-    {
-        Set<DashboardTemplateRecord> ret = new HashSet<>();
-        for (var entry : getDashboardRoles().entrySet())
-        {
-            if (entry.getValue().edit())
-                ret.add(entry.getKey());
-        }
-        return ret;
-    }
-
-    private void addDashboardRole(final OrganizationGameRecord og)
+    private void addDashboardTemplateAccess(final OrganizationGameRecord og)
     {
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
         List<GameVersionRecord> gvList =
@@ -620,19 +606,44 @@ public class AdminData extends CommonData
                 // check that the template does not belong to another organization and is not private
                 if (dt.getOrganizationGameId() == null && dt.getPrivate() == 0)
                 {
-                    addDashboardRole(dt, Access.VIEW);
+                    addDashboardTemplateAccess(dt.getId(), Access.VIEW);
                 }
             }
         }
     }
 
-    private void addDashboardRole(final DashboardTemplateRecord gameSession, final Access access)
+    private void addDashboardTemplateAccess(final Integer dashboardTemplateId, final Access access)
     {
-        Access oldAccess = this.dashboardTemplateRoles.get(gameSession);
+        Access oldAccess = this.dashboardTemplateAccess.get(dashboardTemplateId);
         if (oldAccess == null)
-            this.dashboardTemplateRoles.put(gameSession, access);
+            this.dashboardTemplateAccess.put(dashboardTemplateId, access);
         else if (oldAccess.ordinal() > access.ordinal())
-            this.dashboardTemplateRoles.put(gameSession, access);
+            this.dashboardTemplateAccess.put(dashboardTemplateId, access);
+    }
+
+    public Set<Integer> getDashboardTemplateAccess(final Access access)
+    {
+        Set<Integer> ret = new HashSet<>();
+        for (var entry : getDashboardTemplateAccess().entrySet())
+        {
+            if (entry.getValue().ordinal() <= access.ordinal())
+                ret.add(entry.getKey());
+        }
+        return ret;
+    }
+
+    public Set<DashboardTemplateRecord> getDashboardTemplatePicklist(final Access access)
+    {
+        Set<DashboardTemplateRecord> ret = new HashSet<>();
+        for (var entry : getDashboardTemplateAccess().entrySet())
+        {
+            if (entry.getValue().ordinal() <= access.ordinal())
+            {
+                var dashboardTemplate = SqlUtils.readRecordFromId(this, Tables.DASHBOARD_TEMPLATE, entry.getKey());
+                ret.add(dashboardTemplate);
+            }
+        }
+        return ret;
     }
 
     /* ************************ */
