@@ -14,9 +14,9 @@ import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableForm;
+import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
-import nl.gamedata.data.tables.records.GameSessionRecord;
 import nl.gamedata.data.tables.records.GameSessionRoleRecord;
 
 /**
@@ -41,9 +41,9 @@ public class MaintainGameSessionRole
                 .on(Tables.GAME_SESSION_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
         for (var gameSessionRole : gameSessionRoleList)
         {
-            for (GameSessionRecord gsr : data.getGameSessionRoles().keySet())
+            for (Integer gsId : data.getGameSessionAccess().keySet())
             {
-                if (gsr.getId().equals(gameSessionRole.getValue(Tables.GAME_SESSION.ID)))
+                if (gsId.equals(gameSessionRole.getValue(Tables.GAME_SESSION.ID)))
                 {
                     int id = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.ID);
                     String template = gameSessionRole.getValue(Tables.GAME_SESSION.NAME);
@@ -68,7 +68,7 @@ public class MaintainGameSessionRole
         form.startForm();
         form.setHeader("Game Session Role", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION_ROLE.GAME_SESSION_ID, gameSessionRole)
-                .setPickTable(data, data.getGameSessionRoles().keySet(), Tables.GAME_SESSION.ID, Tables.GAME_SESSION.NAME)
+                .setPickTable(data, data.getGameSessionPicklist(Access.EDIT), Tables.GAME_SESSION.ID, Tables.GAME_SESSION.NAME)
                 .setLabel("Game Session"));
         form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION_ROLE.USER_ID, gameSessionRole)
                 .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));

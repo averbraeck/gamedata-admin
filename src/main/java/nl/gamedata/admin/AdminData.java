@@ -50,8 +50,8 @@ public class AdminData extends CommonData
     /** the access right of the user via OrganizationGameRole. Lazy loading. */
     private Map<Integer, Access> organizationGameAccess = null;
 
-    /** the access right of the user via GameSessionTole. Lazy loading. */
-    private Map<GameSessionRecord, Access> gameSessionRoles = null;
+    /** the access right of the user via GameSessionRole. Lazy loading. */
+    private Map<Integer, Access> gameSessionAccess = null;
 
     /** the access right of the user via DashboardRole. Lazy loading. */
     private Map<DashboardTemplateRecord, Access> dashboardTemplateRoles = null;
@@ -147,7 +147,7 @@ public class AdminData extends CommonData
         this.organizationAccess = null;
         this.gameAccess = null;
         this.organizationGameAccess = null;
-        this.gameSessionRoles = null;
+        this.gameSessionAccess = null;
         this.dashboardTemplateRoles = null;
     }
 
@@ -349,9 +349,9 @@ public class AdminData extends CommonData
                 for (var ogr : ogrList)
                 {
                     if (ogr.getEdit() != 0)
-                        addOrganizationGameRole(ogr.getOrganizationGameId(), Access.EDIT);
+                        addOrganizationGameAccess(ogr.getOrganizationGameId(), Access.EDIT);
                     else if (ogr.getView() != 0)
-                        addOrganizationGameRole(ogr.getOrganizationGameId(), Access.VIEW);
+                        addOrganizationGameAccess(ogr.getOrganizationGameId(), Access.VIEW);
                 }
 
                 // indirect game_access roles for all organizations where user is a member
@@ -364,9 +364,9 @@ public class AdminData extends CommonData
                     for (var og : ogList)
                     {
                         if (or.getEdit() != 0 || or.getAdmin() != 0)
-                            addOrganizationGameRole(og.getId(), Access.EDIT);
+                            addOrganizationGameAccess(og.getId(), Access.EDIT);
                         if (or.getView() != 0)
-                            addOrganizationGameRole(og.getId(), Access.VIEW);
+                            addOrganizationGameAccess(og.getId(), Access.VIEW);
                     }
                 }
             }
@@ -399,7 +399,7 @@ public class AdminData extends CommonData
         return ret;
     }
 
-    private void addOrganizationGameRole(final Integer organizationGameId, final Access access)
+    private void addOrganizationGameAccess(final Integer organizationGameId, final Access access)
     {
         Access oldAccess = this.organizationGameAccess.get(organizationGameId);
         if (oldAccess == null)
@@ -408,11 +408,11 @@ public class AdminData extends CommonData
             this.organizationGameAccess.put(organizationGameId, access);
     }
 
-    public Map<GameSessionRecord, Access> getGameSessionRoles()
+    public Map<Integer, Access> getGameSessionAccess()
     {
-        if (this.gameSessionRoles == null)
+        if (this.gameSessionAccess == null)
         {
-            this.gameSessionRoles = new HashMap<>();
+            this.gameSessionAccess = new HashMap<>();
             DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
             if (isSuperAdmin())
@@ -420,7 +420,7 @@ public class AdminData extends CommonData
                 List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION).fetch();
                 for (var gs : gsList)
                 {
-                    this.gameSessionRoles.put(gs, Access.EDIT);
+                    this.gameSessionAccess.put(gs.getId(), Access.EDIT);
                 }
             }
 
@@ -432,12 +432,10 @@ public class AdminData extends CommonData
                         .where(Tables.GAME_SESSION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var gsr : gsrList)
                 {
-                    GameSessionRecord gameSession =
-                            SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, gsr.getGameSessionId());
                     if (gsr.getEdit() != 0)
-                        addGameGameSessionRole(gameSession, Access.EDIT);
+                        addGameGameSessionAccess(gsr.getGameSessionId(), Access.EDIT);
                     else if (gsr.getView() != 0)
-                        addGameGameSessionRole(gameSession, Access.VIEW);
+                        addGameGameSessionAccess(gsr.getGameSessionId(), Access.VIEW);
                 }
 
                 // indirect game session roles via game_access roles
@@ -450,9 +448,9 @@ public class AdminData extends CommonData
                     for (var gs : gsList)
                     {
                         if (ogr.getEdit() != 0)
-                            addGameGameSessionRole(gs, Access.EDIT);
+                            addGameGameSessionAccess(gs.getId(), Access.EDIT);
                         else if (ogr.getView() != 0)
-                            addGameGameSessionRole(gs, Access.VIEW);
+                            addGameGameSessionAccess(gs.getId(), Access.VIEW);
                     }
                 }
 
@@ -470,35 +468,50 @@ public class AdminData extends CommonData
                         for (var gs : gsList)
                         {
                             if (or.getEdit() != 0)
-                                addGameGameSessionRole(gs, Access.EDIT);
+                                addGameGameSessionAccess(gs.getId(), Access.EDIT);
                             else if (or.getView() != 0)
-                                addGameGameSessionRole(gs, Access.VIEW);
+                                addGameGameSessionAccess(gs.getId(), Access.VIEW);
                         }
                     }
                 }
             }
         }
-        return this.gameSessionRoles;
+        return this.gameSessionAccess;
     }
 
-    public Set<GameSessionRecord> getGameSessionRolesEdit()
+    private void addGameGameSessionAccess(final Integer gameSessionId, final Access access)
     {
-        Set<GameSessionRecord> ret = new HashSet<>();
-        for (var entry : getGameSessionRoles().entrySet())
+        Access oldAccess = this.gameSessionAccess.get(gameSessionId);
+        if (oldAccess == null)
+            this.gameSessionAccess.put(gameSessionId, access);
+        else if (oldAccess.ordinal() > access.ordinal())
+            this.gameSessionAccess.put(gameSessionId, access);
+    }
+
+
+    public Set<Integer> getGameSessionAccess(final Access access)
+    {
+        Set<Integer> ret = new HashSet<>();
+        for (var entry : getGameSessionAccess().entrySet())
         {
-            if (entry.getValue().edit())
+            if (entry.getValue().ordinal() <= access.ordinal())
                 ret.add(entry.getKey());
         }
         return ret;
     }
 
-    private void addGameGameSessionRole(final GameSessionRecord gameSession, final Access access)
+    public Set<GameSessionRecord> getGameSessionPicklist(final Access access)
     {
-        Access oldAccess = this.gameSessionRoles.get(gameSession);
-        if (oldAccess == null)
-            this.gameSessionRoles.put(gameSession, access);
-        else if (oldAccess.ordinal() > access.ordinal())
-            this.gameSessionRoles.put(gameSession, access);
+        Set<GameSessionRecord> ret = new HashSet<>();
+        for (var entry : getGameSessionAccess().entrySet())
+        {
+            if (entry.getValue().ordinal() <= access.ordinal())
+            {
+                var gameSession = SqlUtils.readRecordFromId(this, Tables.GAME_SESSION, entry.getKey());
+                ret.add(gameSession);
+            }
+        }
+        return ret;
     }
 
     public Map<DashboardTemplateRecord, Access> getDashboardRoles()
