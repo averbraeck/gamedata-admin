@@ -31,9 +31,10 @@ public class MaintainDashboardRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin();
-        AdminTable.tableStart(s, "Dashboard Roles", new String[] {"Template", "User", "Edit", "View"}, newButton, "Template", true);
+        AdminTable table = new AdminTable(data, "Dashboard Roles", "Template");
+        boolean access = data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin();
+        table.setNewButton(access);
+        table.setHeader("Template", "User", "Edit", "View");
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> dashboardRoleList = dslContext.selectFrom(Tables.DASHBOARD_ROLE.join(Tables.DASHBOARD_TEMPLATE)
                 .on(Tables.DASHBOARD_ROLE.DASHBOARD_TEMPLATE_ID.eq(Tables.DASHBOARD_TEMPLATE.ID)).join(Tables.USER)
@@ -49,13 +50,12 @@ public class MaintainDashboardRole
                     String user = dashboardRole.getValue(Tables.USER.NAME);
                     String edit = dashboardRole.getValue(Tables.DASHBOARD_ROLE.EDIT) == 0 ? "N" : "Y";
                     String view = dashboardRole.getValue(Tables.DASHBOARD_ROLE.VIEW) == 0 ? "N" : "Y";
-                    AdminTable.tableRow(s, id, new String[] {template, user, edit, view});
+                    table.addRow(id, false, access, access, template, user, edit, view);
                     break;
                 }
             }
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
