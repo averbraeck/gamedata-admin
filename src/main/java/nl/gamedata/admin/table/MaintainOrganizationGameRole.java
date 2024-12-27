@@ -32,7 +32,7 @@ public class MaintainOrganizationGameRole
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.hasOrganizationAccess(Access.ADMIN);
+        boolean newButton = data.isSuperAdmin() || data.isOrganizationAdmin();
         AdminTable.tableStart(s, "User Roles for Organization Games", new String[] {"Org-Game", "User", "Edit", "View"}, newButton,
                 "Org-Game", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);

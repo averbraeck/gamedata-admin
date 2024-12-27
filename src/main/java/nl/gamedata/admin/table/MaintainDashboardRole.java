@@ -32,7 +32,7 @@ public class MaintainDashboardRole
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isGameAdmin() || data.hasOrganizationAccess(Access.ADMIN);
+        boolean newButton = data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin();
         AdminTable.tableStart(s, "Dashboard Roles", new String[] {"Template", "User", "Edit", "View"}, newButton, "Template", true);
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> dashboardRoleList = dslContext.selectFrom(Tables.DASHBOARD_ROLE.join(Tables.DASHBOARD_TEMPLATE)

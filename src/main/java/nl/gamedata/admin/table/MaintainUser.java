@@ -20,7 +20,6 @@ import nl.gamedata.admin.ModalWindowUtils;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
-import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.OrganizationRoleRecord;
@@ -46,9 +45,10 @@ public class MaintainUser
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isGameAdmin() || data.hasOrganizationAccess(Access.ADMIN);
-        AdminTable.tableStart(s, "User", new String[] {"Name", "Email", "Super Admin", "Game Admin"}, newButton, "Name", true);
+
+        AdminTable table = new AdminTable(data, "Users", "Name");
+        table.setNewButton(data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin());
+        table.setHeader("Name", "Email", "Super Admin", "Game Admin");
 
         List<UserRecord> userRecords = new ArrayList<>();
         if (data.isSuperAdmin())
@@ -79,11 +79,15 @@ public class MaintainUser
 
         for (var user : userRecords)
         {
-            AdminTable.tableRow(s, user.getId(), new String[] {user.getName(), user.getEmail(),
-                    user.getSuperAdmin() == 1 ? "Y" : "N", user.getGameAdmin() == 1 ? "Y" : "N"});
+            boolean edit = data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin()
+                    || user.getId().equals(data.getUser().getId());
+            boolean delete = data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin();
+            if (user.getId().equals(data.getUser().getId()))
+                delete = false; // cannot delete self
+            table.addRow(user.getId(), true, edit, delete, user.getName(), user.getEmail(),
+                    user.getSuperAdmin() == 1 ? "Y" : "N", user.getGameAdmin() == 1 ? "Y" : "N");
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)

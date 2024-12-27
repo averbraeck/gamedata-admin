@@ -9,6 +9,7 @@ import nl.gamedata.admin.form.table.TableEntryImage;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableEntryText;
 import nl.gamedata.admin.form.table.TableForm;
+import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.GameRecord;
@@ -23,7 +24,7 @@ import nl.gamedata.data.tables.records.GameRecord;
  */
 public class MaintainGame
 {
-    public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
+    public static void tableOld(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         StringBuilder s = new StringBuilder();
         boolean newButton = data.isSuperAdmin() || data.isGameAdmin();
@@ -36,6 +37,22 @@ public class MaintainGame
         }
         AdminTable.tableEnd(s);
         data.setContent(s.toString());
+    }
+
+    public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
+    {
+        AdminTable table = new AdminTable(data, "Game", "Code");
+        table.setNewButton(data.isSuperAdmin() || data.isGameAdmin());
+        table.setHeader("Code", "Name", "Archived");
+        for (var gameId : data.getGameAccess().keySet())
+        {
+            var game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
+            String archived = game.getArchived() == 0 ? "N" : "Y";
+            boolean edit = data.isSuperAdmin() || data.isGameAdmin() || data.hasGameAccess(Access.EDIT);
+            boolean delete = data.isSuperAdmin() || data.isGameAdmin();
+            table.addRow(game.getId(), true, edit, delete, game.getCode(), game.getName(), archived);
+        }
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)

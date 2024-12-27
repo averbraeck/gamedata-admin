@@ -1,5 +1,8 @@
 package nl.gamedata.admin;
 
+import java.util.NavigableSet;
+import java.util.TreeMap;
+
 /**
  * Table.java.
  * <p>
@@ -90,6 +93,26 @@ public class AdminTable
             </table>
             """;
 
+    private final AdminData data;
+
+    private final String title;
+
+    private boolean newButton = false;
+
+    private String[] header;
+
+    private String sortColumn;
+
+    private boolean az;
+
+    private int sortFieldIndex = 0;
+
+    TreeMap<String, Row> rows = new TreeMap<>();
+
+    private record Row(int recordId, boolean select, boolean edit, boolean delete, String... cells)
+    {
+    }
+
     public static void tableStart(final StringBuilder s, final String title, final String[] header, final boolean hasNew,
             final String sortColumn, final boolean sortDown)
     {
@@ -118,5 +141,71 @@ public class AdminTable
     public static void tableEnd(final StringBuilder s)
     {
         s.append(tableEnd);
+    }
+
+    public AdminTable(final AdminData data, final String title, final String defaultSortField)
+    {
+        this.data = data;
+        this.title = title;
+        if (data.getTableColumnSort() == null)
+            data.selectTableColumnSort(defaultSortField);
+        this.sortColumn = this.data.getTableColumnSort().fieldName();
+        this.az = this.data.getTableColumnSort().az();
+    }
+
+    public void setNewButton(final boolean newButton)
+    {
+        this.newButton = newButton;
+    }
+
+    public void setHeader(final String... header)
+    {
+        this.header = header;
+        for (int i = 0; i < header.length; i++)
+        {
+            if (header[i].equals(this.sortColumn))
+                this.sortFieldIndex = i;
+        }
+    }
+
+    public void addRow(final int recordId, final boolean select, final boolean edit, final boolean delete,
+            final String... cells)
+    {
+        Row row = new Row(recordId, select, edit, delete, cells);
+        this.rows.put(cells[this.sortFieldIndex], row);
+    }
+
+    public void process()
+    {
+        // TABLE START
+        StringBuilder s = new StringBuilder();
+        s.append(tableTitle.formatted(this.title, this.newButton ? "visible" : "hidden"));
+        s.append(tableHeaderTop);
+        for (String h : this.header)
+        {
+            String sort = "fa-sort";
+            if (this.sortColumn.equals(h))
+                sort = this.az ? "fa-arrow-down-a-z" : "fa-arrow-up-z-a";
+            s.append(tableHeaderCol.formatted(h, "az-" + h.toLowerCase().replace(' ', '-'), sort));
+        }
+        s.append(tableHeaderBottom);
+
+        // ROWS
+        NavigableSet<String> keys = this.az ? this.rows.navigableKeySet() : this.rows.descendingKeySet();
+        for (String key : keys)
+        {
+            Row row = this.rows.get(key);
+            s.append(tableRowStart.formatted(row.recordId(), row.recordId(), row.recordId(), row.recordId()));
+            for (String c : row.cells())
+            {
+                s.append(tableCell.formatted(c));
+            }
+            s.append(tableRowEnd);
+        }
+
+        // TABLE END
+        s.append(tableEnd);
+
+        this.data.setContent(s.toString());
     }
 }

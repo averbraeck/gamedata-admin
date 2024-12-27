@@ -158,7 +158,7 @@ public class Navbar
 
     private static void tabChoice(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
     {
-        if (!data.getTabFilterChoices().containsKey(tabName))
+        if (data.getTabFilterChoice(tabName) == null)
         {
             if (tabName.equals(data.getTabChoice(data.getMenuChoice())))
                 s.append(tabChoiceActiveEmpty.formatted(tabText));
@@ -167,7 +167,7 @@ public class Navbar
         }
         else
         {
-            String choice = data.getTabFilterChoices().get(tabName).name();
+            String choice = data.getTabFilterChoice(tabName).name();
             if (choice.length() > 12)
                 choice = choice.substring(0, 9) + "...";
             if (tabName.equals(data.getTabChoice(data.getMenuChoice())))

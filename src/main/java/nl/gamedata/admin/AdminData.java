@@ -66,10 +66,10 @@ public class AdminData extends CommonData
     /** Which tab has been chosen, to maintain persistence after a POST. */
     private Map<String, String> tabChoice = new HashMap<>();
 
-    /** Map that links the tab name to a potential filter choice (record and display name) in the navbar. */
+    /** Map that links the menu#tab name to a potential filter choice (record and display name) in the navbar. */
     private Map<String, FilterChoice> tabFilterChoices = new HashMap<>();
 
-    /** The sorting order of columns in the tables. The map is from table (tab) to column header to A-Z / Z-A */
+    /** The sorting order of columns in the tables. The map is from menu#tab to column header to A-Z / Z-A */
     private Map<String, ColumnSort> tableColumnSort = new HashMap<>();
 
     /** the page content as built by the appropriate class. */
@@ -95,7 +95,7 @@ public class AdminData extends CommonData
     {
     }
 
-    /** A filter choice (record and display name), used in the filtering of records in he navbar. */
+    /** A filter choice (record and display name), used in the filtering of records in the navbar. */
     public record FilterChoice(TableRecord<?> record, String name)
     {
     }
@@ -136,6 +136,11 @@ public class AdminData extends CommonData
     public boolean isGameAdmin()
     {
         return getUser() == null ? false : getUser().getGameAdmin() != 0;
+    }
+
+    public boolean isOrganizationAdmin()
+    {
+        return hasOrganizationAccess(Access.ADMIN);
     }
 
     public boolean hasOrganizationAccess(final Access access)
@@ -845,14 +850,34 @@ public class AdminData extends CommonData
         this.modalWindowHtml = modalWindowHtml;
     }
 
-    public Map<String, ColumnSort> getTableColumnSort()
+    public ColumnSort getTableColumnSort()
     {
-        return this.tableColumnSort;
+        return this.tableColumnSort.get(this.menuChoice + "#" + this.tabChoice);
     }
 
-    public Map<String, FilterChoice> getTabFilterChoices()
+    public void selectTableColumnSort(final String fieldName)
     {
-        return this.tabFilterChoices;
+        String key = this.menuChoice + "#" + this.tabChoice;
+        ColumnSort oldColumnSort = getTableColumnSort();
+        if (oldColumnSort != null && fieldName.equals(oldColumnSort.fieldName()))
+            this.tableColumnSort.put(key, new ColumnSort(fieldName, !oldColumnSort.az()));
+        else
+            this.tableColumnSort.put(key, new ColumnSort(fieldName, true));
+    }
+
+    public FilterChoice getTabFilterChoice(final String tabChoice)
+    {
+        return this.tabFilterChoices.get(this.menuChoice + "#" + tabChoice);
+    }
+
+    public void setTabFilterChoice(final String tabChoice, final TableRecord<?> record, final String displayName)
+    {
+        this.tabFilterChoices.put(this.menuChoice + "#" + tabChoice, new FilterChoice(record, displayName));
+    }
+
+    public void clearTabFilterChoice(final String tabChoice)
+    {
+        this.tabFilterChoices.remove(this.menuChoice + "#" + tabChoice);
     }
 
     public boolean isError()
