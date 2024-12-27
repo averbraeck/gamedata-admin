@@ -31,10 +31,10 @@ public class MaintainOrganizationRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isOrganizationAdmin();
-        AdminTable.tableStart(s, "User Roles in Organizations", new String[] {"Organization", "User", "Admin", "Edit", "View"},
-                newButton, "Organization", true);
+        AdminTable table = new AdminTable(data, "User Roles in Organizations", "Organization");
+        boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
+        table.setNewButton(access);
+        table.setHeader("Organization", "User", "Admin", "Edit", "View");
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE.join(Tables.ORGANIZATION)
                 .on(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID)).join(Tables.USER)
@@ -51,13 +51,12 @@ public class MaintainOrganizationRole
                     String admin = or.getValue(Tables.ORGANIZATION_ROLE.ADMIN) == 0 ? "N" : "Y";
                     String edit = or.getValue(Tables.ORGANIZATION_ROLE.EDIT) == 0 ? "N" : "Y";
                     String view = or.getValue(Tables.ORGANIZATION_ROLE.VIEW) == 0 ? "N" : "Y";
-                    AdminTable.tableRow(s, id, new String[] {org, user, admin, edit, view});
+                    table.addRow(id, false, access, access, org, user, admin, edit, view);
                     break;
                 }
             }
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
