@@ -32,10 +32,10 @@ public class MaintainOrganizationGame
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isGameAdmin();
-        AdminTable.tableStart(s, "Game Access for Organizations", new String[] {"Name", "Organization", "Game"}, newButton, "Name",
-                true);
+        AdminTable table = new AdminTable(data, "Game Access for Organizations", "Name");
+        boolean access = data.isSuperAdmin() || data.isGameAdmin();
+        table.setNewButton(access);
+        table.setHeader("Name", "Organization", "Game");
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME.join(Tables.ORGANIZATION)
                 .on(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID)).join(Tables.GAME)
@@ -50,13 +50,12 @@ public class MaintainOrganizationGame
                     String name = og.getValue(Tables.ORGANIZATION_GAME.NAME);
                     String org = og.getValue(Tables.ORGANIZATION.CODE);
                     String game = og.getValue(Tables.GAME.CODE);
-                    AdminTable.tableRow(s, id, new String[] {name, org, game});
+                    table.addRow(id, false, access, access, name, org, game);
                     break;
                 }
             }
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
