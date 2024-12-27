@@ -14,11 +14,13 @@ import nl.gamedata.admin.table.ITable;
 import nl.gamedata.admin.table.MaintainDashboardRole;
 import nl.gamedata.admin.table.MaintainGame;
 import nl.gamedata.admin.table.MaintainGameRole;
+import nl.gamedata.admin.table.MaintainGameSession;
 import nl.gamedata.admin.table.MaintainGameSessionRole;
 import nl.gamedata.admin.table.MaintainGameVersion;
 import nl.gamedata.admin.table.MaintainOrganization;
 import nl.gamedata.admin.table.MaintainOrganizationGame;
 import nl.gamedata.admin.table.MaintainOrganizationGameRole;
+import nl.gamedata.admin.table.MaintainOrganizationGameToken;
 import nl.gamedata.admin.table.MaintainOrganizationRole;
 import nl.gamedata.admin.table.MaintainUser;
 
@@ -53,8 +55,10 @@ public class Menus
         organizationTabs.add(new Tab("game", "Game", true, Set.of(0, 2), MaintainGame::table, MaintainGame::edit));
         organizationTabs.add(new Tab("organization-game", "Game Access", false, Set.of(0, 2), MaintainOrganizationGame::table,
                 MaintainOrganizationGame::edit));
-        // organizationTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 2)));
-        // organizationTabs.add(new Tab("game-session", "Game Session", false, Set.of(0, 2)));
+        organizationTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 2), MaintainOrganizationGameToken::table,
+                MaintainOrganizationGameToken::edit));
+        organizationTabs.add(new Tab("game-session", "Game Session", false, Set.of(0, 2), MaintainGameSession::table,
+                MaintainGameSession::edit));
 
         menuList.add("user");
         List<Tab> userTabs = new ArrayList<>();
