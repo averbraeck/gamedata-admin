@@ -32,9 +32,10 @@ public class MaintainGameVersion
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isGameAdmin();
-        AdminTable.tableStart(s, "Game Version", new String[] {"Game", "Version", "Archived"}, newButton, "Game", true);
+        AdminTable table = new AdminTable(data, "Game Version", "Game");
+        boolean access = data.isSuperAdmin() || data.isGameAdmin();
+        table.setNewButton(access);
+        table.setHeader("Game", "Version", "Archived");
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> gvList = dslContext
                 .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();
@@ -48,13 +49,12 @@ public class MaintainGameVersion
                     String game = gv.getValue(Tables.GAME.CODE);
                     String version = gv.getValue(Tables.GAME_VERSION.NAME);
                     String archived = gv.getValue(Tables.GAME_VERSION.ARCHIVED) == 0 ? "N" : "Y";
-                    AdminTable.tableRow(s, id, new String[] {game, version, archived});
+                    table.addRow(id, false, access, access, game, version, archived);
                     break;
                 }
             }
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
