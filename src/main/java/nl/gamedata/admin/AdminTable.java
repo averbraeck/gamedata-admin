@@ -163,7 +163,7 @@ public class AdminTable
         this.header = header;
         for (int i = 0; i < header.length; i++)
         {
-            if (header[i].equals(this.sortColumn))
+            if (header[i].toLowerCase().replace(' ', '-').equals(this.sortColumn))
                 this.sortFieldIndex = i;
         }
     }
@@ -172,7 +172,7 @@ public class AdminTable
             final String... cells)
     {
         Row row = new Row(recordId, select, edit, delete, cells);
-        this.rows.put(cells[this.sortFieldIndex], row);
+        this.rows.put(cells[this.sortFieldIndex] + String.valueOf(this.rows.size()), row);
     }
 
     public void process()
@@ -184,7 +184,7 @@ public class AdminTable
         for (String h : this.header)
         {
             String sort = "fa-sort";
-            if (this.sortColumn.equals(h))
+            if (this.sortColumn.equals(h.toLowerCase().replace(' ', '-')))
                 sort = this.az ? "fa-arrow-down-a-z" : "fa-arrow-up-z-a";
             s.append(tableHeaderCol.formatted(h, "az-" + h.toLowerCase().replace(' ', '-'), sort));
         }

@@ -852,17 +852,18 @@ public class AdminData extends CommonData
 
     public ColumnSort getTableColumnSort()
     {
-        return this.tableColumnSort.get(this.menuChoice + "#" + this.tabChoice);
+        return this.tableColumnSort.get(this.menuChoice + "#" + getTabChoice(this.menuChoice));
     }
 
     public void selectTableColumnSort(final String fieldName)
     {
-        String key = this.menuChoice + "#" + this.tabChoice;
+        String fn = fieldName.toLowerCase().replace(' ', '-');
+        String key = this.menuChoice + "#" + getTabChoice(this.menuChoice);
         ColumnSort oldColumnSort = getTableColumnSort();
-        if (oldColumnSort != null && fieldName.equals(oldColumnSort.fieldName()))
-            this.tableColumnSort.put(key, new ColumnSort(fieldName, !oldColumnSort.az()));
+        if (oldColumnSort != null && fn.equals(oldColumnSort.fieldName()))
+            this.tableColumnSort.put(key, new ColumnSort(fn, !oldColumnSort.az()));
         else
-            this.tableColumnSort.put(key, new ColumnSort(fieldName, true));
+            this.tableColumnSort.put(key, new ColumnSort(fn, true));
     }
 
     public FilterChoice getTabFilterChoice(final String tabChoice)
