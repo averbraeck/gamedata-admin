@@ -32,10 +32,10 @@ public class MaintainGameSessionRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isOrganizationAdmin();
-        AdminTable.tableStart(s, "Game Session Roles", new String[] {"Game Session", "User", "Edit", "View"}, newButton,
-                "Game Session", true);
+        AdminTable table = new AdminTable(data, "Game Session Roles", "Game Session");
+        boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
+        table.setNewButton(access);
+        table.setHeader("Game Session", "User", "Edit", "View");
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> gameSessionRoleList = dslContext.selectFrom(Tables.GAME_SESSION_ROLE.join(Tables.GAME_SESSION)
                 .on(Tables.GAME_SESSION_ROLE.GAME_SESSION_ID.eq(Tables.GAME_SESSION.ID)).join(Tables.USER)
@@ -47,17 +47,16 @@ public class MaintainGameSessionRole
                 if (gsId.equals(gameSessionRole.getValue(Tables.GAME_SESSION.ID)))
                 {
                     int id = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.ID);
-                    String template = gameSessionRole.getValue(Tables.GAME_SESSION.NAME);
+                    String session = gameSessionRole.getValue(Tables.GAME_SESSION.NAME);
                     String user = gameSessionRole.getValue(Tables.USER.NAME);
                     String edit = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.EDIT) == 0 ? "N" : "Y";
                     String view = gameSessionRole.getValue(Tables.GAME_SESSION_ROLE.VIEW) == 0 ? "N" : "Y";
-                    AdminTable.tableRow(s, id, new String[] {template, user, edit, view});
+                    table.addRow(id, false, access, access, session, user, edit, view);
                     break;
                 }
             }
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
