@@ -57,7 +57,11 @@ public class AdminServlet extends HttpServlet
             return;
         }
 
-        if (click.startsWith("menu"))
+        if (click.equals("menu-admin-panel"))
+            handleHome(request, response, click, data);
+        else if (click.equals("menu-settings"))
+            handleSettings(request, response, click, data);
+        else if (click.startsWith("menu"))
             handleMenu(request, response, click, data, recordId);
         else if (click.startsWith("tab"))
             handleTab(request, response, click, data, recordId);
@@ -75,6 +79,22 @@ public class AdminServlet extends HttpServlet
             System.err.println("Unknown menu choice: " + click + " with recordId: " + recordId);
 
         response.sendRedirect("jsp/admin/admin.jsp");
+    }
+
+    private void handleHome(final HttpServletRequest request, final HttpServletResponse response, final String click,
+            final AdminData data)
+    {
+        String menuChoice = click.replace("menu-", "");
+        data.setMenuChoice(menuChoice);
+        data.setContent("<h1>Home</h1>\n");
+    }
+
+    private void handleSettings(final HttpServletRequest request, final HttpServletResponse response, final String click,
+            final AdminData data)
+    {
+        String menuChoice = click.replace("menu-", "");
+        data.setMenuChoice(menuChoice);
+        data.setContent("<h1>Settings</h1>\n");
     }
 
     private void handleMenu(final HttpServletRequest request, final HttpServletResponse response, final String click,
@@ -149,6 +169,9 @@ public class AdminServlet extends HttpServlet
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("AZ choice: " + click + " with recordId: " + recordId);
+        String fieldName = click.replace("az-", "");
+        data.selectTableColumnSort(fieldName);
+        Menus.table(data, request, "");
     }
 
 }
