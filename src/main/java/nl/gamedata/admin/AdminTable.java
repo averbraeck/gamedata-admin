@@ -113,36 +113,6 @@ public class AdminTable
     {
     }
 
-    public static void tableStart(final StringBuilder s, final String title, final String[] header, final boolean hasNew,
-            final String sortColumn, final boolean sortDown)
-    {
-        s.append(tableTitle.formatted(title, hasNew ? "visible" : "hidden"));
-        s.append(tableHeaderTop);
-        for (String h : header)
-        {
-            String sort = "fa-sort";
-            if (sortColumn.equals(h))
-                sort = sortDown ? "fa-arrow-down-a-z" : "fa-arrow-up-z-a";
-            s.append(tableHeaderCol.formatted(h, "az-" + h.toLowerCase().replace(' ', '-'), sort));
-        }
-        s.append(tableHeaderBottom);
-    }
-
-    public static void tableRow(final StringBuilder s, final int recordId, final String[] content)
-    {
-        s.append(tableRowStart.formatted(recordId, recordId, recordId, recordId));
-        for (String c : content)
-        {
-            s.append(tableCell.formatted(c));
-        }
-        s.append(tableRowEnd);
-    }
-
-    public static void tableEnd(final StringBuilder s)
-    {
-        s.append(tableEnd);
-    }
-
     public AdminTable(final AdminData data, final String title, final String defaultSortField)
     {
         this.data = data;
