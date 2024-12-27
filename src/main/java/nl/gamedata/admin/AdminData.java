@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.Table;
 import org.jooq.TableRecord;
@@ -376,6 +377,25 @@ public class AdminData extends CommonData
             {
                 var game = SqlUtils.readRecordFromId(this, Tables.GAME, gameEntry.getKey());
                 ret.add(game);
+            }
+        }
+        return ret;
+    }
+
+    public Set<GameVersionRecord> getGameVersionPicklist(final Access access)
+    {
+        Set<GameVersionRecord> ret = new HashSet<>();
+        DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
+        List<GameVersionRecord> gvList = dslContext.selectFrom(Tables.GAME_VERSION).fetch();
+        for (var gv : gvList)
+        {
+            for (var gameEntry : getGameAccess().entrySet())
+            {
+                if (gameEntry.getValue().ordinal() <= access.ordinal()
+                        && gameEntry.getKey().equals(gv.getValue(Tables.GAME.ID)))
+                {
+                    ret.add(gv);
+                }
             }
         }
         return ret;
