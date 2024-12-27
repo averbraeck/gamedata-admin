@@ -31,10 +31,10 @@ public class MaintainOrganizationGameRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isOrganizationAdmin();
-        AdminTable.tableStart(s, "User Roles for Organization Games", new String[] {"Org-Game", "User", "Edit", "View"}, newButton,
-                "Org-Game", true);
+        AdminTable table = new AdminTable(data, "User Roles for Organization Games", "Org-Game");
+        boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
+        table.setNewButton(access);
+        table.setHeader("Org-Game", "User", "Edit", "View");
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE.join(Tables.ORGANIZATION_GAME)
                 .on(Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID)).join(Tables.USER)
@@ -50,13 +50,12 @@ public class MaintainOrganizationGameRole
                     String user = ogr.getValue(Tables.USER.NAME);
                     String edit = ogr.getValue(Tables.ORGANIZATION_GAME_ROLE.EDIT) == 0 ? "N" : "Y";
                     String view = ogr.getValue(Tables.ORGANIZATION_GAME_ROLE.VIEW) == 0 ? "N" : "Y";
-                    AdminTable.tableRow(s, id, new String[] {org, user, edit, view});
+                    table.addRow(id, false, access, access, org, user, edit, view);
                     break;
                 }
             }
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
