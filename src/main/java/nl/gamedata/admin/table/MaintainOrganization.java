@@ -36,16 +36,17 @@ public class MaintainOrganization
 
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin();
-        AdminTable.tableStart(s, "Organization", new String[] {"Code", "Name"}, newButton, "Code", true);
+        AdminTable table = new AdminTable(data, "Organization", "Code");
+        table.setNewButton(data.isSuperAdmin());
+        table.setHeader("Code", "Name");
         for (var organizationId : data.getOrganizationAccess().keySet())
         {
             OrganizationRecord organization = SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, organizationId);
-            AdminTable.tableRow(s, organizationId, new String[] {organization.getCode(), organization.getName()});
+            boolean edit = data.isSuperAdmin();
+            boolean delete = data.isSuperAdmin();
+            table.addRow(organizationId, true, edit, delete, organization.getCode(), organization.getName());
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
