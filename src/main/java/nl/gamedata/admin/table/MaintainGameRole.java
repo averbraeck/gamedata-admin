@@ -31,9 +31,10 @@ public class MaintainGameRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        StringBuilder s = new StringBuilder();
-        boolean newButton = data.isSuperAdmin() || data.isGameAdmin();
-        AdminTable.tableStart(s, "Game Roles", new String[] {"Game", "User", "Edit", "View"}, newButton, "Game", true);
+        AdminTable table = new AdminTable(data, "Game Roles", "Game");
+        boolean access = data.isSuperAdmin() || data.isGameAdmin();
+        table.setNewButton(access);
+        table.setHeader("Game", "User", "Edit", "View");
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> gameRoleList =
                 dslContext.selectFrom(Tables.GAME_ROLE.join(Tables.GAME).on(Tables.GAME_ROLE.GAME_ID.eq(Tables.GAME.ID))
@@ -49,13 +50,12 @@ public class MaintainGameRole
                     String user = gameRole.getValue(Tables.USER.NAME);
                     String edit = gameRole.getValue(Tables.GAME_ROLE.EDIT) == 0 ? "N" : "Y";
                     String view = gameRole.getValue(Tables.GAME_ROLE.VIEW) == 0 ? "N" : "Y";
-                    AdminTable.tableRow(s, id, new String[] {game, user, edit, view});
+                    table.addRow(id, false, access, access, game, user, edit, view);
                     break;
                 }
             }
         }
-        AdminTable.tableEnd(s);
-        data.setContent(s.toString());
+        table.process();
     }
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
