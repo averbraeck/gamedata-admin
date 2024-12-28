@@ -75,7 +75,9 @@ public class MaintainGameSession
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game Session", click, recordId);
-        // TODO: Choose organization - game - gameversion
+        form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.ORGANIZATION_ID, gameSession).setPickTable(data,
+                data.getOrganizationPicklist(Access.VIEW), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE)
+                .setLabel("Organization-Game"));
         form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.GAME_VERSION_ID, gameSession)
                 .setPickTable(data, data.getGameVersionPicklist(Access.VIEW), Tables.GAME_VERSION.ID, Tables.GAME_VERSION.NAME)
                 .setLabel("Game Version"));
