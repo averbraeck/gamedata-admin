@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
@@ -36,9 +33,8 @@ public class MaintainScale
         boolean adminAccess = data.isSuperAdmin() || data.isGameAdmin();
         table.setNewButton(adminAccess);
         table.setHeader("Game", "Scale");
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> scaleList =
-                dslContext.selectFrom(Tables.SCALE.join(Tables.GAME).on(Tables.SCALE.GAME_ID.eq(Tables.GAME.ID))).fetch();
+                data.getDSL().selectFrom(Tables.SCALE.join(Tables.GAME).on(Tables.SCALE.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var scale : scaleList)
         {
             for (Integer gameId : data.getGameAccess().keySet())

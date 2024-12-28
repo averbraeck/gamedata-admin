@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
@@ -36,8 +33,7 @@ public class MaintainGameVersion
         boolean access = data.isSuperAdmin() || data.isGameAdmin();
         table.setNewButton(access);
         table.setHeader("Game", "Version", "Archived");
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<Record> gvList = dslContext
+        List<Record> gvList = data.getDSL()
                 .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var gv : gvList)
         {

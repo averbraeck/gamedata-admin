@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
@@ -35,10 +32,11 @@ public class MaintainOrganizationRole
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
         table.setNewButton(access);
         table.setHeader("Organization", "User", "Admin", "Edit", "View");
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<Record> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE.join(Tables.ORGANIZATION)
-                .on(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID)).join(Tables.USER)
-                .on(Tables.ORGANIZATION_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
+        List<Record> orList = data.getDSL()
+                .selectFrom(Tables.ORGANIZATION_ROLE.join(Tables.ORGANIZATION)
+                        .on(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID)).join(Tables.USER)
+                        .on(Tables.ORGANIZATION_ROLE.USER_ID.eq(Tables.USER.ID)))
+                .fetch();
         for (var or : orList)
         {
             for (Integer organizationId : data.getOrganizationAccess().keySet())

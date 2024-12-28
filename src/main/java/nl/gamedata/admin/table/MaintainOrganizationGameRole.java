@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
@@ -35,10 +32,11 @@ public class MaintainOrganizationGameRole
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
         table.setNewButton(access);
         table.setHeader("Org-Game", "User", "Edit", "View");
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<Record> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE.join(Tables.ORGANIZATION_GAME)
-                .on(Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID)).join(Tables.USER)
-                .on(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
+        List<Record> ogrList = data.getDSL()
+                .selectFrom(Tables.ORGANIZATION_GAME_ROLE.join(Tables.ORGANIZATION_GAME)
+                        .on(Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID))
+                        .join(Tables.USER).on(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(Tables.USER.ID)))
+                .fetch();
         for (var ogr : ogrList)
         {
             for (Integer ogId : data.getOrganizationGameAccess().keySet())

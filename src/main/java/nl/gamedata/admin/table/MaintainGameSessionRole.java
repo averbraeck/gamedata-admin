@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
@@ -36,10 +33,11 @@ public class MaintainGameSessionRole
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
         table.setNewButton(access);
         table.setHeader("Game Session", "User", "Edit", "View");
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<Record> gameSessionRoleList = dslContext.selectFrom(Tables.GAME_SESSION_ROLE.join(Tables.GAME_SESSION)
-                .on(Tables.GAME_SESSION_ROLE.GAME_SESSION_ID.eq(Tables.GAME_SESSION.ID)).join(Tables.USER)
-                .on(Tables.GAME_SESSION_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
+        List<Record> gameSessionRoleList = data.getDSL()
+                .selectFrom(Tables.GAME_SESSION_ROLE.join(Tables.GAME_SESSION)
+                        .on(Tables.GAME_SESSION_ROLE.GAME_SESSION_ID.eq(Tables.GAME_SESSION.ID)).join(Tables.USER)
+                        .on(Tables.GAME_SESSION_ROLE.USER_ID.eq(Tables.USER.ID)))
+                .fetch();
         for (var gameSessionRole : gameSessionRoleList)
         {
             for (Integer gsId : data.getGameSessionAccess().keySet())

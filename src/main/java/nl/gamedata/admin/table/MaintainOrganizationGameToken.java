@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
@@ -36,11 +33,12 @@ public class MaintainOrganizationGameToken
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin() || data.hasOrganizationGameAccess(Access.EDIT);
         table.setNewButton(access);
         table.setHeader("Org", "Game", "Org-Game", "Name", "Value", "Reader", "Writer");
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<Record> ogtList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_TOKEN.join(Tables.ORGANIZATION_GAME)
-                .on(Tables.ORGANIZATION_GAME_TOKEN.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID))
-                .join(Tables.ORGANIZATION).on(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID))
-                .join(Tables.GAME).on(Tables.ORGANIZATION_GAME.GAME_ID.eq(Tables.GAME.ID))).fetch();
+        List<Record> ogtList = data.getDSL()
+                .selectFrom(Tables.ORGANIZATION_GAME_TOKEN.join(Tables.ORGANIZATION_GAME)
+                        .on(Tables.ORGANIZATION_GAME_TOKEN.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID))
+                        .join(Tables.ORGANIZATION).on(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID))
+                        .join(Tables.GAME).on(Tables.ORGANIZATION_GAME.GAME_ID.eq(Tables.GAME.ID)))
+                .fetch();
         for (var ogt : ogtList)
         {
             for (Integer ogId : data.getOrganizationGameAccess().keySet())

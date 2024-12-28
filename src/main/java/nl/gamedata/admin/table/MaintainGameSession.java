@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
@@ -38,10 +35,10 @@ public class MaintainGameSession
         boolean newButton = data.isSuperAdmin() || data.isOrganizationAdmin() || data.hasGameSessionAccess(Access.CREATE);
         table.setNewButton(newButton);
         table.setHeader("Game", "Version", "Code", "Name", "Valid", "Archived");
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<Record> gsList = dslContext.selectFrom(
-                Tables.GAME_SESSION.join(Tables.GAME_VERSION).on(Tables.GAME_SESSION.GAME_VERSION_ID.eq(Tables.GAME_VERSION.ID))
-                        .join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID)))
+        List<Record> gsList = data.getDSL()
+                .selectFrom(Tables.GAME_SESSION.join(Tables.GAME_VERSION)
+                        .on(Tables.GAME_SESSION.GAME_VERSION_ID.eq(Tables.GAME_VERSION.ID)).join(Tables.GAME)
+                        .on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID)))
                 .fetch();
         for (var gs : gsList)
         {

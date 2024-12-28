@@ -8,10 +8,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
-import org.jooq.impl.DSL;
 
 import jakarta.xml.bind.DatatypeConverter;
 import nl.gamedata.admin.AdminData;
@@ -44,8 +41,6 @@ public class MaintainUser
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-
         AdminTable table = new AdminTable(data, "Users", "Name");
         table.setNewButton(data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin());
         table.setHeader("Name", "Email", "Super Admin", "Game Admin");
@@ -53,7 +48,7 @@ public class MaintainUser
         List<UserRecord> userRecords = new ArrayList<>();
         if (data.isSuperAdmin())
         {
-            userRecords = dslContext.selectFrom(Tables.USER).fetch();
+            userRecords = data.getDSL().selectFrom(Tables.USER).fetch();
         }
         else
         {
@@ -62,7 +57,7 @@ public class MaintainUser
             {
                 if (entry.getValue().admin())
                 {
-                    List<OrganizationRoleRecord> organizationRoleList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                    List<OrganizationRoleRecord> organizationRoleList = data.getDSL().selectFrom(Tables.ORGANIZATION_ROLE)
                             .where(Tables.ORGANIZATION_ROLE.ORGANIZATION_ID.eq(entry.getKey())).fetch();
                     for (var organizationRole : organizationRoleList)
                     {
@@ -115,9 +110,8 @@ public class MaintainUser
     public static int saveUser(final HttpServletRequest request, final AdminData data, final int userId)
     {
         String backToMenu = "clickMenu('menu-" + data.getMenuChoice() + "')";
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        UserRecord user = userId == 0 ? dslContext.newRecord(Tables.USER)
-                : dslContext.selectFrom(Tables.USER).where(Tables.USER.ID.eq(userId)).fetchOne();
+        UserRecord user = userId == 0 ? data.getDSL().newRecord(Tables.USER)
+                : data.getDSL().selectFrom(Tables.USER).where(Tables.USER.ID.eq(userId)).fetchOne();
         String hashedPassword = userId == 0 ? "" : user.getPassword(); // has to be BEFORE setFields
         String errors = data.getEditForm().setFields(user, request, data);
         if (errors.length() > 0)

@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
@@ -35,10 +32,11 @@ public class MaintainDashboardRole
         boolean access = data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin();
         table.setNewButton(access);
         table.setHeader("Template", "User", "Edit", "View");
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<Record> dashboardRoleList = dslContext.selectFrom(Tables.DASHBOARD_ROLE.join(Tables.DASHBOARD_TEMPLATE)
-                .on(Tables.DASHBOARD_ROLE.DASHBOARD_TEMPLATE_ID.eq(Tables.DASHBOARD_TEMPLATE.ID)).join(Tables.USER)
-                .on(Tables.DASHBOARD_ROLE.USER_ID.eq(Tables.USER.ID))).fetch();
+        List<Record> dashboardRoleList = data.getDSL()
+                .selectFrom(Tables.DASHBOARD_ROLE.join(Tables.DASHBOARD_TEMPLATE)
+                        .on(Tables.DASHBOARD_ROLE.DASHBOARD_TEMPLATE_ID.eq(Tables.DASHBOARD_TEMPLATE.ID)).join(Tables.USER)
+                        .on(Tables.DASHBOARD_ROLE.USER_ID.eq(Tables.USER.ID)))
+                .fetch();
         for (var dashboardRole : dashboardRoleList)
         {
             for (Integer dtId : data.getDashboardTemplateAccess().keySet())
