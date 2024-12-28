@@ -22,6 +22,7 @@ import nl.gamedata.admin.table.TableGroup;
 import nl.gamedata.admin.table.TableGroupAttempt;
 import nl.gamedata.admin.table.TableGroupObjective;
 import nl.gamedata.admin.table.TableLearningGoal;
+import nl.gamedata.admin.table.TableMissionEvent;
 import nl.gamedata.admin.table.TableOrganization;
 import nl.gamedata.admin.table.TableOrganizationGame;
 import nl.gamedata.admin.table.TableOrganizationGameRole;
@@ -153,7 +154,8 @@ public class Menus
                 new Tab("game-session", "Game Session", true, Set.of(0, 4), TableGameSession::table, TableGameSession::edit));
         gameTabs.add(
                 new Tab("game-mission", "Game Mission", true, Set.of(0, 1), TableGameMission::table, TableGameMission::edit));
-        // dataSessionTabs.add(new Tab("mission-event", "Mission Event", false, Set.of(0, 4)));
+        dataSessionTabs.add(new Tab("mission-event", "Mission Event", false, Set.of(0, 4), TableMissionEvent::table,
+                TableMissionEvent::view));
 
         menuList.add("data-player");
         List<Tab> dataPlayerTabs = new ArrayList<>();
