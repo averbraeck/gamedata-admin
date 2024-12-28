@@ -42,7 +42,7 @@ public class Menus
     {
         menuList.add("admin-panel");
         menuMap.put("admin-panel",
-                new Menu("fa-house", "admin-panel", "Admin panel", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5)));
+                new Menu("fa-house", "admin-panel", "Admin panel", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("organization");
         List<Tab> organizationTabs = new ArrayList<>();
@@ -165,10 +165,10 @@ public class Menus
         // dataGroupTabs.add(new Tab("group-event", "Group Event", false, Set.of(0, 4)));
 
         menuList.add("settings");
-        menuMap.put("settings", new Menu("fa-user-gear", "settings", "Settings", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5)));
+        menuMap.put("settings", new Menu("fa-user-gear", "settings", "Settings", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("logoff");
-        menuMap.put("logoff", new Menu("fa-sign-out", "logoff", "Logoff", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5)));
+        menuMap.put("logoff", new Menu("fa-sign-out", "logoff", "Logoff", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
     }
 
     /**
@@ -178,6 +178,7 @@ public class Menus
      * 3 = organization game role <br>
      * 4 = game session role <br>
      * 5 = dashboard role <br>
+     * 6 = role for everyone <br>
      * @param data game data information
      * @return set of roles for this user
      */
@@ -196,6 +197,7 @@ public class Menus
             roles.add(4);
         if (data.getDashboardTemplateAccess().size() > 0)
             roles.add(5);
+        roles.add(6);
         return roles;
     }
 
