@@ -515,19 +515,26 @@ public class AdminData extends CommonData
                         addGameGameSessionAccess(gsr.getGameSessionId(), Access.VIEW);
                 }
 
-                // indirect game session roles via game_access roles
-                List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
+                // indirect game session roles via organization_game roles
+                List<Record> ogrList = dslContext
+                        .selectFrom(Tables.ORGANIZATION_GAME.join(Tables.ORGANIZATION_GAME_ROLE)
+                                .on(Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID)))
                         .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var ogr : ogrList)
                 {
-                    List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION)
-                            .where(Tables.GAME_SESSION.ORGANIZATION_GAME_ID.eq(ogr.getOrganizationGameId())).fetch();
+                    List<Record> gsList = dslContext
+                            .selectFrom(Tables.GAME_SESSION.join(Tables.GAME_VERSION)
+                                    .on(Tables.GAME_SESSION.GAME_VERSION_ID.eq(Tables.GAME_VERSION.ID)))
+                            .where(Tables.GAME_SESSION.ORGANIZATION_ID
+                                    .eq(ogr.getValue(Tables.ORGANIZATION_GAME.ORGANIZATION_ID))
+                                    .and(Tables.GAME_VERSION.GAME_ID.eq(ogr.getValue(Tables.ORGANIZATION_GAME.GAME_ID))))
+                            .fetch();
                     for (var gs : gsList)
                     {
-                        if (ogr.getEdit() != 0)
-                            addGameGameSessionAccess(gs.getId(), Access.EDIT);
-                        else if (ogr.getView() != 0)
-                            addGameGameSessionAccess(gs.getId(), Access.VIEW);
+                        if (ogr.getValue(Tables.ORGANIZATION_GAME_ROLE.EDIT) != 0)
+                            addGameGameSessionAccess(gs.getValue(Tables.GAME_SESSION.ID), Access.EDIT);
+                        else if (ogr.getValue(Tables.ORGANIZATION_GAME_ROLE.VIEW) != 0)
+                            addGameGameSessionAccess(gs.getValue(Tables.GAME_SESSION.ID), Access.VIEW);
                     }
                 }
 
@@ -541,7 +548,7 @@ public class AdminData extends CommonData
                     for (var og : ogList)
                     {
                         List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION)
-                                .where(Tables.GAME_SESSION.ORGANIZATION_GAME_ID.eq(og.getId())).fetch();
+                                .where(Tables.GAME_SESSION.ORGANIZATION_ID.eq(og.getOrganizationId())).fetch();
                         for (var gs : gsList)
                         {
                             if (or.getEdit() != 0)
