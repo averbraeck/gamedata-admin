@@ -111,7 +111,6 @@ public class AdminServlet extends HttpServlet
     {
         String tab = click.replace("tab-", "");
         data.putTabChoice(data.getMenuChoice(), tab);
-        String menu = data.getMenuChoice();
         System.err.println("TAB choice: " + click + " with recordId: " + recordId);
         Menus.table(data, request, click);
     }
@@ -119,8 +118,6 @@ public class AdminServlet extends HttpServlet
     private void handleRecordEdit(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
-        String menu = data.getMenuChoice();
-        String tab = data.getTabChoice(menu);
         System.err.println("RECORD choice: " + click + " with recordId: " + recordId);
         Menus.edit(data, request, click, recordId);
     }
@@ -130,13 +127,9 @@ public class AdminServlet extends HttpServlet
     {
         System.err.println("RECORD SAVE: " + click + " with recordId: " + recordId);
         if (data.getEditRecord().getTable().getName().toLowerCase().equals("user"))
-        {
             MaintainUser.saveUser(request, data, recordId);
-        }
         else
-        {
             data.saveRecord(request, recordId);
-        }
 
         // TODO: check, popup for errors -> repair/discard
 
