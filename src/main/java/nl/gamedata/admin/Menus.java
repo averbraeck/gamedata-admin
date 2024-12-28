@@ -27,6 +27,7 @@ import nl.gamedata.admin.table.TableOrganizationGameRole;
 import nl.gamedata.admin.table.TableOrganizationGameToken;
 import nl.gamedata.admin.table.TableOrganizationRole;
 import nl.gamedata.admin.table.TablePlayer;
+import nl.gamedata.admin.table.TablePlayerAttempt;
 import nl.gamedata.admin.table.TablePlayerObjective;
 import nl.gamedata.admin.table.TableScale;
 import nl.gamedata.admin.table.TableUser;
