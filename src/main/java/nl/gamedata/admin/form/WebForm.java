@@ -107,11 +107,31 @@ public class WebForm
         return this;
     }
 
-    public int getPhase(final HttpServletRequest request)
+    public static int getPhase(final HttpServletRequest request)
     {
         if (request.getParameter("phase-internal-use") == null)
             return 0;
         return Integer.valueOf(request.getParameter("phase-internal-use"));
+    }
+
+    public static Integer getIntParameter(final HttpServletRequest request, final String name)
+    {
+        if (request.getParameter(name) == null)
+            return null;
+        try
+        {
+            return Integer.valueOf(request.getParameter(name));
+        }
+        catch (NumberFormatException nfe)
+        {
+            nfe.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getStringParameter(final HttpServletRequest request, final String name)
+    {
+        return request.getParameter(name);
     }
 
     public WebForm setPhase(final int phase)

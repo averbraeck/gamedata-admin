@@ -11,6 +11,7 @@ import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.FormEntryInt;
 import nl.gamedata.admin.form.FormEntryPickRecord;
 import nl.gamedata.admin.form.FormEntryString;
+import nl.gamedata.admin.form.WebForm;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
@@ -49,7 +50,7 @@ public class MaintainGameMission
                 if (gameId.equals(gm.getValue(Tables.GAME.ID)))
                 {
                     boolean editAccess = adminAccess | data.getGameAccess().get(gameId).edit();
-                    int id = gm.getValue(Tables.GAME_VERSION.ID);
+                    int id = gm.getValue(Tables.GAME_MISSION.ID);
                     String game = gm.getValue(Tables.GAME.CODE);
                     String version = gm.getValue(Tables.GAME_VERSION.NAME);
                     String mission = gm.getValue(Tables.GAME_MISSION.NAME);
@@ -63,41 +64,49 @@ public class MaintainGameMission
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
-        TableForm form = new TableForm(data);
-        form.startForm();
-        int phase = form.getPhase(request);
-        String paramGameId = request.getParameter("game_id");
-        if (!click.equals("record-new"))
+        int phase = WebForm.getPhase(request);
+        Integer gameId = WebForm.getIntParameter(request, "game_id");
+        if (click.equals("record-new") && (phase == 0 || gameId == null))
         {
-            phase = 1;
-            GameMissionRecord gameMission = SqlUtils.readRecordFromId(data, Tables.GAME_MISSION, recordId);
-            GameVersionRecord gameVersion = SqlUtils.readRecordFromId(data, Tables.GAME_VERSION, gameMission.getGameVersionId());
-            paramGameId = String.valueOf(gameVersion.getGameId());
-        }
-        if (phase == 0 || paramGameId == null)
-        {
-            form.setHeader("Game Mission", click, 0);
+            WebForm form = new WebForm(data);
+            form.startForm();
+            form.setHeader("Game Mission");
             form.setPhase(1);
             form.addEntry(new FormEntryPickRecord("Game", "game_id")
                     .setPickTable(data, data.getGamePicklist(Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
+            form.setOkMethod("record-new");
+            form.endForm();
+            data.setContent(form.process());
+            return;
         }
-        else if (phase == 1 && paramGameId != null)
+
+        if ((phase == 1 && gameId != null) || !click.equals("record-new"))
         {
             GameMissionRecord gameMission = recordId == 0 ? Tables.GAME_MISSION.newRecord()
                     : SqlUtils.readRecordFromId(data, Tables.GAME_MISSION, recordId);
+            if (!click.equals("record-new"))
+            {
+                GameVersionRecord gameVersion = SqlUtils.readRecordFromId(data, Tables.GAME_VERSION, gameMission.getGameVersionId());
+                gameId = gameVersion.getGameId();
+            }
+            TableForm form = new TableForm(data);
+            form.startForm();
             data.setEditRecord(gameMission);
             form.setHeader("Game Mission", click, recordId);
-            form.setPhase(2);
-            int gameId = Integer.valueOf(paramGameId);
+            form.setPhase(1);
             GameRecord game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
             form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
             form.addEntry(new FormEntryString("Game", "game").setReadOnly().setInitialValue(game.getCode(), game.getCode()));
             form.addEntry(new TableEntryPickRecord(Tables.GAME_MISSION.GAME_VERSION_ID, gameMission)
                     .setPickTable(data, data.getGameVersionPicklist(gameId, Access.EDIT)).setLabel("Game Version"));
             form.addEntry(new TableEntryString(Tables.GAME_MISSION.NAME, gameMission).setMinLength(2));
+            form.endForm();
+            data.setContent(form.process());
+            return;
         }
 
-        form.endForm();
-        data.setContent(form.process());
+        String s = "Unknown state, pahse=" + phase + ", gameId=" + gameId + ", click=" + click;
+        data.setContent(s);
+        System.err.println(s);
     }
 }
