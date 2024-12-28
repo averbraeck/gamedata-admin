@@ -128,6 +128,13 @@ public abstract class AbstractFormEntry<F extends AbstractFormEntry<F, T>, T>
         return (F) this;
     }
 
+    @SuppressWarnings("unchecked")
+    public F setInitialValue(final T initialValue)
+    {
+        setInitialValue(initialValue, initialValue);
+        return (F) this;
+    }
+
     public String getLastEnteredValue()
     {
         return this.lastEnteredValue;
