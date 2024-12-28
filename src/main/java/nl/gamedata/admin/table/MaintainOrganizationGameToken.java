@@ -35,10 +35,12 @@ public class MaintainOrganizationGameToken
         AdminTable table = new AdminTable(data, "Game Access Tokens", "Org-Game");
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin() || data.hasOrganizationGameAccess(Access.EDIT);
         table.setNewButton(access);
-        table.setHeader("Org-Game", "Name", "Value", "Reader", "Writer");
+        table.setHeader("Org", "Game", "Org-Game", "Name", "Value", "Reader", "Writer");
         DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
         List<Record> ogtList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_TOKEN.join(Tables.ORGANIZATION_GAME)
-                .on(Tables.ORGANIZATION_GAME_TOKEN.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID))).fetch();
+                .on(Tables.ORGANIZATION_GAME_TOKEN.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID))
+                .join(Tables.ORGANIZATION).on(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(Tables.ORGANIZATION.ID))
+                .join(Tables.GAME).on(Tables.ORGANIZATION_GAME.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var ogt : ogtList)
         {
             for (Integer ogId : data.getOrganizationGameAccess().keySet())
@@ -46,14 +48,14 @@ public class MaintainOrganizationGameToken
                 if (ogId.equals(ogt.getValue(Tables.ORGANIZATION_GAME.ID)))
                 {
                     int id = ogt.getValue(Tables.ORGANIZATION_GAME_TOKEN.ID);
+                    String org = ogt.getValue(Tables.ORGANIZATION.CODE);
+                    String game = ogt.getValue(Tables.GAME.CODE);
                     String orgGame = ogt.getValue(Tables.ORGANIZATION_GAME.NAME);
                     String name = ogt.getValue(Tables.ORGANIZATION_GAME_TOKEN.NAME);
                     String value = ogt.getValue(Tables.ORGANIZATION_GAME_TOKEN.VALUE);
                     String writer = ogt.getValue(Tables.ORGANIZATION_GAME_TOKEN.WRITER) == 0 ? "N" : "Y";
                     String reader = ogt.getValue(Tables.ORGANIZATION_GAME_TOKEN.READER) == 0 ? "N" : "Y";
-                    // TODO? String org = ogt.getValue(Tables.ORGANIZATION.CODE);
-                    // TODO? String game = ogt.getValue(Tables.GAME.CODE);
-                    table.addRow(id, false, access, access, orgGame, name, value, writer, reader);
+                    table.addRow(id, false, access, access, org, game, orgGame, name, value, writer, reader);
                     break;
                 }
             }
