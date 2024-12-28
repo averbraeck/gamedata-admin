@@ -13,6 +13,7 @@ import nl.gamedata.admin.table.IEdit;
 import nl.gamedata.admin.table.ITable;
 import nl.gamedata.admin.table.MaintainDashboardRole;
 import nl.gamedata.admin.table.MaintainGame;
+import nl.gamedata.admin.table.MaintainGameMission;
 import nl.gamedata.admin.table.MaintainGameRole;
 import nl.gamedata.admin.table.MaintainGameSession;
 import nl.gamedata.admin.table.MaintainGameSessionRole;
@@ -55,8 +56,8 @@ public class Menus
         organizationTabs.add(new Tab("game", "Game", true, Set.of(0, 2), MaintainGame::table, MaintainGame::edit));
         organizationTabs.add(new Tab("organization-game", "Game Access", false, Set.of(0, 2), MaintainOrganizationGame::table,
                 MaintainOrganizationGame::edit));
-        organizationTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 2), MaintainOrganizationGameToken::table,
-                MaintainOrganizationGameToken::edit));
+        organizationTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 2),
+                MaintainOrganizationGameToken::table, MaintainOrganizationGameToken::edit));
         organizationTabs.add(new Tab("game-session", "Game Session", false, Set.of(0, 2), MaintainGameSession::table,
                 MaintainGameSession::edit));
 
@@ -81,7 +82,8 @@ public class Menus
         gameTabs.add(new Tab("game", "Game", true, Set.of(0, 1), MaintainGame::table, MaintainGame::edit));
         gameTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 1), MaintainGameVersion::table,
                 MaintainGameVersion::edit));
-        // gameTabs.add(new Tab("game-mission", "Game Mission", true, Set.of(0, 1)));
+        gameTabs.add(new Tab("game-mission", "Game Mission", true, Set.of(0, 1), MaintainGameMission::table,
+                MaintainGameMission::edit));
         // gameTabs.add(new Tab("scale", "Scale", false, Set.of(0, 1)));
         // gameTabs.add(new Tab("learning-goal", "Learning Goal", true, Set.of(0, 1)));
         // gameTabs.add(new Tab("player-objective", "Player Objective", false, Set.of(0, 1)));
@@ -170,7 +172,8 @@ public class Menus
         // dataGroupTabs.add(new Tab("group-event", "Group Event", false, Set.of(0, 4)));
 
         menuList.add("settings");
-        menuMap.put("settings", new Menu("fa-user-gear", "settings", "Settings", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
+        menuMap.put("settings",
+                new Menu("fa-user-gear", "settings", "Settings", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("logoff");
         menuMap.put("logoff", new Menu("fa-sign-out", "logoff", "Logoff", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
