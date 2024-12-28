@@ -7,13 +7,10 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.jooq.Condition;
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
-import org.jooq.impl.DSL;
 import org.jooq.types.UInteger;
 
 import nl.gamedata.admin.AdminData;
@@ -55,8 +52,7 @@ public class TableEntryPickRecord extends AbstractTableEntry<TableEntryPickRecor
     public TableEntryPickRecord setPickTable(final AdminData data, final Table<?> table, final TableField<?, Integer> id,
             final TableField<?, ?> name)
     {
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<? extends Record> tableRecords = dslContext.selectFrom(table).fetch();
+        List<? extends Record> tableRecords = data.getDSL().selectFrom(table).fetch();
         if (!isRequired())
             this.records.put("", null);
         for (Record record : tableRecords)
@@ -69,8 +65,7 @@ public class TableEntryPickRecord extends AbstractTableEntry<TableEntryPickRecor
     public TableEntryPickRecord setPickTable(final AdminData data, final Table<?> table, final TableField<?, Integer> id,
             final TableField<?, String> name, final Condition condition)
     {
-        DSLContext dslContext = DSL.using(data.getDataSource(), SQLDialect.MYSQL);
-        List<? extends Record> tableRecords = dslContext.selectFrom(table).where(condition).fetch();
+        List<? extends Record> tableRecords = data.getDSL().selectFrom(table).where(condition).fetch();
         if (!isRequired())
             this.records.put("", null);
         for (Record record : tableRecords)
