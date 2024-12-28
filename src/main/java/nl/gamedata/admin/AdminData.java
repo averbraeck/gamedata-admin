@@ -378,6 +378,27 @@ public class AdminData extends CommonData
         return ret;
     }
 
+    public Set<GameRecord> getGamePicklist(final int organizationId, final Access access)
+    {
+        Set<GameRecord> ret = new HashSet<>();
+        for (var gameEntry : getGameAccess().entrySet())
+        {
+            if (gameEntry.getValue().ordinal() <= access.ordinal())
+            {
+                for (var orgGameId : getOrganizationGameAccess(Access.EDIT))
+                {
+                    OrganizationGameRecord og = SqlUtils.readRecordFromId(this, Tables.ORGANIZATION_GAME, orgGameId);
+                    if (og.getOrganizationId().equals(organizationId) && gameEntry.getKey().equals(og.getGameId()))
+                    {
+                        var game = SqlUtils.readRecordFromId(this, Tables.GAME, gameEntry.getKey());
+                        ret.add(game);
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
     public Map<Integer, String> getGameVersionPicklist(final Access access)
     {
         Map<Integer, String> ret = new HashMap<>();

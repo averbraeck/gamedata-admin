@@ -109,14 +109,14 @@ public class WebForm
 
     public static int getPhase(final HttpServletRequest request)
     {
-        if (request.getParameter("phase-internal-use") == null)
+        if (request.getParameter("phase-internal-use") == null || request.getParameter("phase-internal-use").equals("null"))
             return 0;
         return Integer.valueOf(request.getParameter("phase-internal-use"));
     }
 
     public static Integer getIntParameter(final HttpServletRequest request, final String name)
     {
-        if (request.getParameter(name) == null)
+        if (request.getParameter(name) == null || request.getParameter(name).equals("null"))
             return null;
         try
         {

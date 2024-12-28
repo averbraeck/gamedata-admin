@@ -8,16 +8,24 @@ import org.jooq.Record;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
+import nl.gamedata.admin.form.FormEntryInt;
+import nl.gamedata.admin.form.FormEntryPickRecord;
+import nl.gamedata.admin.form.FormEntryString;
+import nl.gamedata.admin.form.WebForm;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryDate;
 import nl.gamedata.admin.form.table.TableEntryDateTime;
+import nl.gamedata.admin.form.table.TableEntryInt;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
+import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameSessionRecord;
+import nl.gamedata.data.tables.records.GameVersionRecord;
+import nl.gamedata.data.tables.records.OrganizationRecord;
 
 /**
  * MaintainGameSession takes care of the game version screen.
@@ -66,28 +74,87 @@ public class MaintainGameSession
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
-        GameSessionRecord gameSession = recordId == 0 ? Tables.GAME_SESSION.newRecord()
-                : SqlUtils.readRecordFromId(data, Tables.GAME_SESSION, recordId);
-        data.setEditRecord(gameSession);
-        TableForm form = new TableForm(data);
-        form.startForm();
-        form.setHeader("Game Session", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.ORGANIZATION_ID, gameSession)
-                .setPickTable(data, data.getOrganizationPicklist(Access.VIEW), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE)
-                .setLabel("Organization-Game"));
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.GAME_VERSION_ID, gameSession)
-                .setPickTable(data, data.getGameVersionPicklist(Access.VIEW)).setLabel("Game Version"));
-        form.addEntry(new TableEntryString(Tables.GAME_SESSION.CODE, gameSession).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.GAME_SESSION.NAME, gameSession).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_TOKEN, gameSession).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_STATUS, gameSession).setMinLength(2));
-        form.addEntry(new TableEntryDate(Tables.GAME_SESSION.PLAY_DATE, gameSession));
-        form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.VALID, gameSession));
-        form.addEntry(new TableEntryDateTime(Tables.GAME_SESSION.VALID_FROM, gameSession));
-        form.addEntry(new TableEntryDateTime(Tables.GAME_SESSION.VALID_UNTIL, gameSession));
-        form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.TOKEN_FOR_DASHBOARD, gameSession));
-        form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.ARCHIVED, gameSession).setLabel("Archived?"));
-        form.endForm();
-        data.setContent(form.process());
+        int phase = WebForm.getPhase(request);
+        Integer organizationId = WebForm.getIntParameter(request, "organization_id");
+        if (click.equals("record-new") && (phase == 0 || organizationId == null))
+        {
+            WebForm form = new WebForm(data);
+            form.startForm();
+            form.setHeader("Game Session");
+            form.setPhase(1);
+            form.addEntry(new FormEntryPickRecord("Organization", "organization_id").setPickTable(data,
+                    data.getOrganizationPicklist(Access.VIEW), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE)
+                    .setLabel("Organization"));
+            form.setOkMethod("record-new");
+            form.endForm();
+            data.setContent(form.process());
+            return;
+        }
+
+        Integer gameId = WebForm.getIntParameter(request, "game_id");
+        if (click.equals("record-new") && organizationId != null && (phase == 1 || gameId == null))
+        {
+            WebForm form = new WebForm(data);
+            form.startForm();
+            form.setHeader("Game Session");
+            form.setPhase(2);
+            OrganizationRecord organization = SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, organizationId);
+            form.addEntry(new FormEntryInt("Organization id", "organization_id").setHidden().setReadOnly()
+                    .setInitialValue(organizationId, organizationId));
+            form.addEntry(new FormEntryString("Organization", "organization").setReadOnly()
+                    .setInitialValue(organization.getCode(), organization.getCode()));
+            form.addEntry(new FormEntryPickRecord("Game", "game_id")
+                    .setPickTable(data, data.getGamePicklist(organizationId, Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE)
+                    .setLabel("Game"));
+            form.setOkMethod("record-new");
+            form.endForm();
+            data.setContent(form.process());
+            return;
+        }
+
+        if ((phase == 2 && organizationId != null && gameId != null) || !click.equals("record-new"))
+        {
+            GameSessionRecord gameSession = recordId == 0 ? Tables.GAME_SESSION.newRecord()
+                    : SqlUtils.readRecordFromId(data, Tables.GAME_SESSION, recordId);
+            if (!click.equals("record-new"))
+            {
+                organizationId = gameSession.getOrganizationId();
+                GameVersionRecord gameVersion =
+                        SqlUtils.readRecordFromId(data, Tables.GAME_VERSION, gameSession.getGameVersionId());
+                gameId = gameVersion.getGameId();
+            }
+            TableForm form = new TableForm(data);
+            form.startForm();
+            data.setEditRecord(gameSession);
+            form.setHeader("Game Session", click, recordId);
+            form.setPhase(1);
+            OrganizationRecord organization = SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, organizationId);
+            form.addEntry(new TableEntryInt(Tables.GAME_SESSION.ORGANIZATION_ID, gameSession).setInitialValue(organizationId)
+                    .setHidden().setReadOnly());
+            form.addEntry(new FormEntryString("Organization", "organization").setReadOnly()
+                    .setInitialValue(organization.getCode(), organization.getCode()));
+            GameRecord game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
+            form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
+            form.addEntry(new FormEntryString("Game", "game").setReadOnly().setInitialValue(game.getCode(), game.getCode()));
+            form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.GAME_VERSION_ID, gameSession)
+                    .setPickTable(data, data.getGameVersionPicklist(gameId, Access.VIEW)).setLabel("Game Version"));
+            form.addEntry(new TableEntryString(Tables.GAME_SESSION.CODE, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryString(Tables.GAME_SESSION.NAME, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_TOKEN, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_STATUS, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryDate(Tables.GAME_SESSION.PLAY_DATE, gameSession));
+            form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.VALID, gameSession));
+            form.addEntry(new TableEntryDateTime(Tables.GAME_SESSION.VALID_FROM, gameSession));
+            form.addEntry(new TableEntryDateTime(Tables.GAME_SESSION.VALID_UNTIL, gameSession));
+            form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.TOKEN_FOR_DASHBOARD, gameSession));
+            form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.ARCHIVED, gameSession).setLabel("Archived?"));
+            form.endForm();
+            data.setContent(form.process());
+            return;
+        }
+
+        String s = "Unknown state, pahse=" + phase + ", gameId=" + gameId + ", click=" + click;
+        data.setContent(s);
+        System.err.println(s);
     }
 }
