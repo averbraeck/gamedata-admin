@@ -75,12 +75,11 @@ public class MaintainGameSession
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game Session", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.ORGANIZATION_ID, gameSession).setPickTable(data,
-                data.getOrganizationPicklist(Access.VIEW), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE)
+        form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.ORGANIZATION_ID, gameSession)
+                .setPickTable(data, data.getOrganizationPicklist(Access.VIEW), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE)
                 .setLabel("Organization-Game"));
         form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.GAME_VERSION_ID, gameSession)
-                .setPickTable(data, data.getGameVersionPicklist(Access.VIEW), Tables.GAME_VERSION.ID, Tables.GAME_VERSION.NAME)
-                .setLabel("Game Version"));
+                .setPickTable(data, data.getGameVersionPicklist(Access.VIEW)).setLabel("Game Version"));
         form.addEntry(new TableEntryString(Tables.GAME_SESSION.CODE, gameSession).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.GAME_SESSION.NAME, gameSession).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_TOKEN, gameSession).setMinLength(2));

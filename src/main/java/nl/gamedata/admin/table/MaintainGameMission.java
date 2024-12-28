@@ -68,8 +68,7 @@ public class MaintainGameMission
         form.startForm();
         form.setHeader("Game Mission", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.GAME_MISSION.GAME_VERSION_ID, gameMission)
-                .setPickTable(data, data.getGameVersionPicklist(Access.EDIT), Tables.GAME_VERSION.ID, Tables.GAME_VERSION.NAME)
-                .setLabel("Game Version"));
+                .setPickTable(data, data.getGameVersionPicklist(Access.EDIT)).setLabel("Game Version"));
         form.addEntry(new TableEntryString(Tables.GAME_MISSION.NAME, gameMission).setMinLength(2));
         form.endForm();
         data.setContent(form.process());
