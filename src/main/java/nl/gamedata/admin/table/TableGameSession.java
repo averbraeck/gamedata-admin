@@ -35,7 +35,7 @@ import nl.gamedata.data.tables.records.OrganizationRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainGameSession
+public class TableGameSession
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {

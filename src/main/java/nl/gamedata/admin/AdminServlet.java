@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import nl.gamedata.admin.table.MaintainUser;
+import nl.gamedata.admin.table.TableUser;
 
 @WebServlet("/admin")
 @MultipartConfig
@@ -127,7 +127,7 @@ public class AdminServlet extends HttpServlet
     {
         System.err.println("RECORD SAVE: " + click + " with recordId: " + recordId);
         if (data.getEditRecord().getTable().getName().toLowerCase().equals("user"))
-            MaintainUser.saveUser(request, data, recordId);
+            TableUser.saveUser(request, data, recordId);
         else
             data.saveRecord(request, recordId);
 

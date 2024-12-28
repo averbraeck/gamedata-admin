@@ -25,7 +25,7 @@ import nl.gamedata.data.tables.records.ScaleRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainScale
+public class TableScale
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {

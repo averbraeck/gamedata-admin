@@ -37,7 +37,7 @@ import nl.gamedata.data.tables.records.UserRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainUser
+public class TableUser
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {

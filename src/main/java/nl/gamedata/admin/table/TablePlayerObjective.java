@@ -13,8 +13,8 @@ import nl.gamedata.admin.form.FormEntryPickRecord;
 import nl.gamedata.admin.form.FormEntryString;
 import nl.gamedata.admin.form.WebForm;
 import nl.gamedata.admin.form.table.TableEntryInt;
+import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
-import nl.gamedata.admin.form.table.TableEntryText;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
@@ -23,6 +23,8 @@ import nl.gamedata.data.tables.records.GameMissionRecord;
 import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameVersionRecord;
 import nl.gamedata.data.tables.records.LearningGoalRecord;
+import nl.gamedata.data.tables.records.PlayerObjectiveRecord;
+import nl.gamedata.data.tables.records.ScaleRecord;
 
 /**
  * MaintainGameSession takes care of the game version screen.
@@ -32,33 +34,39 @@ import nl.gamedata.data.tables.records.LearningGoalRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainLearningGoal
+public class TablePlayerObjective
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        AdminTable table = new AdminTable(data, "Learning Goal", "Name");
+        AdminTable table = new AdminTable(data, "Player Objective", "Name");
         boolean admin = data.isSuperAdmin() || data.isGameAdmin() || data.hasGameAccess(Access.EDIT);
         table.setNewButton(admin);
-        table.setHeader("Game", "Version", "Mission", "Learning Goal");
-        List<Record> lgList = data.getDSL()
-                .selectFrom(Tables.LEARNING_GOAL.join(Tables.GAME_MISSION)
+        table.setHeader("Game", "Version", "Mission", "Learning Goal", "Objective", "Scale", "Threshold");
+        List<Record> poList = data.getDSL()
+                .selectFrom(Tables.PLAYER_OBJECTIVE.join(Tables.LEARNING_GOAL)
+                        .on(Tables.PLAYER_OBJECTIVE.LEARNING_GOAL_ID.eq(Tables.LEARNING_GOAL.ID)).join(Tables.GAME_MISSION)
                         .on(Tables.LEARNING_GOAL.GAME_MISSION_ID.eq(Tables.GAME_MISSION.ID)).join(Tables.GAME_VERSION)
                         .on(Tables.GAME_MISSION.GAME_VERSION_ID.eq(Tables.GAME_VERSION.ID)).join(Tables.GAME)
                         .on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID)))
                 .fetch();
-        for (var lg : lgList)
+        for (var po : poList)
         {
             for (Integer gameId : data.getGameAccess().keySet())
             {
-                if (gameId.equals(lg.getValue(Tables.GAME.ID)))
+                if (gameId.equals(po.getValue(Tables.GAME.ID)))
                 {
-                    int id = lg.getValue(Tables.LEARNING_GOAL.ID);
-                    String game = lg.getValue(Tables.GAME.CODE);
-                    String version = lg.getValue(Tables.GAME_VERSION.NAME);
-                    String mission = lg.getValue(Tables.GAME_MISSION.NAME);
-                    String name = lg.getValue(Tables.LEARNING_GOAL.NAME);
+                    int id = po.getValue(Tables.PLAYER_OBJECTIVE.ID);
+                    String game = po.getValue(Tables.GAME.CODE);
+                    String version = po.getValue(Tables.GAME_VERSION.NAME);
+                    String mission = po.getValue(Tables.GAME_MISSION.NAME);
+                    String learningGoal = po.getValue(Tables.LEARNING_GOAL.NAME);
+                    String name = po.getValue(Tables.PLAYER_OBJECTIVE.NAME);
+                    ScaleRecord scale =
+                            SqlUtils.readRecordFromId(data, Tables.SCALE, po.getValue(Tables.PLAYER_OBJECTIVE.SCALE_ID));
+                    String threshold = po.getValue(Tables.PLAYER_OBJECTIVE.THRESHOLD);
                     boolean edit = data.getGameAccess().get(id).edit();
-                    table.addRow(id, false, edit, admin, game, version, mission, name);
+                    table.addRow(id, false, edit, admin, game, version, mission, learningGoal, name, scale.getType(),
+                            threshold);
                     break;
                 }
             }
@@ -74,7 +82,7 @@ public class MaintainLearningGoal
         {
             WebForm form = new WebForm(data);
             form.startForm();
-            form.setHeader("Learning Goal");
+            form.setHeader("Player Objective");
             form.setPhase(1);
             form.addEntry(new FormEntryPickRecord("Game", "game_id")
                     .setPickTable(data, data.getGamePicklist(Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
@@ -89,7 +97,7 @@ public class MaintainLearningGoal
         {
             WebForm form = new WebForm(data);
             form.startForm();
-            form.setHeader("Learning Goal");
+            form.setHeader("Player Objective");
             form.setPhase(2);
             GameRecord game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
             form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
@@ -107,7 +115,7 @@ public class MaintainLearningGoal
         {
             WebForm form = new WebForm(data);
             form.startForm();
-            form.setHeader("Learning Goal");
+            form.setHeader("Player Objective");
             form.setPhase(3);
             GameRecord game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
             form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
@@ -125,11 +133,45 @@ public class MaintainLearningGoal
             return;
         }
 
-        if ((phase == 3 && gameId != null && gameVersionId != null && gameMissionId != null) || !click.equals("record-new"))
+        Integer learningGoalId = WebForm.getIntParameter(request, "learning_goal_id");
+        if (click.equals("record-new") && gameId != null && gameVersionId != null && gameMissionId != null
+                && (phase == 3 || learningGoalId == null))
         {
-            LearningGoalRecord learningGoal = recordId == 0 ? Tables.LEARNING_GOAL.newRecord()
-                    : SqlUtils.readRecordFromId(data, Tables.LEARNING_GOAL, recordId);
+            WebForm form = new WebForm(data);
+            form.startForm();
+            form.setHeader("Player Objective");
+            form.setPhase(4);
+            GameRecord game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
+            form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
+            form.addEntry(new FormEntryString("Game", "game").setReadOnly().setInitialValue(game.getCode(), game.getCode()));
+            GameVersionRecord gameVersion = SqlUtils.readRecordFromId(data, Tables.GAME_VERSION, gameVersionId);
+            form.addEntry(new FormEntryInt("Game Version id", "game_version_id").setHidden().setReadOnly()
+                    .setInitialValue(gameVersionId, gameVersionId));
+            form.addEntry(new FormEntryString("Game Version", "game_version").setReadOnly()
+                    .setInitialValue(gameVersion.getName(), gameVersion.getName()));
+            GameMissionRecord gameMission = SqlUtils.readRecordFromId(data, Tables.GAME_MISSION, gameMissionId);
+            form.addEntry(new FormEntryInt("Game Mission id", "game_mission_id").setHidden().setReadOnly()
+                    .setInitialValue(gameMissionId, gameMissionId));
+            form.addEntry(new FormEntryString("Game Mission", "game_mission").setReadOnly()
+                    .setInitialValue(gameMission.getName(), gameMission.getName()));
+            form.addEntry(new FormEntryPickRecord("Learning Goal", "learning_goal_id").setPickTable(data, Tables.LEARNING_GOAL,
+                    Tables.LEARNING_GOAL.ID, Tables.LEARNING_GOAL.NAME,
+                    Tables.LEARNING_GOAL.GAME_MISSION_ID.eq(gameMissionId)));
+            form.setOkMethod("record-new");
+            form.endForm();
+            data.setContent(form.process());
+            return;
+        }
 
+        if ((phase == 4 && gameId != null && gameVersionId != null && gameMissionId != null && learningGoalId != null)
+                || !click.equals("record-new"))
+        {
+            PlayerObjectiveRecord playerObjective = recordId == 0 ? Tables.PLAYER_OBJECTIVE.newRecord()
+                    : SqlUtils.readRecordFromId(data, Tables.PLAYER_OBJECTIVE, recordId);
+
+            if (learningGoalId == null)
+                learningGoalId = playerObjective.getLearningGoalId();
+            LearningGoalRecord learningGoal = SqlUtils.readRecordFromId(data, Tables.LEARNING_GOAL, learningGoalId);
             if (gameMissionId == null)
                 gameMissionId = learningGoal.getGameMissionId();
             GameMissionRecord gameMission = SqlUtils.readRecordFromId(data, Tables.GAME_MISSION, gameMissionId);
@@ -142,7 +184,7 @@ public class MaintainLearningGoal
 
             TableForm form = new TableForm(data);
             form.startForm();
-            data.setEditRecord(learningGoal);
+            data.setEditRecord(playerObjective);
             form.setHeader("Larning Goal", click, recordId);
             form.setPhase(1);
             form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
@@ -151,12 +193,18 @@ public class MaintainLearningGoal
                     .setInitialValue(gameVersionId, gameVersionId));
             form.addEntry(new FormEntryString("Game Version", "game_version").setReadOnly()
                     .setInitialValue(gameVersion.getName(), gameVersion.getName()));
-            form.addEntry(new TableEntryInt(Tables.LEARNING_GOAL.GAME_MISSION_ID, learningGoal).setInitialValue(gameMissionId)
-                    .setHidden().setReadOnly());
+            form.addEntry(new FormEntryInt("Game Mission id", "game_mission_id").setHidden().setReadOnly()
+                    .setInitialValue(gameMissionId, gameMissionId));
             form.addEntry(new FormEntryString("Game Mission", "game_mission").setReadOnly()
                     .setInitialValue(gameMission.getName(), gameMission.getName()));
-            form.addEntry(new TableEntryString(Tables.LEARNING_GOAL.NAME, learningGoal).setMinLength(2));
-            form.addEntry(new TableEntryText(Tables.LEARNING_GOAL.DESCRIPTION, learningGoal));
+            form.addEntry(new TableEntryInt(Tables.PLAYER_OBJECTIVE.LEARNING_GOAL_ID, playerObjective)
+                    .setInitialValue(learningGoalId).setHidden().setReadOnly());
+            form.addEntry(new FormEntryString("Learning Goal", "learning_goal").setReadOnly()
+                    .setInitialValue(learningGoal.getName(), learningGoal.getName()));
+            form.addEntry(new TableEntryString(Tables.PLAYER_OBJECTIVE.NAME, playerObjective).setMinLength(2));
+            form.addEntry(new TableEntryPickRecord(Tables.PLAYER_OBJECTIVE.SCALE_ID, playerObjective).setPickTable(data,
+                    Tables.SCALE, Tables.SCALE.ID, Tables.SCALE.TYPE, Tables.SCALE.GAME_ID.eq(gameId)));
+            form.addEntry(new TableEntryString(Tables.PLAYER_OBJECTIVE.THRESHOLD, playerObjective));
             form.endForm();
             data.setContent(form.process());
             return;

@@ -25,7 +25,7 @@ import nl.gamedata.data.tables.records.GameSessionRoleRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainGameSessionRole
+public class TableGameSessionRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {

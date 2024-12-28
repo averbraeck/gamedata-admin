@@ -24,7 +24,7 @@ import nl.gamedata.data.tables.records.DashboardRoleRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainDashboardRole
+public class TableDashboardRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {

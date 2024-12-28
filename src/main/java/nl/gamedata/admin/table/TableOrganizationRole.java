@@ -24,7 +24,7 @@ import nl.gamedata.data.tables.records.OrganizationRoleRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainOrganizationRole
+public class TableOrganizationRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {

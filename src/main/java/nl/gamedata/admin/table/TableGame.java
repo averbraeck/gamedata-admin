@@ -22,7 +22,7 @@ import nl.gamedata.data.tables.records.GameRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainGame
+public class TableGame
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {

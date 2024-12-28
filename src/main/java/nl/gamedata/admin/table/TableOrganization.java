@@ -22,7 +22,7 @@ import nl.gamedata.data.tables.records.OrganizationRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class MaintainOrganization
+public class TableOrganization
 {
     /**
      * Filter the Organization table based on access rights and filter settings.
