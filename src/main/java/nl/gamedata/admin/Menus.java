@@ -108,8 +108,8 @@ public class Menus
         gameSessionTabs.add(new Tab("game", "Game", true, Set.of(0, 4), MaintainGame::table, MaintainGame::edit));
         gameSessionTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4), MaintainGameVersion::table,
                 MaintainGameVersion::edit));
-        gameSessionTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4), MaintainGameSessionRole::table,
-                MaintainGameSessionRole::edit));
+        gameSessionTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4), MaintainGameSession::table,
+                MaintainGameSession::edit));
         // gameSessionTabs.add(new Tab("session-dashboard", "Session Dashboard", false, Set.of(0, 4)));
 
         menuList.add("layout");
@@ -138,8 +138,8 @@ public class Menus
         dataSessionTabs.add(new Tab("game", "Game", true, Set.of(0, 4), MaintainGame::table, MaintainGame::edit));
         dataSessionTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4), MaintainGameVersion::table,
                 MaintainGameVersion::edit));
-        dataSessionTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4), MaintainGameSessionRole::table,
-                MaintainGameSessionRole::edit));
+        dataSessionTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4), MaintainGameSession::table,
+                MaintainGameSession::edit));
         // dataSessionTabs.add(new Tab("game-mission", "Game Mission", true, Set.of(0, 4)));
         // dataSessionTabs.add(new Tab("mission-event", "Mission Event", false, Set.of(0, 4)));
 
@@ -149,8 +149,8 @@ public class Menus
         dataPlayerTabs.add(new Tab("game", "Game", true, Set.of(0, 4), MaintainGame::table, MaintainGame::edit));
         dataPlayerTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4), MaintainGameVersion::table,
                 MaintainGameVersion::edit));
-        dataPlayerTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4), MaintainGameSessionRole::table,
-                MaintainGameSessionRole::edit));
+        dataPlayerTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4), MaintainGameSession::table,
+                MaintainGameSession::edit));
         // dataPlayerTabs.add(new Tab("player", "Player", true, Set.of(0, 4)));
         // dataPlayerTabs.add(new Tab("player-attempt", "Player Attempt", true, Set.of(0, 4)));
         // dataPlayerTabs.add(new Tab("player-score", "Player Score", false, Set.of(0, 4)));
@@ -163,8 +163,8 @@ public class Menus
         dataGroupTabs.add(new Tab("game", "Game", true, Set.of(0, 4), MaintainGame::table, MaintainGame::edit));
         dataGroupTabs.add(new Tab("game-version", "Game Version", true, Set.of(0, 4), MaintainGameVersion::table,
                 MaintainGameVersion::edit));
-        dataGroupTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4), MaintainGameSessionRole::table,
-                MaintainGameSessionRole::edit));
+        dataGroupTabs.add(new Tab("game-session", "Game Session", true, Set.of(0, 4), MaintainGameSession::table,
+                MaintainGameSession::edit));
         // dataGroupTabs.add(new Tab("group", "Group", true, Set.of(0, 4)));
         // dataGroupTabs.add(new Tab("group-player", "Group Player", false, Set.of(0, 4)));
         // dataGroupTabs.add(new Tab("group-attempt", "Group Attempt", true, Set.of(0, 4)));
