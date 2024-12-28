@@ -1,6 +1,7 @@
 package nl.gamedata.admin.form.table;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -23,7 +24,8 @@ public class TableEntryPickRecord extends AbstractTableEntry<TableEntryPickRecor
     /** Entries alphabetically sorted on pick name. */
     private SortedMap<String, Integer> records = new TreeMap<>();
 
-    public <R extends UpdatableRecord<R>> TableEntryPickRecord(final TableField<R, Integer> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryPickRecord(final TableField<R, Integer> tableField,
+            final UpdatableRecord<R> record)
     {
         super(tableField, record);
     }
@@ -104,6 +106,17 @@ public class TableEntryPickRecord extends AbstractTableEntry<TableEntryPickRecor
                 this.records.put(record.get(name), ((UInteger) record.get(id)).intValue());
             else
                 this.records.put(record.get(name), ((Integer) record.get(id)).intValue());
+        }
+        return this;
+    }
+
+    public TableEntryPickRecord setPickTable(final AdminData data, final Map<Integer, String> pickTable)
+    {
+        if (!isRequired())
+            this.records.put("", null);
+        for (var entry : pickTable.entrySet())
+        {
+            this.records.put(entry.getValue(), entry.getKey());
         }
         return this;
     }

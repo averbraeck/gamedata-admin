@@ -382,11 +382,12 @@ public class AdminData extends CommonData
         return ret;
     }
 
-    public Set<GameVersionRecord> getGameVersionPicklist(final Access access)
+    public Map<Integer, String> getGameVersionPicklist(final Access access)
     {
-        Set<GameVersionRecord> ret = new HashSet<>();
+        Map<Integer, String> ret = new HashMap<>();
         DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        List<GameVersionRecord> gvList = dslContext.selectFrom(Tables.GAME_VERSION).fetch();
+        List<Record> gvList = dslContext
+                .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var gv : gvList)
         {
             for (var gameEntry : getGameAccess().entrySet())
@@ -394,7 +395,8 @@ public class AdminData extends CommonData
                 if (gameEntry.getValue().ordinal() <= access.ordinal()
                         && gameEntry.getKey().equals(gv.getValue(Tables.GAME.ID)))
                 {
-                    ret.add(gv);
+                    ret.put(gv.getValue(Tables.GAME_VERSION.ID),
+                            gv.getValue(Tables.GAME.CODE) + "-" + gv.getValue(Tables.GAME_VERSION.NAME));
                 }
             }
         }
