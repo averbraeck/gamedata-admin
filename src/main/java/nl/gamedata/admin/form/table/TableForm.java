@@ -3,8 +3,6 @@ package nl.gamedata.admin.form.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,14 +11,12 @@ import javax.servlet.http.Part;
 import org.jooq.Record;
 
 import nl.gamedata.admin.AdminData;
+import nl.gamedata.admin.form.AbstractFormEntry;
+import nl.gamedata.admin.form.WebForm;
 
-public class TableForm
+public class TableForm extends WebForm
 {
-    private StringBuilder s;
-
     private int recordId;
-
-    private String cancelMethod = "";
 
     private String saveMethod = "";
 
@@ -28,40 +24,13 @@ public class TableForm
 
     private String deleteMethod = "";
 
-    private List<String> additionalButtons = new ArrayList<>();
-
-    private List<String> additionalMethods = new ArrayList<>();
-
-    List<AbstractTableEntry<?, ?>> entries = new ArrayList<>();
-
     private boolean multipart;
 
     private boolean edit;
 
-    private String labelLength = "25%";
-
-    private String fieldLength = "75%";
-
     /* **************************************************************************************************************** */
     /* ************************************************* FORM ELEMENTS ************************************************ */
     /* **************************************************************************************************************** */
-
-    /** start buttonrow. */
-    private static final String htmlStartButtonRow = """
-              <div class="gd-admin-form-buttons">
-            """;
-
-    /** button. 1 = submit string, 2 = record nr, 3 = button text */
-    private static final String htmlButton = """
-              <div class="gd-button">
-                <button type="button" class="btn btn-primary" onClick="submitEditForm('%s', %d); return false;">%s</button>
-              </div>
-            """;
-
-    /** end buttonrow. */
-    private static final String htmlEndButtonRow = """
-              </div>
-            """;
 
     /** No tags. */
     private static final String htmlStartMultiPartForm = """
@@ -71,38 +40,13 @@ public class TableForm
                 <input id="editRecordId" type="hidden" name="editRecordId" value="0" />
                 """;
 
-    /** No tags. */
-    private static final String htmlStartForm = """
-            <div class="gd-form">
-              <form id="editForm" action="/gamedata-admin/admin" method="POST">
-                <input id="editClick" type="hidden" name="editClick" value="tobefilled" />
-                <input id="editRecordId" type="hidden" name="editRecordId" value="0" />
-                """;
-
-    /** No tags. */
-    private static final String htmlStartTable = """
-                <table>
-            """;
-
-    /** end table. */
-    private static final String htmlEndTable = """
-                </table>
-            """;
-
-    /** end form. */
-    private static final String htmlEndForm = """
-               </form>
-             </div>
-            """;
-
     /* **************************************************************************************************************** */
     /* **************************************************** METHODS *************************************************** */
     /* **************************************************************************************************************** */
 
     public TableForm(final AdminData data)
     {
-        this.s = new StringBuilder();
-        data.setEditForm(this);
+        super(data);
     }
 
     public TableForm setHeader(final String recordType, final String click, final int recordId)
@@ -129,7 +73,6 @@ public class TableForm
         this.s.append("  <h3>");
         this.s.append(header);
         this.s.append("</h3>\n");
-        buttonRow();
         this.s.append("</div>\n");
         return this;
     }
@@ -142,22 +85,23 @@ public class TableForm
         return this;
     }
 
+    @Override
     public TableForm startForm()
     {
         this.multipart = false;
-        this.s.append(htmlStartForm);
-        this.s.append(htmlStartTable);
+        super.startForm();
         return this;
     }
 
+    @Override
     public TableForm endForm()
     {
-        this.s.append(htmlEndTable);
-        this.s.append(htmlEndForm);
+        super.endForm();
         return this;
     }
 
-    private void buttonRow()
+    @Override
+    protected void buttonRow()
     {
         this.s.append(htmlStartButtonRow);
         this.s.append(htmlButton.formatted(this.cancelMethod, this.recordId, "Cancel"));
@@ -172,7 +116,8 @@ public class TableForm
         this.s.append(htmlEndButtonRow);
     }
 
-    public TableForm addEntry(final AbstractTableEntry<?, ?> entry)
+    @Override
+    public TableForm addEntry(final AbstractFormEntry<?, ?> entry)
     {
         this.entries.add(entry);
         entry.setForm(this);
@@ -180,6 +125,7 @@ public class TableForm
         return this;
     }
 
+    @Override
     public TableForm setCancelMethod(final String cancelMethod)
     {
         this.cancelMethod = cancelMethod;
@@ -204,10 +150,10 @@ public class TableForm
         return this;
     }
 
+    @Override
     public TableForm addAddtionalButton(final String method, final String buttonText)
     {
-        this.additionalButtons.add(buttonText);
-        this.additionalMethods.add(method);
+        super.addAddtionalButton(method, buttonText);
         return this;
     }
 
@@ -233,38 +179,25 @@ public class TableForm
         return this;
     }
 
-    public String getLabelLength()
-    {
-        return this.labelLength;
-    }
-
+    @Override
     public TableForm setLabelLength(final String labelLength)
     {
-        this.labelLength = labelLength;
+        super.setLabelLength(labelLength);
         return this;
     }
 
-    public String getFieldLength()
-    {
-        return this.fieldLength;
-    }
-
+    @Override
     public TableForm setFieldLength(final String fieldLength)
     {
-        this.fieldLength = fieldLength;
+        super.setFieldLength(fieldLength);
         return this;
-    }
-
-    public String process()
-    {
-        return this.s.toString();
     }
 
     // for multipart: https://stackoverflow.com/questions/2422468/how-to-upload-files-to-server-using-jsp-servlet
     public String setFields(final Record record, final HttpServletRequest request, final AdminData data)
     {
         String errors = "";
-        for (AbstractTableEntry<?, ?> entry : this.entries)
+        for (AbstractFormEntry<?, ?> entry : this.entries)
         {
             if (isMultipart() && entry instanceof TableEntryImage)
             {
@@ -272,7 +205,7 @@ public class TableForm
                 {
                     TableEntryImage imageEntry = (TableEntryImage) entry;
                     Part filePart = request.getPart(imageEntry.getTableField().getName());
-                    String reset = request.getParameter(entry.getTableField().getName() + "_reset");
+                    String reset = request.getParameter(imageEntry.getTableField().getName() + "_reset");
                     boolean delete = reset != null && reset.equals("delete");
                     if (delete)
                     {
@@ -295,25 +228,26 @@ public class TableForm
                     errors += "<p>Exception: " + exception.getMessage() + "</p>\n";
                 }
             }
-            else
+            else if (entry instanceof AbstractTableEntry)
             {
+                AbstractTableEntry<?, ?> tableEntry = (AbstractTableEntry<?, ?>) entry;
                 boolean set = false;
-                String value = request.getParameter(entry.getTableField().getName());
-                if (entry.getTableField().getDataType().nullable())
+                String value = request.getParameter(tableEntry.getTableField().getName());
+                if (tableEntry.getTableField().getDataType().nullable())
                 {
-                    var nullValue = request.getParameter(entry.getTableField().getName() + "-null");
+                    var nullValue = request.getParameter(tableEntry.getTableField().getName() + "-null");
                     if (nullValue != null)
                     {
                         if (nullValue.equals("on") || nullValue.equals("null"))
                         {
-                            record.set(entry.getTableField(), null);
+                            record.set(tableEntry.getTableField(), null);
                             set = true;
                         }
                     }
                 }
                 if (!set)
                 {
-                    errors += entry.setRecordValue(record, value);
+                    errors += tableEntry.setRecordValue(record, value);
                 }
             }
         }

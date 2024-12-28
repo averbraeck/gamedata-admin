@@ -13,6 +13,7 @@ import org.jooq.Table;
 import org.jooq.TableRecord;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.form.WebForm;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.CommonData;
@@ -80,7 +81,7 @@ public class AdminData extends CommonData
     private String modalWindowHtml = "";
 
     /** The form that is currently being used. */
-    private TableForm editForm = null;
+    private WebForm editForm = null;
 
     /** The record that is currently being edited. */
     private UpdatableRecord<?> editRecord = null;
@@ -382,6 +383,27 @@ public class AdminData extends CommonData
         Map<Integer, String> ret = new HashMap<>();
         List<Record> gvList = getDSL()
                 .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();
+        for (var gv : gvList)
+        {
+            for (var gameEntry : getGameAccess().entrySet())
+            {
+                if (gameEntry.getValue().ordinal() <= access.ordinal()
+                        && gameEntry.getKey().equals(gv.getValue(Tables.GAME.ID)))
+                {
+                    ret.put(gv.getValue(Tables.GAME_VERSION.ID),
+                            gv.getValue(Tables.GAME.CODE) + "-" + gv.getValue(Tables.GAME_VERSION.NAME));
+                }
+            }
+        }
+        return ret;
+    }
+
+    public Map<Integer, String> getGameVersionPicklist(final int gameId, final Access access)
+    {
+        Map<Integer, String> ret = new HashMap<>();
+        List<Record> gvList =
+                getDSL().selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID)))
+                        .where(Tables.GAME.ID.eq(gameId)).fetch();
         for (var gv : gvList)
         {
             for (var gameEntry : getGameAccess().entrySet())
@@ -726,7 +748,7 @@ public class AdminData extends CommonData
     /* DATABASE AND FORM ACCESS */
     /* ************************ */
 
-    public void setEditForm(final TableForm editForm)
+    public void setEditForm(final WebForm editForm)
     {
         this.editForm = editForm;
     }
@@ -742,7 +764,7 @@ public class AdminData extends CommonData
         Table<R> table = (Table<R>) this.editRecord.getTable();
         R record = recordId == 0 ? getDSL().newRecord(table) : (R) this.editRecord;
         // getDSL().selectFrom(table).where(((TableField<R, Integer>) table.field("id")).eq(recordId)).fetchOne();
-        String errors = this.editForm.setFields(record, request, this);
+        String errors = ((TableForm) this.editForm).setFields(record, request, this);
         String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
         if (errors.length() > 0)
         {
@@ -909,7 +931,7 @@ public class AdminData extends CommonData
         this.error = error;
     }
 
-    public TableForm getEditForm()
+    public WebForm getEditForm()
     {
         return this.editForm;
     }

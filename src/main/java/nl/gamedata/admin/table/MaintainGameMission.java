@@ -8,6 +8,9 @@ import org.jooq.Record;
 
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
+import nl.gamedata.admin.form.FormEntryInt;
+import nl.gamedata.admin.form.FormEntryPickRecord;
+import nl.gamedata.admin.form.FormEntryString;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
 import nl.gamedata.admin.form.table.TableForm;
@@ -15,6 +18,8 @@ import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.GameMissionRecord;
+import nl.gamedata.data.tables.records.GameRecord;
+import nl.gamedata.data.tables.records.GameVersionRecord;
 
 /**
  * MaintainGameVersion takes care of the game version screen.
@@ -58,15 +63,40 @@ public class MaintainGameMission
 
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
-        GameMissionRecord gameMission = recordId == 0 ? Tables.GAME_MISSION.newRecord()
-                : SqlUtils.readRecordFromId(data, Tables.GAME_MISSION, recordId);
-        data.setEditRecord(gameMission);
         TableForm form = new TableForm(data);
         form.startForm();
-        form.setHeader("Game Mission", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_MISSION.GAME_VERSION_ID, gameMission)
-                .setPickTable(data, data.getGameVersionPicklist(Access.EDIT)).setLabel("Game Version"));
-        form.addEntry(new TableEntryString(Tables.GAME_MISSION.NAME, gameMission).setMinLength(2));
+        int phase = form.getPhase(request);
+        String paramGameId = request.getParameter("game_id");
+        if (!click.equals("record-new"))
+        {
+            phase = 1;
+            GameMissionRecord gameMission = SqlUtils.readRecordFromId(data, Tables.GAME_MISSION, recordId);
+            GameVersionRecord gameVersion = SqlUtils.readRecordFromId(data, Tables.GAME_VERSION, gameMission.getGameVersionId());
+            paramGameId = String.valueOf(gameVersion.getGameId());
+        }
+        if (phase == 0 || paramGameId == null)
+        {
+            form.setHeader("Game Mission", click, 0);
+            form.setPhase(1);
+            form.addEntry(new FormEntryPickRecord("Game", "game_id")
+                    .setPickTable(data, data.getGamePicklist(Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
+        }
+        else if (phase == 1 && paramGameId != null)
+        {
+            GameMissionRecord gameMission = recordId == 0 ? Tables.GAME_MISSION.newRecord()
+                    : SqlUtils.readRecordFromId(data, Tables.GAME_MISSION, recordId);
+            data.setEditRecord(gameMission);
+            form.setHeader("Game Mission", click, recordId);
+            form.setPhase(2);
+            int gameId = Integer.valueOf(paramGameId);
+            GameRecord game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
+            form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
+            form.addEntry(new FormEntryString("Game", "game").setReadOnly().setInitialValue(game.getCode(), game.getCode()));
+            form.addEntry(new TableEntryPickRecord(Tables.GAME_MISSION.GAME_VERSION_ID, gameMission)
+                    .setPickTable(data, data.getGameVersionPicklist(gameId, Access.EDIT)).setLabel("Game Version"));
+            form.addEntry(new TableEntryString(Tables.GAME_MISSION.NAME, gameMission).setMinLength(2));
+        }
+
         form.endForm();
         data.setContent(form.process());
     }

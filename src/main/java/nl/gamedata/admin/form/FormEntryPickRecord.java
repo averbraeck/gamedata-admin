@@ -1,6 +1,8 @@
 package nl.gamedata.admin.form;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -8,6 +10,7 @@ import org.jooq.Condition;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.types.UInteger;
 
 import nl.gamedata.admin.AdminData;
 
@@ -60,6 +63,47 @@ public class FormEntryPickRecord extends AbstractFormEntry<FormEntryPickRecord, 
         for (Record record : tableRecords)
         {
             this.records.put(record.get(name), record.get(id));
+        }
+        return this;
+    }
+
+    public FormEntryPickRecord setPickTable(final AdminData data, final List<? extends Record> tableRecords,
+            final TableField<?, ?> id, final TableField<?, String> name)
+    {
+        if (!isRequired())
+            this.records.put("", null);
+        for (Record record : tableRecords)
+        {
+            if (record.get(id) instanceof UInteger)
+                this.records.put(record.get(name), ((UInteger) record.get(id)).intValue());
+            else
+                this.records.put(record.get(name), ((Integer) record.get(id)).intValue());
+        }
+        return this;
+    }
+
+    public FormEntryPickRecord setPickTable(final AdminData data, final Set<? extends Record> tableRecords,
+            final TableField<?, ?> id, final TableField<?, String> name)
+    {
+        if (!isRequired())
+            this.records.put("", null);
+        for (Record record : tableRecords)
+        {
+            if (record.get(id) instanceof UInteger)
+                this.records.put(record.get(name), ((UInteger) record.get(id)).intValue());
+            else
+                this.records.put(record.get(name), ((Integer) record.get(id)).intValue());
+        }
+        return this;
+    }
+
+    public FormEntryPickRecord setPickTable(final AdminData data, final Map<Integer, String> pickTable)
+    {
+        if (!isRequired())
+            this.records.put("", null);
+        for (var entry : pickTable.entrySet())
+        {
+            this.records.put(entry.getValue(), entry.getKey());
         }
         return this;
     }

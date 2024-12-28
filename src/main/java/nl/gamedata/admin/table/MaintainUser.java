@@ -113,7 +113,7 @@ public class MaintainUser
         UserRecord user = userId == 0 ? data.getDSL().newRecord(Tables.USER)
                 : data.getDSL().selectFrom(Tables.USER).where(Tables.USER.ID.eq(userId)).fetchOne();
         String hashedPassword = userId == 0 ? "" : user.getPassword(); // has to be BEFORE setFields
-        String errors = data.getEditForm().setFields(user, request, data);
+        String errors = ((TableForm) data.getEditForm()).setFields(user, request, data);
         if (errors.length() > 0)
         {
             ModalWindowUtils.popup(data, "Error in user entries for user", errors, backToMenu);

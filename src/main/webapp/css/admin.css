@@ -125,10 +125,11 @@ body {
 }
 
 .gd-admin-form-buttons {
+  padding-top: 20px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 10px;
 }
 

@@ -1,11 +1,9 @@
 package nl.gamedata.admin.form;
 
-import nl.gamedata.admin.form.table.TableForm;
-
 public abstract class AbstractFormEntry<F extends AbstractFormEntry<F, T>, T>
 {
 
-    private TableForm form;
+    private WebForm form;
 
     private String label;
 
@@ -37,12 +35,12 @@ public abstract class AbstractFormEntry<F extends AbstractFormEntry<F, T>, T>
         this.minLength = 0;
     }
 
-    public TableForm getForm()
+    public WebForm getForm()
     {
         return this.form;
     }
 
-    public void setForm(final TableForm form)
+    public void setForm(final WebForm form)
     {
         this.form = form;
     }
@@ -123,7 +121,7 @@ public abstract class AbstractFormEntry<F extends AbstractFormEntry<F, T>, T>
     }
 
     @SuppressWarnings("unchecked")
-    protected F setInitialValue(final T initialValue, final T valueWhenNull)
+    public F setInitialValue(final T initialValue, final T valueWhenNull)
     {
         this.initialValue = initialValue != null ? initialValue : valueWhenNull;
         setLastEnteredValue(codeForEdit(this.initialValue));

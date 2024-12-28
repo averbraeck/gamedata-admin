@@ -42,6 +42,18 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         this.errors = "";
     }
 
+    @Override
+    public TableForm getForm()
+    {
+        return (TableForm) super.getForm();
+    }
+
+    @Override
+    public String makeHtml()
+    {
+        return null;
+    }
+
     public String getType()
     {
         return this.type;
