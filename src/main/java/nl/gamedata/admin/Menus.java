@@ -18,6 +18,7 @@ import nl.gamedata.admin.table.MaintainGameRole;
 import nl.gamedata.admin.table.MaintainGameSession;
 import nl.gamedata.admin.table.MaintainGameSessionRole;
 import nl.gamedata.admin.table.MaintainGameVersion;
+import nl.gamedata.admin.table.MaintainGroupObjective;
 import nl.gamedata.admin.table.MaintainLearningGoal;
 import nl.gamedata.admin.table.MaintainOrganization;
 import nl.gamedata.admin.table.MaintainOrganizationGame;
@@ -92,7 +93,8 @@ public class Menus
                 MaintainLearningGoal::edit));
         gameTabs.add(new Tab("player-objective", "Player Objective", false, Set.of(0, 1), MaintainPlayerObjective::table,
                 MaintainPlayerObjective::edit));
-        // gameTabs.add(new Tab("group-objective", "Group Objective", false, Set.of(0, 1)));
+        gameTabs.add(new Tab("group-objective", "Group Objective", false, Set.of(0, 1), MaintainGroupObjective::table,
+                MaintainGroupObjective::edit));
 
         menuList.add("game-control");
         List<Tab> gameControlTabs = new ArrayList<>();
