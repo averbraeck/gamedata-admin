@@ -30,6 +30,7 @@ import nl.gamedata.admin.table.TableOrganizationGameToken;
 import nl.gamedata.admin.table.TableOrganizationRole;
 import nl.gamedata.admin.table.TablePlayer;
 import nl.gamedata.admin.table.TablePlayerAttempt;
+import nl.gamedata.admin.table.TablePlayerEvent;
 import nl.gamedata.admin.table.TablePlayerObjective;
 import nl.gamedata.admin.table.TableScale;
 import nl.gamedata.admin.table.TableUser;
@@ -169,7 +170,8 @@ public class Menus
         dataPlayerTabs.add(new Tab("player-attempt", "Player Attempt", true, Set.of(0, 4), TablePlayerAttempt::table,
                 TablePlayerAttempt::view));
         // dataPlayerTabs.add(new Tab("player-score", "Player Score", false, Set.of(0, 4)));
-        // dataPlayerTabs.add(new Tab("player-event", "Player Event", false, Set.of(0, 4)));
+        dataPlayerTabs.add(new Tab("player-event", "Player Event", false, Set.of(0, 4), TablePlayerEvent::table,
+                TablePlayerEvent::view));
         // dataPlayerTabs.add(new Tab("player-group-role", "Group Role", false, Set.of(0, 4)));
 
         menuList.add("data-group");
