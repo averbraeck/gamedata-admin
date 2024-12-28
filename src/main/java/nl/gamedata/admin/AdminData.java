@@ -8,13 +8,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SQLDialect;
 import org.jooq.Table;
 import org.jooq.TableRecord;
 import org.jooq.UpdatableRecord;
-import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
@@ -214,10 +211,9 @@ public class AdminData extends CommonData
         if (this.organizationAccess == null)
         {
             this.organizationAccess = new HashMap<>();
-            DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
             if (isSuperAdmin())
             {
-                List<OrganizationRecord> orgList = dslContext.selectFrom(Tables.ORGANIZATION).fetch();
+                List<OrganizationRecord> orgList = getDSL().selectFrom(Tables.ORGANIZATION).fetch();
                 for (var organization : orgList)
                 {
                     this.organizationAccess.put(organization.getId(), Access.ADMIN);
@@ -225,7 +221,7 @@ public class AdminData extends CommonData
             }
             else
             {
-                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                List<OrganizationRoleRecord> orList = getDSL().selectFrom(Tables.ORGANIZATION_ROLE)
                         .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var or : orList)
                 {
@@ -271,11 +267,10 @@ public class AdminData extends CommonData
         if (this.gameAccess == null)
         {
             this.gameAccess = new HashMap<>();
-            DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
             if (isSuperAdmin())
             {
-                List<GameRecord> gameList = dslContext.selectFrom(Tables.GAME).fetch();
+                List<GameRecord> gameList = getDSL().selectFrom(Tables.GAME).fetch();
                 for (var game : gameList)
                 {
                     this.gameAccess.put(game.getId(), Access.EDIT);
@@ -287,7 +282,7 @@ public class AdminData extends CommonData
             {
                 // direct game roles
                 List<GameRoleRecord> grList =
-                        dslContext.selectFrom(Tables.GAME_ROLE).where(Tables.GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
+                        getDSL().selectFrom(Tables.GAME_ROLE).where(Tables.GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var gr : grList)
                 {
                     if (gr.getEdit() != 0)
@@ -297,11 +292,11 @@ public class AdminData extends CommonData
                 }
 
                 // indirect game roles via game_access for all organizations where user is a member
-                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                List<OrganizationRoleRecord> orList = getDSL().selectFrom(Tables.ORGANIZATION_ROLE)
                         .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var or : orList)
                 {
-                    List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
+                    List<OrganizationGameRecord> ogList = getDSL().selectFrom(Tables.ORGANIZATION_GAME)
                             .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
                     for (var og : ogList)
                     {
@@ -311,7 +306,7 @@ public class AdminData extends CommonData
                 }
 
                 // indirect game roles via direct game_access role
-                List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
+                List<OrganizationGameRoleRecord> ogrList = getDSL().selectFrom(Tables.ORGANIZATION_GAME_ROLE)
                         .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var ogr : ogrList)
                 {
@@ -322,7 +317,7 @@ public class AdminData extends CommonData
                 }
 
                 // indirect game roles via session_role
-                List<GameSessionRoleRecord> gsrList = dslContext.selectFrom(Tables.GAME_SESSION_ROLE)
+                List<GameSessionRoleRecord> gsrList = getDSL().selectFrom(Tables.GAME_SESSION_ROLE)
                         .where(Tables.GAME_SESSION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var gsr : gsrList)
                 {
@@ -333,7 +328,7 @@ public class AdminData extends CommonData
                 }
 
                 // indirect game roles via dashboard_role
-                List<DashboardRoleRecord> drList = dslContext.selectFrom(Tables.DASHBOARD_ROLE)
+                List<DashboardRoleRecord> drList = getDSL().selectFrom(Tables.DASHBOARD_ROLE)
                         .where(Tables.DASHBOARD_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var dr : drList)
                 {
@@ -385,8 +380,7 @@ public class AdminData extends CommonData
     public Map<Integer, String> getGameVersionPicklist(final Access access)
     {
         Map<Integer, String> ret = new HashMap<>();
-        DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        List<Record> gvList = dslContext
+        List<Record> gvList = getDSL()
                 .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var gv : gvList)
         {
@@ -408,11 +402,10 @@ public class AdminData extends CommonData
         if (this.organizationGameAccess == null)
         {
             this.organizationGameAccess = new HashMap<>();
-            DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
             if (isSuperAdmin())
             {
-                List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME).fetch();
+                List<OrganizationGameRecord> ogList = getDSL().selectFrom(Tables.ORGANIZATION_GAME).fetch();
                 for (var og : ogList)
                 {
                     this.organizationGameAccess.put(og.getId(), Access.EDIT);
@@ -423,7 +416,7 @@ public class AdminData extends CommonData
 
             {
                 // direct game access roles
-                List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
+                List<OrganizationGameRoleRecord> ogrList = getDSL().selectFrom(Tables.ORGANIZATION_GAME_ROLE)
                         .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var ogr : ogrList)
                 {
@@ -434,11 +427,11 @@ public class AdminData extends CommonData
                 }
 
                 // indirect game_access roles for all organizations where user is a member
-                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                List<OrganizationRoleRecord> orList = getDSL().selectFrom(Tables.ORGANIZATION_ROLE)
                         .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var or : orList)
                 {
-                    List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
+                    List<OrganizationGameRecord> ogList = getDSL().selectFrom(Tables.ORGANIZATION_GAME)
                             .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
                     for (var og : ogList)
                     {
@@ -492,11 +485,10 @@ public class AdminData extends CommonData
         if (this.gameSessionAccess == null)
         {
             this.gameSessionAccess = new HashMap<>();
-            DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
             if (isSuperAdmin())
             {
-                List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION).fetch();
+                List<GameSessionRecord> gsList = getDSL().selectFrom(Tables.GAME_SESSION).fetch();
                 for (var gs : gsList)
                 {
                     this.gameSessionAccess.put(gs.getId(), Access.EDIT);
@@ -507,7 +499,7 @@ public class AdminData extends CommonData
 
             {
                 // direct game session roles
-                List<GameSessionRoleRecord> gsrList = dslContext.selectFrom(Tables.GAME_SESSION_ROLE)
+                List<GameSessionRoleRecord> gsrList = getDSL().selectFrom(Tables.GAME_SESSION_ROLE)
                         .where(Tables.GAME_SESSION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var gsr : gsrList)
                 {
@@ -518,13 +510,13 @@ public class AdminData extends CommonData
                 }
 
                 // indirect game session roles via organization_game roles
-                List<Record> ogrList = dslContext
+                List<Record> ogrList = getDSL()
                         .selectFrom(Tables.ORGANIZATION_GAME.join(Tables.ORGANIZATION_GAME_ROLE)
                                 .on(Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID.eq(Tables.ORGANIZATION_GAME.ID)))
                         .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var ogr : ogrList)
                 {
-                    List<Record> gsList = dslContext
+                    List<Record> gsList = getDSL()
                             .selectFrom(Tables.GAME_SESSION.join(Tables.GAME_VERSION)
                                     .on(Tables.GAME_SESSION.GAME_VERSION_ID.eq(Tables.GAME_VERSION.ID)))
                             .where(Tables.GAME_SESSION.ORGANIZATION_ID
@@ -541,15 +533,15 @@ public class AdminData extends CommonData
                 }
 
                 // indirect game session roles for all organizations where user is a member
-                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                List<OrganizationRoleRecord> orList = getDSL().selectFrom(Tables.ORGANIZATION_ROLE)
                         .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var or : orList)
                 {
-                    List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
+                    List<OrganizationGameRecord> ogList = getDSL().selectFrom(Tables.ORGANIZATION_GAME)
                             .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
                     for (var og : ogList)
                     {
-                        List<GameSessionRecord> gsList = dslContext.selectFrom(Tables.GAME_SESSION)
+                        List<GameSessionRecord> gsList = getDSL().selectFrom(Tables.GAME_SESSION)
                                 .where(Tables.GAME_SESSION.ORGANIZATION_ID.eq(og.getOrganizationId())).fetch();
                         for (var gs : gsList)
                         {
@@ -604,11 +596,10 @@ public class AdminData extends CommonData
         if (this.dashboardTemplateAccess == null)
         {
             this.dashboardTemplateAccess = new HashMap<>();
-            DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
 
             if (isSuperAdmin())
             {
-                List<DashboardTemplateRecord> dashboardList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE).fetch();
+                List<DashboardTemplateRecord> dashboardList = getDSL().selectFrom(Tables.DASHBOARD_TEMPLATE).fetch();
                 for (var dt : dashboardList)
                 {
                     this.dashboardTemplateAccess.put(dt.getId(), Access.EDIT);
@@ -619,7 +610,7 @@ public class AdminData extends CommonData
 
             {
                 // direct dashboard roles
-                List<DashboardRoleRecord> drList = dslContext.selectFrom(Tables.DASHBOARD_ROLE)
+                List<DashboardRoleRecord> drList = getDSL().selectFrom(Tables.DASHBOARD_ROLE)
                         .where(Tables.DASHBOARD_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var dr : drList)
                 {
@@ -630,11 +621,11 @@ public class AdminData extends CommonData
                 }
 
                 // indirect dashboard roles via game_access roles
-                List<OrganizationGameRoleRecord> ogrList = dslContext.selectFrom(Tables.ORGANIZATION_GAME_ROLE)
+                List<OrganizationGameRoleRecord> ogrList = getDSL().selectFrom(Tables.ORGANIZATION_GAME_ROLE)
                         .where(Tables.ORGANIZATION_GAME_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var ogr : ogrList)
                 {
-                    List<DashboardTemplateRecord> dtList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE)
+                    List<DashboardTemplateRecord> dtList = getDSL().selectFrom(Tables.DASHBOARD_TEMPLATE)
                             .where(Tables.DASHBOARD_TEMPLATE.ORGANIZATION_GAME_ID.eq(ogr.getOrganizationGameId())).fetch();
                     for (var dt : dtList)
                     {
@@ -651,15 +642,15 @@ public class AdminData extends CommonData
                 }
 
                 // indirect dashboard roles for all organizations where user is a member
-                List<OrganizationRoleRecord> orList = dslContext.selectFrom(Tables.ORGANIZATION_ROLE)
+                List<OrganizationRoleRecord> orList = getDSL().selectFrom(Tables.ORGANIZATION_ROLE)
                         .where(Tables.ORGANIZATION_ROLE.USER_ID.eq(this.user.getId())).fetch();
                 for (var or : orList)
                 {
-                    List<OrganizationGameRecord> ogList = dslContext.selectFrom(Tables.ORGANIZATION_GAME)
+                    List<OrganizationGameRecord> ogList = getDSL().selectFrom(Tables.ORGANIZATION_GAME)
                             .where(Tables.ORGANIZATION_GAME.ORGANIZATION_ID.eq(or.getOrganizationId())).fetch();
                     for (var og : ogList)
                     {
-                        List<DashboardTemplateRecord> dtList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE)
+                        List<DashboardTemplateRecord> dtList = getDSL().selectFrom(Tables.DASHBOARD_TEMPLATE)
                                 .where(Tables.DASHBOARD_TEMPLATE.ORGANIZATION_GAME_ID.eq(og.getId())).fetch();
                         for (var dt : dtList)
                         {
@@ -680,12 +671,11 @@ public class AdminData extends CommonData
 
     private void addDashboardTemplateAccess(final OrganizationGameRecord og)
     {
-        DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
         List<GameVersionRecord> gvList =
-                dslContext.selectFrom(Tables.GAME_VERSION).where(Tables.GAME_VERSION.GAME_ID.eq(og.getGameId())).fetch();
+                getDSL().selectFrom(Tables.GAME_VERSION).where(Tables.GAME_VERSION.GAME_ID.eq(og.getGameId())).fetch();
         for (var gv : gvList)
         {
-            List<DashboardTemplateRecord> dtList = dslContext.selectFrom(Tables.DASHBOARD_TEMPLATE)
+            List<DashboardTemplateRecord> dtList = getDSL().selectFrom(Tables.DASHBOARD_TEMPLATE)
                     .where(Tables.DASHBOARD_TEMPLATE.GAME_VERSION_ID.eq(gv.getId())).fetch();
             for (var dt : dtList)
             {
@@ -750,9 +740,8 @@ public class AdminData extends CommonData
     public <R extends org.jooq.UpdatableRecord<R>> int saveRecord(final HttpServletRequest request, final int recordId)
     {
         Table<R> table = (Table<R>) this.editRecord.getTable();
-        DSLContext dslContext = DSL.using(getDataSource(), SQLDialect.MYSQL);
-        R record = recordId == 0 ? dslContext.newRecord(table) : (R) this.editRecord;
-        // dslContext.selectFrom(table).where(((TableField<R, Integer>) table.field("id")).eq(recordId)).fetchOne();
+        R record = recordId == 0 ? getDSL().newRecord(table) : (R) this.editRecord;
+        // getDSL().selectFrom(table).where(((TableField<R, Integer>) table.field("id")).eq(recordId)).fetchOne();
         String errors = this.editForm.setFields(record, request, this);
         String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
         if (errors.length() > 0)
