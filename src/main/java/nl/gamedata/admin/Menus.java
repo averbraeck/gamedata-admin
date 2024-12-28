@@ -20,6 +20,7 @@ import nl.gamedata.admin.table.TableGameSessionRole;
 import nl.gamedata.admin.table.TableGameVersion;
 import nl.gamedata.admin.table.TableGroup;
 import nl.gamedata.admin.table.TableGroupAttempt;
+import nl.gamedata.admin.table.TableGroupEvent;
 import nl.gamedata.admin.table.TableGroupObjective;
 import nl.gamedata.admin.table.TableLearningGoal;
 import nl.gamedata.admin.table.TableMissionEvent;
@@ -170,8 +171,8 @@ public class Menus
         dataPlayerTabs.add(new Tab("player-attempt", "Player Attempt", true, Set.of(0, 4), TablePlayerAttempt::table,
                 TablePlayerAttempt::view));
         // dataPlayerTabs.add(new Tab("player-score", "Player Score", false, Set.of(0, 4)));
-        dataPlayerTabs.add(new Tab("player-event", "Player Event", false, Set.of(0, 4), TablePlayerEvent::table,
-                TablePlayerEvent::view));
+        dataPlayerTabs.add(
+                new Tab("player-event", "Player Event", false, Set.of(0, 4), TablePlayerEvent::table, TablePlayerEvent::view));
         // dataPlayerTabs.add(new Tab("player-group-role", "Group Role", false, Set.of(0, 4)));
 
         menuList.add("data-group");
@@ -186,8 +187,8 @@ public class Menus
         // dataGroupTabs.add(new Tab("group-player", "Group Player", false, Set.of(0, 4), TableGroup::table, TableGroup::view));
         dataGroupTabs.add(new Tab("group-attempt", "Group Attempt", true, Set.of(0, 4), TableGroupAttempt::table,
                 TableGroupAttempt::view));
-        // dataGroupTabs.add(new Tab("group-score", "Group Score", false, Set.of(0, 4)));
-        // dataGroupTabs.add(new Tab("group-event", "Group Event", false, Set.of(0, 4)));
+        // dataGroupTabs.add(new Tab("group-score", "Group Score", false, Set.of(0, 4), TableGroupScore::table, TableGroupScore::view));
+        dataGroupTabs.add(new Tab("group-event", "Group Event", false, Set.of(0, 4), TableGroupEvent::table, TableGroupEvent::view));
 
         menuList.add("settings");
         menuMap.put("settings",
