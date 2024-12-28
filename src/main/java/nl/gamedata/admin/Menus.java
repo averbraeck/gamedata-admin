@@ -19,6 +19,7 @@ import nl.gamedata.admin.table.TableGameSession;
 import nl.gamedata.admin.table.TableGameSessionRole;
 import nl.gamedata.admin.table.TableGameVersion;
 import nl.gamedata.admin.table.TableGroup;
+import nl.gamedata.admin.table.TableGroupAttempt;
 import nl.gamedata.admin.table.TableGroupObjective;
 import nl.gamedata.admin.table.TableLearningGoal;
 import nl.gamedata.admin.table.TableOrganization;
@@ -179,7 +180,8 @@ public class Menus
                 new Tab("game-session", "Game Session", true, Set.of(0, 4), TableGameSession::table, TableGameSession::edit));
         dataGroupTabs.add(new Tab("group", "Group", true, Set.of(0, 4), TableGroup::table, TableGroup::view));
         // dataGroupTabs.add(new Tab("group-player", "Group Player", false, Set.of(0, 4), TableGroup::table, TableGroup::view));
-        // dataGroupTabs.add(new Tab("group-attempt", "Group Attempt", true, Set.of(0, 4)));
+        dataGroupTabs.add(new Tab("group-attempt", "Group Attempt", true, Set.of(0, 4), TableGroupAttempt::table,
+                TableGroupAttempt::view));
         // dataGroupTabs.add(new Tab("group-score", "Group Score", false, Set.of(0, 4)));
         // dataGroupTabs.add(new Tab("group-event", "Group Event", false, Set.of(0, 4)));
 
