@@ -14,6 +14,7 @@ import nl.gamedata.admin.table.ITable;
 import nl.gamedata.admin.table.TableDashboardElement;
 import nl.gamedata.admin.table.TableDashboardLayout;
 import nl.gamedata.admin.table.TableDashboardRole;
+import nl.gamedata.admin.table.TableElementProperty;
 import nl.gamedata.admin.table.TableGame;
 import nl.gamedata.admin.table.TableGameMission;
 import nl.gamedata.admin.table.TableGameRole;
@@ -138,7 +139,8 @@ public class Menus
                 TableDashboardLayout::edit));
         layoutTabs.add(new Tab("dashboard-element", "Dashboard Element", true, Set.of(0), TableDashboardElement::table,
                 TableDashboardElement::edit));
-        // layoutTabs.add(new Tab("element-property", "Element Property", true, Set.of(0)));
+        layoutTabs.add(new Tab("element-property", "Element Property", true, Set.of(0), TableElementProperty::table,
+                TableElementProperty::edit));
 
         menuList.add("dashboard");
         List<Tab> dashboardTabs = new ArrayList<>();
