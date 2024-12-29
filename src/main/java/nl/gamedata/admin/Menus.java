@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import nl.gamedata.admin.table.IEdit;
 import nl.gamedata.admin.table.ITable;
+import nl.gamedata.admin.table.TableDashboardElement;
 import nl.gamedata.admin.table.TableDashboardLayout;
 import nl.gamedata.admin.table.TableDashboardRole;
 import nl.gamedata.admin.table.TableGame;
@@ -135,7 +136,8 @@ public class Menus
         menuMap.put("layout", new Menu("fa-display", "layout", "Layout", layoutTabs, Set.of(0)));
         layoutTabs.add(new Tab("dashboard-layout", "Dashboard Layout", true, Set.of(0), TableDashboardLayout::table,
                 TableDashboardLayout::edit));
-        // layoutTabs.add(new Tab("dashboard-element", "Dashboard Element", true, Set.of(0)));
+        layoutTabs.add(new Tab("dashboard-element", "Dashboard Element", true, Set.of(0), TableDashboardElement::table,
+                TableDashboardElement::edit));
         // layoutTabs.add(new Tab("element-property", "Element Property", true, Set.of(0)));
 
         menuList.add("dashboard");
