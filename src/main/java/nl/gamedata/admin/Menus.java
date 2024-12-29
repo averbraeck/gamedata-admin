@@ -33,6 +33,7 @@ import nl.gamedata.admin.table.TablePlayer;
 import nl.gamedata.admin.table.TablePlayerAttempt;
 import nl.gamedata.admin.table.TablePlayerEvent;
 import nl.gamedata.admin.table.TablePlayerObjective;
+import nl.gamedata.admin.table.TablePlayerScore;
 import nl.gamedata.admin.table.TableScale;
 import nl.gamedata.admin.table.TableUser;
 
@@ -170,7 +171,8 @@ public class Menus
         dataPlayerTabs.add(new Tab("player", "Player", true, Set.of(0, 4), TablePlayer::table, TablePlayer::view));
         dataPlayerTabs.add(new Tab("player-attempt", "Player Attempt", true, Set.of(0, 4), TablePlayerAttempt::table,
                 TablePlayerAttempt::view));
-        // dataPlayerTabs.add(new Tab("player-score", "Player Score", false, Set.of(0, 4)));
+        dataPlayerTabs.add(
+                new Tab("player-score", "Player Score", false, Set.of(0, 4), TablePlayerScore::table, TablePlayerScore::view));
         dataPlayerTabs.add(
                 new Tab("player-event", "Player Event", false, Set.of(0, 4), TablePlayerEvent::table, TablePlayerEvent::view));
         // dataPlayerTabs.add(new Tab("player-group-role", "Group Role", false, Set.of(0, 4)));
@@ -187,8 +189,10 @@ public class Menus
         // dataGroupTabs.add(new Tab("group-player", "Group Player", false, Set.of(0, 4), TableGroup::table, TableGroup::view));
         dataGroupTabs.add(new Tab("group-attempt", "Group Attempt", true, Set.of(0, 4), TableGroupAttempt::table,
                 TableGroupAttempt::view));
-        // dataGroupTabs.add(new Tab("group-score", "Group Score", false, Set.of(0, 4), TableGroupScore::table, TableGroupScore::view));
-        dataGroupTabs.add(new Tab("group-event", "Group Event", false, Set.of(0, 4), TableGroupEvent::table, TableGroupEvent::view));
+        // dataGroupTabs.add(new Tab("group-score", "Group Score", false, Set.of(0, 4), TableGroupScore::table,
+        // TableGroupScore::view));
+        dataGroupTabs
+                .add(new Tab("group-event", "Group Event", false, Set.of(0, 4), TableGroupEvent::table, TableGroupEvent::view));
 
         menuList.add("settings");
         menuMap.put("settings",
