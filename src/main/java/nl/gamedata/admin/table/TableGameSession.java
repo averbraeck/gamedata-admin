@@ -142,6 +142,7 @@ public class TableGameSession
             form.addEntry(new TableEntryString(Tables.GAME_SESSION.NAME, gameSession).setMinLength(2));
             form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_TOKEN, gameSession).setMinLength(2));
             form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_STATUS, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.TOKEN_FORCED, gameSession));
             form.addEntry(new TableEntryDate(Tables.GAME_SESSION.PLAY_DATE, gameSession));
             form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.VALID, gameSession));
             form.addEntry(new TableEntryDateTime(Tables.GAME_SESSION.VALID_FROM, gameSession));
