@@ -24,6 +24,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import jakarta.xml.bind.DatatypeConverter;
+import nl.gamedata.common.SqlUtils;
 import nl.gamedata.data.tables.records.UserRecord;
 
 @WebServlet("/login")
@@ -123,7 +124,7 @@ public class UserLoginServlet extends HttpServlet
             throw new ServletException(e);
         }
 
-        UserRecord user = AdminUtils.readUserFromUsername(data, username);
+        UserRecord user = SqlUtils.readUserFromUsername(data, username);
         if (user != null)
         {
             MessageDigest md;
