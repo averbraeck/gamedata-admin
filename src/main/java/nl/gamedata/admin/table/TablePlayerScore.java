@@ -91,8 +91,6 @@ public class TablePlayerScore
                 .setInitialValue(playerScore.getNewScoreNumber(), Double.NaN));
         form.addEntry(new FormEntryString("New score (str)", "new_score_string").setReadOnly()
                 .setInitialValue(playerScore.getNewScoreString(), "-"));
-        form.addEntry(new FormEntryInt("Mission Attempt", "mission_attempt").setReadOnly()
-                .setInitialValue(playerScore.getMissionAttempt()));
         form.addEntry(new FormEntryBoolean("Final Score", "final_score").setReadOnly()
                 .setInitialValue(playerScore.getFinalScore(), (byte) 0));
         form.addEntry(new FormEntryString("Status", "status").setReadOnly().setInitialValue(playerScore.getStatus(), "-"));

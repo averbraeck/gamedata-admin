@@ -74,8 +74,6 @@ public class TablePlayerEvent
         form.addEntry(new FormEntryString("Type", "type").setReadOnly().setInitialValue(playerEvent.getType()));
         form.addEntry(new FormEntryString("Key", "key").setReadOnly().setInitialValue(playerEvent.getKey()));
         form.addEntry(new FormEntryString("Value", "value").setReadOnly().setInitialValue(playerEvent.getValue()));
-        form.addEntry(new FormEntryInt("Mission Attempt", "mission_attempt").setReadOnly()
-                .setInitialValue(playerEvent.getMissionAttempt()));
         form.addEntry(new FormEntryString("Status", "status").setReadOnly().setInitialValue(playerEvent.getStatus(), "-"));
         form.addEntry(new FormEntryString("Round", "round").setReadOnly().setInitialValue(playerEvent.getRound(), "-"));
         form.addEntry(

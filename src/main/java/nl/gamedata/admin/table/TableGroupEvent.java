@@ -74,8 +74,6 @@ public class TableGroupEvent
         form.addEntry(new FormEntryString("Type", "type").setReadOnly().setInitialValue(groupEvent.getType()));
         form.addEntry(new FormEntryString("Key", "key").setReadOnly().setInitialValue(groupEvent.getKey()));
         form.addEntry(new FormEntryString("Value", "value").setReadOnly().setInitialValue(groupEvent.getValue()));
-        form.addEntry(new FormEntryInt("Mission Attempt", "mission_attempt").setReadOnly()
-                .setInitialValue(groupEvent.getMissionAttempt()));
         form.addEntry(new FormEntryString("Status", "status").setReadOnly().setInitialValue(groupEvent.getStatus(), "-"));
         form.addEntry(new FormEntryString("Round", "round").setReadOnly().setInitialValue(groupEvent.getRound(), "-"));
         form.addEntry(
