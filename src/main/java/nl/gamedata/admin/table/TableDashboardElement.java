@@ -33,7 +33,7 @@ public class TableDashboardElement
         {
             boolean edit = data.isSuperAdmin();
             boolean delete = data.isSuperAdmin();
-            table.addRow(de.getId(), true, edit, delete, de.getName(), de.getDescriiption());
+            table.addRow(de.getId(), true, edit, delete, de.getName(), de.getDescription());
         }
         table.process();
     }
@@ -47,7 +47,7 @@ public class TableDashboardElement
         form.startForm();
         form.setHeader("Dashboard Element", click, recordId);
         form.addEntry(new TableEntryString(Tables.DASHBOARD_ELEMENT.NAME, dashboardElement).setMinLength(2));
-        form.addEntry(new TableEntryText(Tables.DASHBOARD_ELEMENT.DESCRIIPTION, dashboardElement));
+        form.addEntry(new TableEntryText(Tables.DASHBOARD_ELEMENT.DESCRIPTION, dashboardElement));
         form.endForm();
         data.setContent(form.process());
     }
