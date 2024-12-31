@@ -25,15 +25,15 @@ public class TableDashboardLayout
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        AdminTable table = new AdminTable(data, "Dashboard Layout", "Name");
+        AdminTable table = new AdminTable(data, "Dashboard Layout", "Code");
         table.setNewButton(data.isSuperAdmin());
-        table.setHeader("Name", "Description");
+        table.setHeader("Code", "Name");
         List<DashboardLayoutRecord> dlList = data.getDSL().selectFrom(Tables.DASHBOARD_LAYOUT).fetch();
         for (var dl : dlList)
         {
             boolean edit = data.isSuperAdmin();
             boolean delete = data.isSuperAdmin();
-            table.addRow(dl.getId(), true, edit, delete, dl.getName(), dl.getDescription());
+            table.addRow(dl.getId(), true, edit, delete, dl.getCode(), dl.getName());
         }
         table.process();
     }
@@ -46,6 +46,7 @@ public class TableDashboardLayout
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Dashboard Layout", click, recordId);
+        form.addEntry(new TableEntryString(Tables.DASHBOARD_LAYOUT.CODE, dashboardLayout).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.DASHBOARD_LAYOUT.NAME, dashboardLayout).setMinLength(2));
         form.addEntry(new TableEntryText(Tables.DASHBOARD_LAYOUT.DESCRIPTION, dashboardLayout));
         form.endForm();

@@ -18,6 +18,7 @@ import nl.gamedata.admin.form.table.TableEntryDateTime;
 import nl.gamedata.admin.form.table.TableEntryInt;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
+import nl.gamedata.admin.form.table.TableEntryText;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
@@ -140,6 +141,7 @@ public class TableGameSession
                     .setPickTable(data, data.getGameVersionPicklist(gameId, Access.VIEW)).setLabel("Game Version"));
             form.addEntry(new TableEntryString(Tables.GAME_SESSION.CODE, gameSession).setMinLength(2));
             form.addEntry(new TableEntryString(Tables.GAME_SESSION.NAME, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryText(Tables.GAME_SESSION.DESCRIPTION, gameSession));
             form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_TOKEN, gameSession).setMinLength(2));
             form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_STATUS, gameSession).setMinLength(2));
             form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.TOKEN_FORCED, gameSession));

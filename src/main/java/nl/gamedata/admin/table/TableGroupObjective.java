@@ -15,6 +15,7 @@ import nl.gamedata.admin.form.WebForm;
 import nl.gamedata.admin.form.table.TableEntryInt;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
+import nl.gamedata.admin.form.table.TableEntryText;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
@@ -22,8 +23,8 @@ import nl.gamedata.data.Tables;
 import nl.gamedata.data.tables.records.GameMissionRecord;
 import nl.gamedata.data.tables.records.GameRecord;
 import nl.gamedata.data.tables.records.GameVersionRecord;
-import nl.gamedata.data.tables.records.LearningGoalRecord;
 import nl.gamedata.data.tables.records.GroupObjectiveRecord;
+import nl.gamedata.data.tables.records.LearningGoalRecord;
 import nl.gamedata.data.tables.records.ScaleRecord;
 
 /**
@@ -60,12 +61,12 @@ public class TableGroupObjective
                     String version = po.getValue(Tables.GAME_VERSION.NAME);
                     String mission = po.getValue(Tables.GAME_MISSION.NAME);
                     String learningGoal = po.getValue(Tables.LEARNING_GOAL.NAME);
-                    String name = po.getValue(Tables.GROUP_OBJECTIVE.NAME);
+                    String code = po.getValue(Tables.GROUP_OBJECTIVE.CODE);
                     ScaleRecord scale =
                             SqlUtils.readRecordFromId(data, Tables.SCALE, po.getValue(Tables.GROUP_OBJECTIVE.SCALE_ID));
                     String threshold = po.getValue(Tables.GROUP_OBJECTIVE.THRESHOLD);
                     boolean edit = data.getGameAccess().get(id).edit();
-                    table.addRow(id, false, edit, admin, game, version, mission, learningGoal, name, scale.getType(),
+                    table.addRow(id, false, edit, admin, game, version, mission, learningGoal, code, scale.getType(),
                             threshold);
                     break;
                 }
@@ -201,7 +202,9 @@ public class TableGroupObjective
                     .setInitialValue(learningGoalId).setHidden().setReadOnly());
             form.addEntry(new FormEntryString("Learning Goal", "learning_goal").setReadOnly()
                     .setInitialValue(learningGoal.getName(), learningGoal.getName()));
+            form.addEntry(new TableEntryString(Tables.GROUP_OBJECTIVE.CODE, groupObjective).setMinLength(2));
             form.addEntry(new TableEntryString(Tables.GROUP_OBJECTIVE.NAME, groupObjective).setMinLength(2));
+            form.addEntry(new TableEntryText(Tables.GROUP_OBJECTIVE.DESCRIPTION, groupObjective));
             form.addEntry(new TableEntryPickRecord(Tables.GROUP_OBJECTIVE.SCALE_ID, groupObjective).setPickTable(data,
                     Tables.SCALE, Tables.SCALE.ID, Tables.SCALE.TYPE, Tables.SCALE.GAME_ID.eq(gameId)));
             form.addEntry(new TableEntryString(Tables.GROUP_OBJECTIVE.THRESHOLD, groupObjective));

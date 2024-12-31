@@ -25,15 +25,15 @@ public class TableDashboardElement
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        AdminTable table = new AdminTable(data, "Dashboard Element", "Name");
+        AdminTable table = new AdminTable(data, "Dashboard Element", "Code");
         table.setNewButton(data.isSuperAdmin());
-        table.setHeader("Name", "Description");
+        table.setHeader("Code", "Name");
         List<DashboardElementRecord> deList = data.getDSL().selectFrom(Tables.DASHBOARD_ELEMENT).fetch();
         for (var de : deList)
         {
             boolean edit = data.isSuperAdmin();
             boolean delete = data.isSuperAdmin();
-            table.addRow(de.getId(), true, edit, delete, de.getName(), de.getDescription());
+            table.addRow(de.getId(), true, edit, delete, de.getCode(), de.getName());
         }
         table.process();
     }
@@ -46,6 +46,7 @@ public class TableDashboardElement
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Dashboard Element", click, recordId);
+        form.addEntry(new TableEntryString(Tables.DASHBOARD_ELEMENT.CODE, dashboardElement).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.DASHBOARD_ELEMENT.NAME, dashboardElement).setMinLength(2));
         form.addEntry(new TableEntryText(Tables.DASHBOARD_ELEMENT.DESCRIPTION, dashboardElement));
         form.endForm();

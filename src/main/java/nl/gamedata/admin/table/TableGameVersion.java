@@ -11,6 +11,7 @@ import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.table.TableEntryBoolean;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
+import nl.gamedata.admin.form.table.TableEntryText;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
@@ -32,7 +33,7 @@ public class TableGameVersion
         AdminTable table = new AdminTable(data, "Game Version", "Game");
         boolean access = data.isSuperAdmin() || data.isGameAdmin();
         table.setNewButton(access);
-        table.setHeader("Game", "Version", "Archived");
+        table.setHeader("Game", "Version", "Name", "Archived");
         List<Record> gvList = data.getDSL()
                 .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();
         for (var gv : gvList)
@@ -43,9 +44,10 @@ public class TableGameVersion
                 {
                     int id = gv.getValue(Tables.GAME_VERSION.ID);
                     String game = gv.getValue(Tables.GAME.CODE);
-                    String version = gv.getValue(Tables.GAME_VERSION.NAME);
+                    String code = gv.getValue(Tables.GAME_VERSION.CODE);
+                    String name = gv.getValue(Tables.GAME_VERSION.NAME);
                     String archived = gv.getValue(Tables.GAME_VERSION.ARCHIVED) == 0 ? "N" : "Y";
-                    table.addRow(id, false, access, access, game, version, archived);
+                    table.addRow(id, false, access, access, game, code, name, archived);
                     break;
                 }
             }
@@ -63,7 +65,9 @@ public class TableGameVersion
         form.setHeader("Game Version", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.GAME_VERSION.GAME_ID, gameVersion)
                 .setPickTable(data, data.getGamePicklist(Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
+        form.addEntry(new TableEntryString(Tables.GAME_VERSION.CODE, gameVersion).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.GAME_VERSION.NAME, gameVersion).setMinLength(2));
+        form.addEntry(new TableEntryText(Tables.GAME_VERSION.DESCRIPTION, gameVersion));
         form.addEntry(new TableEntryBoolean(Tables.GAME_VERSION.ARCHIVED, gameVersion).setLabel("Archived?"));
         form.endForm();
         data.setContent(form.process());

@@ -26,16 +26,16 @@ public class TableElementProperty
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        AdminTable table = new AdminTable(data, "Dashboard Element Property", "Name");
+        AdminTable table = new AdminTable(data, "Dashboard Element Property", "Code");
         table.setNewButton(data.isSuperAdmin());
-        table.setHeader("Element", "Name", "Type");
+        table.setHeader("Element", "Code", "Name", "Type");
         List<ElementPropertyRecord> epList = data.getDSL().selectFrom(Tables.ELEMENT_PROPERTY).fetch();
         for (var ep : epList)
         {
             var dashboardElement = SqlUtils.readRecordFromId(data, Tables.DASHBOARD_ELEMENT, ep.getDashboardElementId());
             boolean edit = data.isSuperAdmin();
             boolean delete = data.isSuperAdmin();
-            table.addRow(ep.getId(), true, edit, delete, dashboardElement.getName(), ep.getName(), ep.getType());
+            table.addRow(ep.getId(), true, edit, delete, dashboardElement.getCode(), ep.getCode(), ep.getName(), ep.getType());
         }
         table.process();
     }
@@ -50,8 +50,10 @@ public class TableElementProperty
         form.setHeader("Dashboard Element Property", click, recordId);
         form.addEntry(new TableEntryPickRecord(Tables.ELEMENT_PROPERTY.DASHBOARD_ELEMENT_ID, elementProperty).setPickTable(data,
                 Tables.DASHBOARD_ELEMENT, Tables.DASHBOARD_ELEMENT.ID, Tables.DASHBOARD_ELEMENT.NAME));
+        form.addEntry(new TableEntryString(Tables.ELEMENT_PROPERTY.CODE, elementProperty).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.ELEMENT_PROPERTY.NAME, elementProperty).setMinLength(2));
-        form.addEntry(new TableEntryText(Tables.ELEMENT_PROPERTY.TYPE, elementProperty));
+        form.addEntry(new TableEntryText(Tables.ELEMENT_PROPERTY.DESCRIPTION, elementProperty));
+        form.addEntry(new TableEntryString(Tables.ELEMENT_PROPERTY.TYPE, elementProperty).setMinLength(2));
         form.endForm();
         data.setContent(form.process());
     }

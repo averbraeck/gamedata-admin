@@ -39,7 +39,7 @@ public class TableLearningGoal
         AdminTable table = new AdminTable(data, "Learning Goal", "Name");
         boolean admin = data.isSuperAdmin() || data.isGameAdmin() || data.hasGameAccess(Access.EDIT);
         table.setNewButton(admin);
-        table.setHeader("Game", "Version", "Mission", "Learning Goal");
+        table.setHeader("Game", "Version", "Mission", "Learning Goal", "Name");
         List<Record> lgList = data.getDSL()
                 .selectFrom(Tables.LEARNING_GOAL.join(Tables.GAME_MISSION)
                         .on(Tables.LEARNING_GOAL.GAME_MISSION_ID.eq(Tables.GAME_MISSION.ID)).join(Tables.GAME_VERSION)
@@ -56,9 +56,10 @@ public class TableLearningGoal
                     String game = lg.getValue(Tables.GAME.CODE);
                     String version = lg.getValue(Tables.GAME_VERSION.NAME);
                     String mission = lg.getValue(Tables.GAME_MISSION.NAME);
+                    String code = lg.getValue(Tables.LEARNING_GOAL.CODE);
                     String name = lg.getValue(Tables.LEARNING_GOAL.NAME);
                     boolean edit = data.getGameAccess().get(id).edit();
-                    table.addRow(id, false, edit, admin, game, version, mission, name);
+                    table.addRow(id, false, edit, admin, game, version, mission, code, name);
                     break;
                 }
             }
@@ -155,6 +156,7 @@ public class TableLearningGoal
                     .setHidden().setReadOnly());
             form.addEntry(new FormEntryString("Game Mission", "game_mission").setReadOnly()
                     .setInitialValue(gameMission.getName(), gameMission.getName()));
+            form.addEntry(new TableEntryString(Tables.LEARNING_GOAL.CODE, learningGoal).setMinLength(2));
             form.addEntry(new TableEntryString(Tables.LEARNING_GOAL.NAME, learningGoal).setMinLength(2));
             form.addEntry(new TableEntryText(Tables.LEARNING_GOAL.DESCRIPTION, learningGoal));
             form.endForm();

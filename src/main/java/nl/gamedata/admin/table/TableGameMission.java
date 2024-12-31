@@ -14,6 +14,7 @@ import nl.gamedata.admin.form.FormEntryString;
 import nl.gamedata.admin.form.WebForm;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
+import nl.gamedata.admin.form.table.TableEntryText;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
@@ -37,7 +38,7 @@ public class TableGameMission
         AdminTable table = new AdminTable(data, "Game Mission", "Game");
         boolean adminAccess = data.isSuperAdmin() || data.isGameAdmin();
         table.setNewButton(adminAccess);
-        table.setHeader("Game", "Version", "Mission");
+        table.setHeader("Game", "Version", "Mission", "Name");
         List<Record> gmList = data.getDSL()
                 .selectFrom(Tables.GAME_MISSION.join(Tables.GAME_VERSION)
                         .on(Tables.GAME_MISSION.GAME_VERSION_ID.eq(Tables.GAME_VERSION.ID)).join(Tables.GAME)
@@ -53,8 +54,9 @@ public class TableGameMission
                     int id = gm.getValue(Tables.GAME_MISSION.ID);
                     String game = gm.getValue(Tables.GAME.CODE);
                     String version = gm.getValue(Tables.GAME_VERSION.NAME);
-                    String mission = gm.getValue(Tables.GAME_MISSION.NAME);
-                    table.addRow(id, true, editAccess, adminAccess, game, version, mission);
+                    String mission = gm.getValue(Tables.GAME_MISSION.CODE);
+                    String name = gm.getValue(Tables.GAME_MISSION.NAME);
+                    table.addRow(id, true, editAccess, adminAccess, game, version, mission, name);
                     break;
                 }
             }
@@ -99,7 +101,9 @@ public class TableGameMission
             form.addEntry(new FormEntryString("Game", "game").setReadOnly().setInitialValue(game.getCode(), game.getCode()));
             form.addEntry(new TableEntryPickRecord(Tables.GAME_MISSION.GAME_VERSION_ID, gameMission)
                     .setPickTable(data, data.getGameVersionPicklist(gameId, Access.EDIT)).setLabel("Game Version"));
+            form.addEntry(new TableEntryString(Tables.GAME_MISSION.CODE, gameMission).setMinLength(2));
             form.addEntry(new TableEntryString(Tables.GAME_MISSION.NAME, gameMission).setMinLength(2));
+            form.addEntry(new TableEntryText(Tables.GAME_MISSION.DESCRIPTION, gameMission));
             form.endForm();
             data.setContent(form.process());
             return;

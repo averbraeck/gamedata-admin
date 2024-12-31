@@ -15,6 +15,7 @@ import nl.gamedata.admin.form.WebForm;
 import nl.gamedata.admin.form.table.TableEntryInt;
 import nl.gamedata.admin.form.table.TableEntryPickRecord;
 import nl.gamedata.admin.form.table.TableEntryString;
+import nl.gamedata.admin.form.table.TableEntryText;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.SqlUtils;
@@ -60,12 +61,12 @@ public class TablePlayerObjective
                     String version = po.getValue(Tables.GAME_VERSION.NAME);
                     String mission = po.getValue(Tables.GAME_MISSION.NAME);
                     String learningGoal = po.getValue(Tables.LEARNING_GOAL.NAME);
-                    String name = po.getValue(Tables.PLAYER_OBJECTIVE.NAME);
+                    String code = po.getValue(Tables.PLAYER_OBJECTIVE.CODE);
                     ScaleRecord scale =
                             SqlUtils.readRecordFromId(data, Tables.SCALE, po.getValue(Tables.PLAYER_OBJECTIVE.SCALE_ID));
                     String threshold = po.getValue(Tables.PLAYER_OBJECTIVE.THRESHOLD);
                     boolean edit = data.getGameAccess().get(id).edit();
-                    table.addRow(id, false, edit, admin, game, version, mission, learningGoal, name, scale.getType(),
+                    table.addRow(id, false, edit, admin, game, version, mission, learningGoal, code, scale.getType(),
                             threshold);
                     break;
                 }
@@ -201,7 +202,9 @@ public class TablePlayerObjective
                     .setInitialValue(learningGoalId).setHidden().setReadOnly());
             form.addEntry(new FormEntryString("Learning Goal", "learning_goal").setReadOnly()
                     .setInitialValue(learningGoal.getName(), learningGoal.getName()));
+            form.addEntry(new TableEntryString(Tables.PLAYER_OBJECTIVE.CODE, playerObjective).setMinLength(2));
             form.addEntry(new TableEntryString(Tables.PLAYER_OBJECTIVE.NAME, playerObjective).setMinLength(2));
+            form.addEntry(new TableEntryText(Tables.PLAYER_OBJECTIVE.DESCRIPTION, playerObjective));
             form.addEntry(new TableEntryPickRecord(Tables.PLAYER_OBJECTIVE.SCALE_ID, playerObjective).setPickTable(data,
                     Tables.SCALE, Tables.SCALE.ID, Tables.SCALE.TYPE, Tables.SCALE.GAME_ID.eq(gameId)));
             form.addEntry(new TableEntryString(Tables.PLAYER_OBJECTIVE.THRESHOLD, playerObjective));
