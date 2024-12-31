@@ -39,11 +39,11 @@ public class TableGroupPlayer
             {
                 List<Record> prList = data.getDSL()
                         .selectFrom(
-                                Tables.PLAYER.join(Tables.GROUP_ROLE).on(Tables.PLAYER.GROUP_ROLE_ID.eq(Tables.GROUP_ROLE.ID)))
+                                Tables.PLAYER.join(Tables.GROUP_ROLE).on(Tables.GROUP_ROLE.PLAYER_ID.eq(Tables.PLAYER.ID)))
                         .where(Tables.GROUP_ROLE.GROUP_ID.eq(group.getId())).fetch();
                 for (var pr : prList)
                 {
-                    table.addRow(pr.getValue(Tables.PLAYER.ID), false, false, false, gameSession.getName(), group.getName(),
+                    table.addRow(pr.getValue(Tables.GROUP_ROLE.ID), false, false, false, gameSession.getName(), group.getName(),
                             pr.getValue(Tables.PLAYER.NAME), pr.getValue(Tables.GROUP_ROLE.NAME));
                 }
             }
@@ -53,11 +53,11 @@ public class TableGroupPlayer
 
     public static void view(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
-        var player = SqlUtils.readRecordFromId(data, Tables.PLAYER, recordId);
-        var groupRole = SqlUtils.readRecordFromId(data, Tables.GROUP_ROLE, player.getGroupRoleId());
+        var groupRole = SqlUtils.readRecordFromId(data, Tables.GROUP_ROLE, recordId);
+        var player = SqlUtils.readRecordFromId(data, Tables.PLAYER, groupRole.getPlayerId());
         var group = SqlUtils.readRecordFromId(data, Tables.GROUP, groupRole.getGroupId());
         var gameSession = SqlUtils.readRecordFromId(data, Tables.GAME_SESSION, group.getGameSessionId());
-        data.setEditRecord(group);
+        data.setEditRecord(groupRole);
         WebForm form = new WebForm(data);
         form.startForm();
         form.setHeader("Group");
