@@ -23,11 +23,11 @@ import nl.gamedata.data.tables.records.GroupRecord;
  * </p>
  * @author <a href="https://github.com/averbraeck">Alexander Verbraeck</a>
  */
-public class TableGroupPlayer
+public class TableGroupRole
 {
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
-        AdminTable table = new AdminTable(data, "Group Players", "Session");
+        AdminTable table = new AdminTable(data, "Group Roles for Players", "Session");
         table.setNewButton(data.isSuperAdmin() || data.hasGameSessionAccess(Access.VIEW));
         table.setHeader("Session", "Group Name", "Player", "Role");
         for (var gameSessionId : data.getGameSessionAccess(Access.VIEW))
@@ -60,7 +60,7 @@ public class TableGroupPlayer
         data.setEditRecord(groupRole);
         WebForm form = new WebForm(data);
         form.startForm();
-        form.setHeader("Group");
+        form.setHeader("Group Role for Player");
         form.addEntry(new FormEntryString("Game Session", "game_session").setReadOnly().setInitialValue(gameSession.getName()));
         form.addEntry(new FormEntryString("Player Name", "player_name").setReadOnly().setInitialValue(player.getName()));
         form.addEntry(
