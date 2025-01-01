@@ -69,7 +69,7 @@ public class AdminServlet extends HttpServlet
             handleRecordEdit(request, response, click, data, recordId);
         else if (click.equals("record-save"))
             handleRecordSave(request, response, click, data, recordId);
-        else if (click.equals("record-cancel"))
+        else if (click.equals("record-cancel") || click.equals("record-ok"))
             handleRecordCancel(request, response, click, data, recordId);
         else if (click.equals("record-delete"))
             handleRecordDelete(request, response, click, data, recordId);

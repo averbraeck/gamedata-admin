@@ -15,6 +15,7 @@ import nl.gamedata.admin.table.TableDashboardElement;
 import nl.gamedata.admin.table.TableDashboardLayout;
 import nl.gamedata.admin.table.TableDashboardRole;
 import nl.gamedata.admin.table.TableElementProperty;
+import nl.gamedata.admin.table.TableErrors;
 import nl.gamedata.admin.table.TableGame;
 import nl.gamedata.admin.table.TableGameMission;
 import nl.gamedata.admin.table.TableGameRole;
@@ -163,7 +164,7 @@ public class Menus
                 new Tab("game-version", "Game Version", true, Set.of(0, 4), TableGameVersion::table, TableGameVersion::edit));
         dataSessionTabs.add(
                 new Tab("game-session", "Game Session", true, Set.of(0, 4), TableGameSession::table, TableGameSession::edit));
-        gameTabs.add(
+        dataSessionTabs.add(
                 new Tab("game-mission", "Game Mission", true, Set.of(0, 1), TableGameMission::table, TableGameMission::edit));
         dataSessionTabs.add(new Tab("mission-event", "Mission Event", false, Set.of(0, 4), TableMissionEvent::table,
                 TableMissionEvent::view));
@@ -183,8 +184,8 @@ public class Menus
                 new Tab("player-score", "Player Score", false, Set.of(0, 4), TablePlayerScore::table, TablePlayerScore::view));
         dataPlayerTabs.add(
                 new Tab("player-event", "Player Event", false, Set.of(0, 4), TablePlayerEvent::table, TablePlayerEvent::view));
-        dataPlayerTabs.add(new Tab("player-group-role", "Group Role", false, Set.of(0, 4), TableGroupRole::table,
-                TableGroupRole::view));
+        dataPlayerTabs.add(
+                new Tab("player-group-role", "Group Role", false, Set.of(0, 4), TableGroupRole::table, TableGroupRole::view));
 
         menuList.add("data-group");
         List<Tab> dataGroupTabs = new ArrayList<>();
@@ -195,14 +196,19 @@ public class Menus
         dataGroupTabs.add(
                 new Tab("game-session", "Game Session", true, Set.of(0, 4), TableGameSession::table, TableGameSession::edit));
         dataGroupTabs.add(new Tab("group", "Group", true, Set.of(0, 4), TableGroup::table, TableGroup::view));
-        dataGroupTabs.add(
-                new Tab("group-player", "Group Player", false, Set.of(0, 4), TableGroupRole::table, TableGroupRole::view));
+        dataGroupTabs
+                .add(new Tab("group-player", "Group Player", false, Set.of(0, 4), TableGroupRole::table, TableGroupRole::view));
         dataGroupTabs.add(new Tab("group-attempt", "Group Attempt", true, Set.of(0, 4), TableGroupAttempt::table,
                 TableGroupAttempt::view));
         dataGroupTabs
                 .add(new Tab("group-score", "Group Score", false, Set.of(0, 4), TableGroupScore::table, TableGroupScore::view));
         dataGroupTabs
                 .add(new Tab("group-event", "Group Event", false, Set.of(0, 4), TableGroupEvent::table, TableGroupEvent::view));
+
+        menuList.add("errors");
+        List<Tab> errorsTabs = new ArrayList<>();
+        menuMap.put("errors", new Menu("fa-triangle-exclamation", "errors", "Errors", errorsTabs, Set.of(0, 1, 2)));
+        errorsTabs.add(new Tab("last-100", "Last 100", false, Set.of(0, 1, 2), TableErrors::table100, TableErrors::view));
 
         menuList.add("settings");
         menuMap.put("settings",
@@ -292,12 +298,12 @@ public class Menus
         data.putTabChoice("game-control", "game");
         data.putTabChoice("game-session", "game");
         data.putTabChoice("layout", "dashboard-layout");
-        data.putTabChoice("dashboard", "dashboard-template");
+        data.putTabChoice("dashboard", "game");
         data.putTabChoice("data-session", "game");
         data.putTabChoice("data-player", "game");
         data.putTabChoice("data-group", "game");
+        data.putTabChoice("errors", "last-100");
         data.putTabChoice("settings", "");
-
     }
 
     public static record Menu(String icon, String menuChoice, String menuText, List<Tab> tabs, Set<Integer> access)
