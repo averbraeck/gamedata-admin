@@ -26,7 +26,7 @@ public class TableGroup
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Group", "Session");
-        table.setNewButton(data.isSuperAdmin() || data.hasGameSessionAccess(Access.VIEW));
+        table.setNewButton(false);
         table.setHeader("Session", "Group Name", "Display Name");
         for (var gameSessionId : data.getGameSessionAccess(Access.VIEW))
         {

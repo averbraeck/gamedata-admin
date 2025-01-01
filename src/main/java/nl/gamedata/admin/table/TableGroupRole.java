@@ -28,7 +28,7 @@ public class TableGroupRole
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Group Roles for Players", "Session");
-        table.setNewButton(data.isSuperAdmin() || data.hasGameSessionAccess(Access.VIEW));
+        table.setNewButton(false);
         table.setHeader("Session", "Group Name", "Player", "Role");
         for (var gameSessionId : data.getGameSessionAccess(Access.VIEW))
         {
