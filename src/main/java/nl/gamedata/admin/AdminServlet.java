@@ -68,11 +68,17 @@ public class AdminServlet extends HttpServlet
         else if (click.equals("record-new") || click.equals("record-view") || click.equals("record-edit"))
             handleRecordEdit(request, response, click, data, recordId);
         else if (click.equals("record-save"))
+        {
             handleRecordSave(request, response, click, data, recordId);
+            data.resetRoles();
+        }
         else if (click.equals("record-cancel"))
             handleRecordCancel(request, response, click, data, recordId);
         else if (click.equals("record-delete"))
+        {
             handleRecordDelete(request, response, click, data, recordId);
+            data.resetRoles();
+        }
         else if (click.startsWith("az"))
             handleSort(request, response, click, data, recordId);
         else
