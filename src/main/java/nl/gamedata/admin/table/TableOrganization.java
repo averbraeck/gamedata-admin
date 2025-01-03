@@ -59,7 +59,8 @@ public class TableOrganization
         form.setHeader("Organization", click, recordId);
         form.addEntry(new TableEntryString(Tables.ORGANIZATION.CODE, organization).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.ORGANIZATION.NAME, organization).setMinLength(2));
-        form.addEntry(new TableEntryImage(Tables.ORGANIZATION.LOGO, organization));
+        form.addEntry(new TableEntryImage(Tables.ORGANIZATION.LOGO, organization).setImageRecordId(recordId)
+                .setImageServlet("imageOrganization"));
         form.endForm();
         data.setContent(form.process());
     }
