@@ -52,7 +52,7 @@ public class TableGame
         form.addEntry(new TableEntryText(Tables.GAME.DESCRIPTION, game));
         form.addEntry(new TableEntryBoolean(Tables.GAME.TOKEN_FORCED, game).setLabel("Token forced?"));
         form.addEntry(new TableEntryBoolean(Tables.GAME.ARCHIVED, game).setLabel("Archived?"));
-        form.addEntry(new TableEntryImage(Tables.GAME.LOGO, game));
+        form.addEntry(new TableEntryImage(Tables.GAME.LOGO, game).setImageRecordId(recordId).setImageServlet("imageGame"));
         form.endForm();
         data.setContent(form.process());
     }
