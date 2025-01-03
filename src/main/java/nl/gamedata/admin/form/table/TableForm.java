@@ -255,4 +255,60 @@ public class TableForm extends WebForm
         return errors;
     }
 
+    public boolean checkFieldsChanged(final Record record, final HttpServletRequest request, final AdminData data)
+    {
+        try
+        {
+            for (AbstractFormEntry<?, ?> entry : this.entries)
+            {
+                if (entry instanceof TableEntryImage)
+                {
+                    // changed if image deleted
+                    TableEntryImage imageEntry = (TableEntryImage) entry;
+                    Part filePart = request.getPart(imageEntry.getTableField().getName());
+                    String reset = request.getParameter(imageEntry.getTableField().getName() + "_reset");
+                    boolean delete = reset != null && reset.equals("delete");
+                    if (delete)
+                        return true;
+                    else if (filePart != null && filePart.getSubmittedFileName() != null
+                            && filePart.getSubmittedFileName().length() > 0)
+                        return true;
+                }
+                else if (entry instanceof AbstractTableEntry)
+                {
+                    AbstractTableEntry<?, ?> tableEntry = (AbstractTableEntry<?, ?>) entry;
+                    String value = request.getParameter(tableEntry.getTableField().getName());
+                    if (tableEntry.getTableField().getDataType().nullable())
+                    {
+                        var nullValue = request.getParameter(tableEntry.getTableField().getName() + "-null");
+                        if (nullValue != null)
+                        {
+                            if (nullValue.equals("on") || nullValue.equals("null"))
+                            {
+                                if (record.get(tableEntry.getTableField()) != null)
+                                    return true;
+                            }
+                        }
+                    }
+                    if (value != null && !value.equals(tableEntry.getLastEnteredValue()))
+                    {
+                        if (entry instanceof TableEntryText)
+                        {
+                            return !value.replaceAll("[\\n\\r]", "")
+                                    .equals(tableEntry.getLastEnteredValue().replaceAll("[\\n\\r]", ""));
+                        }
+                        else
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error during check for change: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

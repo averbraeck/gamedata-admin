@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.jooq.Record;
 import org.jooq.Table;
-import org.jooq.TableRecord;
 import org.jooq.UpdatableRecord;
 
 import nl.gamedata.admin.form.WebForm;
@@ -95,7 +94,7 @@ public class AdminData extends CommonData
     }
 
     /** A filter choice (record and display name), used in the filtering of records in the navbar. */
-    public record FilterChoice(TableRecord<?> record, String name)
+    public record FilterChoice(int recordId, String name)
     {
     }
 
@@ -932,9 +931,9 @@ public class AdminData extends CommonData
         return this.tabFilterChoices.get(this.menuChoice + "#" + tabChoice);
     }
 
-    public void setTabFilterChoice(final String tabChoice, final TableRecord<?> record, final String displayName)
+    public void setTabFilterChoice(final String tabChoice, final int recordId, final String displayName)
     {
-        this.tabFilterChoices.put(this.menuChoice + "#" + tabChoice, new FilterChoice(record, displayName));
+        this.tabFilterChoices.put(this.menuChoice + "#" + tabChoice, new FilterChoice(recordId, displayName));
     }
 
     public void clearTabFilterChoice(final String tabChoice)
