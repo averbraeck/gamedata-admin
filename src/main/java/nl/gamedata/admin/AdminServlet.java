@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jooq.Record;
+
+import nl.gamedata.admin.Menus.Tab;
+import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.admin.table.TableUser;
 
 @WebServlet("/admin")
@@ -73,6 +77,10 @@ public class AdminServlet extends HttpServlet
             handleRecordCancel(request, response, click, data, recordId);
         else if (click.equals("record-delete"))
             handleRecordDelete(request, response, click, data, recordId);
+        else if (click.equals("record-select"))
+            handleRecordSelect(request, response, click, data, recordId);
+        else if (click.startsWith("close-"))
+            handleCloseSelect(request, response, click, data, recordId);
         else if (click.startsWith("az"))
             handleSort(request, response, click, data, recordId);
         else
@@ -143,10 +151,18 @@ public class AdminServlet extends HttpServlet
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD CANCEL: " + click + " with recordId: " + recordId);
-
-        // TODO: check for changes -> continue edit/discard
-
-        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        if (((TableForm) data.getEditForm()).checkFieldsChanged(data.getEditRecord(), request, data))
+        {
+            String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+            String reEditMethod = "clickMenu('recordReEdit')";
+            ModalWindowUtils.make2ButtonModalWindow(data, "Data has changed",
+                    "Data has changed. Do you want to continue editing or cancel without saving?", "Edit", reEditMethod,
+                    "Cancel", cancelMethod, cancelMethod);
+        }
+        else
+        {
+            handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        }
     }
 
     private void handleRecordDelete(final HttpServletRequest request, final HttpServletResponse response, final String click,
@@ -157,6 +173,28 @@ public class AdminServlet extends HttpServlet
         // TODO: check for ok -> delete/cancel
 
         data.resetRoles();
+        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+    }
+
+    private void handleRecordSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,
+            final AdminData data, final int recordId) throws IOException
+    {
+        System.err.println("RECORD SELECT: " + click + " with recordId: " + recordId);
+        var dslContext = data.getDSL();
+        Tab tab = Menus.getActiveTab(data);
+        String table = tab.tableName();
+        Record tableRecord = dslContext.selectFrom(table).where("id=" + recordId).fetchAny();
+        String displayValue = tableRecord.get(tab.selectField()).toString();
+        data.setTabFilterChoice(data.getTabChoice(data.getMenuChoice()), recordId, displayValue);
+        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+    }
+
+    private void handleCloseSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,
+            final AdminData data, final int recordId) throws IOException
+    {
+        System.err.println("CLOSE SELECT: " + click);
+        String tabName = click.substring(6);
+        data.clearTabFilterChoice(tabName);
         handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
     }
 

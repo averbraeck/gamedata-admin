@@ -66,149 +66,150 @@ public class Menus
         menuList.add("organization");
         List<Tab> organizationTabs = new ArrayList<>();
         menuMap.put("organization", new Menu("fa-sitemap", "organization", "Organization", organizationTabs, Set.of(0, 2)));
-        organizationTabs.add(
-                new Tab("organization", "Organization", true, Set.of(0, 2), TableOrganization::table, TableOrganization::edit));
-        organizationTabs.add(new Tab("user", "User", true, Set.of(0, 2), TableUser::table, TableUser::edit));
-        organizationTabs.add(new Tab("user-role", "User Role", false, Set.of(0, 2), TableOrganizationRole::table,
-                TableOrganizationRole::edit));
-        organizationTabs.add(new Tab("game", "Game", true, Set.of(0, 2), TableGame::table, TableGame::edit));
-        organizationTabs.add(new Tab("organization-game", "Game Access", false, Set.of(0, 2), TableOrganizationGame::table,
-                TableOrganizationGame::edit));
-        organizationTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 2), TableOrganizationGameToken::table,
-                TableOrganizationGameToken::edit));
-        organizationTabs.add(
-                new Tab("game-session", "Game Session", false, Set.of(0, 2), TableGameSession::table, TableGameSession::edit));
+        organizationTabs.add(new Tab("organization", "Organization", "organization", "code", Set.of(0, 2),
+                TableOrganization::table, TableOrganization::edit));
+        organizationTabs.add(new Tab("user", "User", "user", "name", Set.of(0, 2), TableUser::table, TableUser::edit));
+        organizationTabs.add(new Tab("user-role", "User Role", "organization_role", null, Set.of(0, 2),
+                TableOrganizationRole::table, TableOrganizationRole::edit));
+        organizationTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 2), TableGame::table, TableGame::edit));
+        organizationTabs.add(new Tab("organization-game", "Game Access", "organization_game", null, Set.of(0, 2),
+                TableOrganizationGame::table, TableOrganizationGame::edit));
+        organizationTabs.add(new Tab("org-game-token", "Access Token", "organization_game_token", null, Set.of(0, 2),
+                TableOrganizationGameToken::table, TableOrganizationGameToken::edit));
+        organizationTabs.add(new Tab("game-session", "Game Session", "game_session", null, Set.of(0, 2),
+                TableGameSession::table, TableGameSession::edit));
 
         menuList.add("user");
         List<Tab> userTabs = new ArrayList<>();
         menuMap.put("user", new Menu("fa-user", "user", "User", userTabs, Set.of(0, 1, 2)));
-        userTabs.add(new Tab("user", "User", true, Set.of(0, 1, 2), TableUser::table, TableUser::edit));
-        userTabs.add(new Tab("game", "Game", true, Set.of(0, 1), TableGame::table, TableGame::edit));
-        userTabs.add(new Tab("organization-role", "Organization Role", false, Set.of(0, 2), TableOrganizationRole::table,
-                TableOrganizationRole::edit));
-        userTabs.add(new Tab("game-role", "Game Role", false, Set.of(0, 1), TableGameRole::table, TableGameRole::edit));
-        userTabs.add(new Tab("org-game-role", "Org-Game Role", false, Set.of(0, 2), TableOrganizationGameRole::table,
-                TableOrganizationGameRole::edit));
-        userTabs.add(new Tab("game-session-role", "Game Session Role", false, Set.of(0, 2), TableGameSessionRole::table,
-                TableGameSessionRole::edit));
-        userTabs.add(new Tab("dashboard-role", "Dashboard Role", false, Set.of(0, 1, 2), TableDashboardRole::table,
-                TableDashboardRole::edit));
+        userTabs.add(new Tab("user", "User", "user", "name", Set.of(0, 1, 2), TableUser::table, TableUser::edit));
+        userTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 1), TableGame::table, TableGame::edit));
+        userTabs.add(new Tab("organization-role", "Organization Role", "organization_role", null, Set.of(0, 2),
+                TableOrganizationRole::table, TableOrganizationRole::edit));
+        userTabs.add(
+                new Tab("game-role", "Game Role", "game_role", null, Set.of(0, 1), TableGameRole::table, TableGameRole::edit));
+        userTabs.add(new Tab("org-game-role", "Org-Game Role", "organization_game_role", null, Set.of(0, 2),
+                TableOrganizationGameRole::table, TableOrganizationGameRole::edit));
+        userTabs.add(new Tab("game-session-role", "Game Session Role", "game_session_role", null, Set.of(0, 2),
+                TableGameSessionRole::table, TableGameSessionRole::edit));
+        userTabs.add(new Tab("dashboard-role", "Dashboard Role", "dashboard_role", null, Set.of(0, 1, 2),
+                TableDashboardRole::table, TableDashboardRole::edit));
 
         menuList.add("game");
         List<Tab> gameTabs = new ArrayList<>();
         menuMap.put("game", new Menu("fa-dice", "game", "Game", gameTabs, Set.of(0, 1)));
-        gameTabs.add(new Tab("game", "Game", true, Set.of(0, 1), TableGame::table, TableGame::edit));
-        gameTabs.add(
-                new Tab("game-version", "Game Version", true, Set.of(0, 1), TableGameVersion::table, TableGameVersion::edit));
-        gameTabs.add(
-                new Tab("game-mission", "Game Mission", true, Set.of(0, 1), TableGameMission::table, TableGameMission::edit));
-        gameTabs.add(new Tab("scale", "Scale", false, Set.of(0, 1), TableScale::table, TableScale::edit));
-        gameTabs.add(new Tab("learning-goal", "Learning Goal", true, Set.of(0, 1), TableLearningGoal::table,
+        gameTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 1), TableGame::table, TableGame::edit));
+        gameTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 1), TableGameVersion::table,
+                TableGameVersion::edit));
+        gameTabs.add(new Tab("game-mission", "Game Mission", "game_mission", "code", Set.of(0, 1), TableGameMission::table,
+                TableGameMission::edit));
+        gameTabs.add(new Tab("scale", "Scale", "scale", null, Set.of(0, 1), TableScale::table, TableScale::edit));
+        gameTabs.add(new Tab("learning-goal", "Learning Goal", "learning_goal", "code", Set.of(0, 1), TableLearningGoal::table,
                 TableLearningGoal::edit));
-        gameTabs.add(new Tab("player-objective", "Player Objective", false, Set.of(0, 1), TablePlayerObjective::table,
-                TablePlayerObjective::edit));
-        gameTabs.add(new Tab("group-objective", "Group Objective", false, Set.of(0, 1), TableGroupObjective::table,
-                TableGroupObjective::edit));
+        gameTabs.add(new Tab("player-objective", "Player Objective", "player_objective", null, Set.of(0, 1),
+                TablePlayerObjective::table, TablePlayerObjective::edit));
+        gameTabs.add(new Tab("group-objective", "Group Objective", "group_objective", null, Set.of(0, 1),
+                TableGroupObjective::table, TableGroupObjective::edit));
 
         menuList.add("game-control");
         List<Tab> gameControlTabs = new ArrayList<>();
         menuMap.put("game-control",
                 new Menu("fa-square-binary", "game-control", "Game Control", gameControlTabs, Set.of(0, 3)));
-        gameControlTabs.add(new Tab("game", "Game", true, Set.of(0, 3), TableGame::table, TableGame::edit));
-        gameControlTabs.add(
-                new Tab("organization", "Organization", true, Set.of(0, 3), TableOrganization::table, TableOrganization::edit));
-        gameControlTabs.add(new Tab("organization-game", "Game Access", true, Set.of(0, 3), TableOrganizationGame::table,
-                TableOrganizationGame::edit));
-        gameControlTabs.add(new Tab("org-game-token", "Access Token", false, Set.of(0, 3), TableOrganizationGameToken::table,
-                TableOrganizationGameToken::edit));
+        gameControlTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 3), TableGame::table, TableGame::edit));
+        gameControlTabs.add(new Tab("organization", "Organization", "organization", "code", Set.of(0, 3),
+                TableOrganization::table, TableOrganization::edit));
+        gameControlTabs.add(new Tab("organization-game", "Game Access", "organization_game", null, Set.of(0, 3),
+                TableOrganizationGame::table, TableOrganizationGame::edit));
+        gameControlTabs.add(new Tab("org-game-token", "Access Token", "organization_game_token", null, Set.of(0, 3),
+                TableOrganizationGameToken::table, TableOrganizationGameToken::edit));
 
         menuList.add("game-session");
         List<Tab> gameSessionTabs = new ArrayList<>();
         menuMap.put("game-session",
                 new Menu("fa-calendar-check", "game-session", "Game Session", gameSessionTabs, Set.of(0, 4)));
-        gameSessionTabs.add(new Tab("game", "Game", true, Set.of(0, 4), TableGame::table, TableGame::edit));
-        gameSessionTabs.add(
-                new Tab("game-version", "Game Version", true, Set.of(0, 4), TableGameVersion::table, TableGameVersion::edit));
-        gameSessionTabs.add(
-                new Tab("game-session", "Game Session", true, Set.of(0, 4), TableGameSession::table, TableGameSession::edit));
-        // gameSessionTabs.add(new Tab("session-dashboard", "Session Dashboard", false, Set.of(0, 4)));
+        gameSessionTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
+        gameSessionTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 4),
+                TableGameVersion::table, TableGameVersion::edit));
+        gameSessionTabs.add(new Tab("game-session", "Game Session", "game_version", "code", Set.of(0, 4),
+                TableGameSession::table, TableGameSession::edit));
+        // gameSessionTabs.add(new Tab("session-dashboard", "Session Dashboard", null, Set.of(0, 4)));
 
         menuList.add("layout");
         List<Tab> layoutTabs = new ArrayList<>();
         menuMap.put("layout", new Menu("fa-display", "layout", "Layout", layoutTabs, Set.of(0)));
-        layoutTabs.add(new Tab("dashboard-layout", "Dashboard Layout", true, Set.of(0), TableDashboardLayout::table,
-                TableDashboardLayout::edit));
-        layoutTabs.add(new Tab("dashboard-element", "Dashboard Element", true, Set.of(0), TableDashboardElement::table,
-                TableDashboardElement::edit));
-        layoutTabs.add(new Tab("element-property", "Element Property", true, Set.of(0), TableElementProperty::table,
-                TableElementProperty::edit));
+        layoutTabs.add(new Tab("dashboard-layout", "Dashboard Layout", "dashboard_layout", "code", Set.of(0),
+                TableDashboardLayout::table, TableDashboardLayout::edit));
+        layoutTabs.add(new Tab("dashboard-element", "Dashboard Element", "dashboard_element", "code", Set.of(0),
+                TableDashboardElement::table, TableDashboardElement::edit));
+        layoutTabs.add(new Tab("element-property", "Element Property", "element_property", "code", Set.of(0),
+                TableElementProperty::table, TableElementProperty::edit));
 
         menuList.add("dashboard");
         List<Tab> dashboardTabs = new ArrayList<>();
         menuMap.put("dashboard", new Menu("fa-table-cells-large", "dashboard", "Dashboard", dashboardTabs, Set.of(0, 5)));
-        dashboardTabs.add(new Tab("game", "Game", true, Set.of(0, 5), TableGame::table, TableGame::edit));
-        dashboardTabs.add(
-                new Tab("game-version", "Game Version", true, Set.of(0, 5), TableGameVersion::table, TableGameVersion::edit));
-        // dashboardTabs.add(new Tab("dashboard-template", "Dashboard Template", true, Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("template-element", "Template Element", true, Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("property-value", "Property Value", false, Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("dashboard", "Dashboard", true, Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("session-dashboard", "Session Dashboard", false, Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("dashboard-token", "Dashboard Token", false, Set.of(0, 5)));
+        dashboardTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 5), TableGame::table, TableGame::edit));
+        dashboardTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 5), TableGameVersion::table,
+                TableGameVersion::edit));
+        // dashboardTabs.add(new Tab("dashboard-template", "Dashboard Template", "code", Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("template-element", "Template Element", null, Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("property-value", "Property Value", null, Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("dashboard", "Dashboard", "name", Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("session-dashboard", "Session Dashboard", null, Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("dashboard-token", "Dashboard Token", null, Set.of(0, 5)));
 
         menuList.add("data-session");
         List<Tab> dataSessionTabs = new ArrayList<>();
         menuMap.put("data-session", new Menu("fa-chart-pie", "data-session", "Data Session", dataSessionTabs, Set.of(0, 4)));
-        dataSessionTabs.add(new Tab("game", "Game", true, Set.of(0, 4), TableGame::table, TableGame::edit));
-        dataSessionTabs.add(
-                new Tab("game-version", "Game Version", true, Set.of(0, 4), TableGameVersion::table, TableGameVersion::edit));
-        dataSessionTabs.add(
-                new Tab("game-session", "Game Session", true, Set.of(0, 4), TableGameSession::table, TableGameSession::edit));
-        dataSessionTabs.add(
-                new Tab("game-mission", "Game Mission", true, Set.of(0, 1), TableGameMission::table, TableGameMission::edit));
-        dataSessionTabs.add(new Tab("mission-event", "Mission Event", false, Set.of(0, 4), TableMissionEvent::table,
-                TableMissionEvent::view));
+        dataSessionTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
+        dataSessionTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 4),
+                TableGameVersion::table, TableGameVersion::edit));
+        dataSessionTabs.add(new Tab("game-session", "Game Session", "game_version", "code", Set.of(0, 4),
+                TableGameSession::table, TableGameSession::edit));
+        dataSessionTabs.add(new Tab("game-mission", "Game Mission", "game_mission", "code", Set.of(0, 1),
+                TableGameMission::table, TableGameMission::edit));
+        dataSessionTabs.add(new Tab("mission-event", "Mission Event", "mission_event", null, Set.of(0, 4),
+                TableMissionEvent::table, TableMissionEvent::view));
 
         menuList.add("data-player");
         List<Tab> dataPlayerTabs = new ArrayList<>();
         menuMap.put("data-player", new Menu("fa-chart-line", "data-player", "Data Player", dataPlayerTabs, Set.of(0, 4)));
-        dataPlayerTabs.add(new Tab("game", "Game", true, Set.of(0, 4), TableGame::table, TableGame::edit));
-        dataPlayerTabs.add(
-                new Tab("game-version", "Game Version", true, Set.of(0, 4), TableGameVersion::table, TableGameVersion::edit));
-        dataPlayerTabs.add(
-                new Tab("game-session", "Game Session", true, Set.of(0, 4), TableGameSession::table, TableGameSession::edit));
-        dataPlayerTabs.add(new Tab("player", "Player", true, Set.of(0, 4), TablePlayer::table, TablePlayer::view));
-        dataPlayerTabs.add(new Tab("player-attempt", "Player Attempt", true, Set.of(0, 4), TablePlayerAttempt::table,
-                TablePlayerAttempt::view));
-        dataPlayerTabs.add(
-                new Tab("player-score", "Player Score", false, Set.of(0, 4), TablePlayerScore::table, TablePlayerScore::view));
-        dataPlayerTabs.add(
-                new Tab("player-event", "Player Event", false, Set.of(0, 4), TablePlayerEvent::table, TablePlayerEvent::view));
-        dataPlayerTabs.add(
-                new Tab("player-group-role", "Group Role", false, Set.of(0, 4), TableGroupRole::table, TableGroupRole::view));
+        dataPlayerTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
+        dataPlayerTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 4),
+                TableGameVersion::table, TableGameVersion::edit));
+        dataPlayerTabs.add(new Tab("game-session", "Game Session", "game_version", "code", Set.of(0, 4),
+                TableGameSession::table, TableGameSession::edit));
+        dataPlayerTabs.add(new Tab("player", "Player", "player", "name", Set.of(0, 4), TablePlayer::table, TablePlayer::view));
+        dataPlayerTabs.add(new Tab("player-attempt", "Player_Attempt", "player_attempt", null, Set.of(0, 4),
+                TablePlayerAttempt::table, TablePlayerAttempt::view));
+        dataPlayerTabs.add(new Tab("player-score", "Player Score", "player_score", null, Set.of(0, 4), TablePlayerScore::table,
+                TablePlayerScore::view));
+        dataPlayerTabs.add(new Tab("player-event", "Player Event", "player_event", null, Set.of(0, 4), TablePlayerEvent::table,
+                TablePlayerEvent::view));
+        dataPlayerTabs.add(new Tab("player-group-role", "Group Role", "group_role", null, Set.of(0, 4), TableGroupRole::table,
+                TableGroupRole::view));
 
         menuList.add("data-group");
         List<Tab> dataGroupTabs = new ArrayList<>();
         menuMap.put("data-group", new Menu("fa-chart-simple", "data-group", "Data Group", dataGroupTabs, Set.of(0, 4)));
-        dataGroupTabs.add(new Tab("game", "Game", true, Set.of(0, 4), TableGame::table, TableGame::edit));
-        dataGroupTabs.add(
-                new Tab("game-version", "Game Version", true, Set.of(0, 4), TableGameVersion::table, TableGameVersion::edit));
-        dataGroupTabs.add(
-                new Tab("game-session", "Game Session", true, Set.of(0, 4), TableGameSession::table, TableGameSession::edit));
-        dataGroupTabs.add(new Tab("group", "Group", true, Set.of(0, 4), TableGroup::table, TableGroup::view));
-        dataGroupTabs
-                .add(new Tab("group-player", "Group Player", false, Set.of(0, 4), TableGroupRole::table, TableGroupRole::view));
-        dataGroupTabs.add(new Tab("group-attempt", "Group Attempt", true, Set.of(0, 4), TableGroupAttempt::table,
-                TableGroupAttempt::view));
-        dataGroupTabs
-                .add(new Tab("group-score", "Group Score", false, Set.of(0, 4), TableGroupScore::table, TableGroupScore::view));
-        dataGroupTabs
-                .add(new Tab("group-event", "Group Event", false, Set.of(0, 4), TableGroupEvent::table, TableGroupEvent::view));
+        dataGroupTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
+        dataGroupTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 4), TableGameVersion::table,
+                TableGameVersion::edit));
+        dataGroupTabs.add(new Tab("game-session", "Game Session", "game_version", "code", Set.of(0, 4), TableGameSession::table,
+                TableGameSession::edit));
+        dataGroupTabs.add(new Tab("group", "Group", "group", "name", Set.of(0, 4), TableGroup::table, TableGroup::view));
+        dataGroupTabs.add(new Tab("group-player", "Group Player", "group_role", null, Set.of(0, 4), TableGroupRole::table,
+                TableGroupRole::view));
+        dataGroupTabs.add(new Tab("group-attempt", "Group Attempt", "group_attempt", null, Set.of(0, 4),
+                TableGroupAttempt::table, TableGroupAttempt::view));
+        dataGroupTabs.add(new Tab("group-score", "Group Score", "group_score", null, Set.of(0, 4), TableGroupScore::table,
+                TableGroupScore::view));
+        dataGroupTabs.add(new Tab("group-event", "Group Event", "group_event", null, Set.of(0, 4), TableGroupEvent::table,
+                TableGroupEvent::view));
 
         menuList.add("errors");
         List<Tab> errorsTabs = new ArrayList<>();
         menuMap.put("errors", new Menu("fa-triangle-exclamation", "errors", "Errors", errorsTabs, Set.of(0, 1, 2)));
-        errorsTabs.add(new Tab("last-100", "Last 100", false, Set.of(0, 1, 2), TableErrors::table100, TableErrors::view));
+        errorsTabs.add(new Tab("last-100", "Last 100", null, null, Set.of(0, 1, 2), TableErrors::table100, TableErrors::view));
 
         menuList.add("settings");
         menuMap.put("settings",
@@ -289,6 +290,19 @@ public class Menus
         tab.editRef.edit(data, request, click, recordId);
     }
 
+    public static Tab getActiveTab(final AdminData data)
+    {
+        String menuChoice = data.getMenuChoice();
+        List<Tab> tabList = menuMap.get(menuChoice).tabs();
+        for (Tab tab : tabList)
+        {
+            if (tab.tabChoice().equals(data.getTabChoice(menuChoice)))
+                return tab;
+        }
+        System.err.println("Could not find active tab");
+        return tabList.get(0);
+    }
+
     public static void initializeTabChoices(final AdminData data)
     {
         data.putTabChoice("admin-panel", "");
@@ -310,8 +324,8 @@ public class Menus
     {
     }
 
-    public static record Tab(String tabChoice, String tabText, boolean select, Set<Integer> access, ITable tableRef,
-            IEdit editRef)
+    public static record Tab(String tabChoice, String tabText, String tableName, String selectField, Set<Integer> access,
+            ITable tableRef, IEdit editRef)
     {
     }
 }

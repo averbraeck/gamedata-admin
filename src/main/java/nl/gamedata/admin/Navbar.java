@@ -61,7 +61,7 @@ public class Navbar
                       <a href="#" onclick="clickMenu('%s')">%s</a>
                     </div>
                     <div class="gd-tab-choice">
-                      <div class="gd-tab-choice-text">"%s</div>
+                      <div class="gd-tab-choice-text">%s</div>
                       <div class="gd-tab-choice-close">
                         <a href="#" onclick="clickMenu('%s')">
                           <i class="fas fa-xmark fa-fw"></i>
@@ -138,7 +138,7 @@ public class Navbar
         {
             if (Menus.showTab(data, menuChoice, data.getTabChoice(menuChoice)))
             {
-                if (tab.select())
+                if (tab.selectField() != null)
                     tabChoice(s, data, tab.tabChoice(), tab.tabText());
                 else
                     tab(s, data, tab.tabChoice(), tab.tabText());
@@ -171,10 +171,9 @@ public class Navbar
             if (choice.length() > 12)
                 choice = choice.substring(0, 9) + "...";
             if (tabName.equals(data.getTabChoice(data.getMenuChoice())))
-                s.append(tabChoiceActive.formatted(tabText, choice, "tab-" + tabName + "-close"));
+                s.append(tabChoiceActive.formatted(tabText, choice, "close-" + tabName));
             else
-                s.append(tabChoiceInactive.formatted("tab-" + tabName, tabText, choice, "tab-" + tabName + "-close"));
+                s.append(tabChoiceInactive.formatted("tab-" + tabName, tabText, choice, "close-" + tabName));
         }
     }
-
 }
