@@ -45,7 +45,7 @@ public class TableGame
         GameRecord game = recordId == 0 ? Tables.GAME.newRecord() : SqlUtils.readRecordFromId(data, Tables.GAME, recordId);
         data.setEditRecord(game);
         TableForm form = new TableForm(data);
-        form.startForm();
+        form.startMultipartForm();
         form.setHeader("Game", click, recordId);
         form.addEntry(new TableEntryString(Tables.GAME.CODE, game).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.GAME.NAME, game).setMinLength(2));

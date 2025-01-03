@@ -55,7 +55,7 @@ public class TableOrganization
                 : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, recordId);
         data.setEditRecord(organization);
         TableForm form = new TableForm(data);
-        form.startForm();
+        form.startMultipartForm();
         form.setHeader("Organization", click, recordId);
         form.addEntry(new TableEntryString(Tables.ORGANIZATION.CODE, organization).setMinLength(2));
         form.addEntry(new TableEntryString(Tables.ORGANIZATION.NAME, organization).setMinLength(2));
