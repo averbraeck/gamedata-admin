@@ -9,11 +9,9 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jooq.Record;
-import org.jooq.Table;
 import org.jooq.UpdatableRecord;
 
 import nl.gamedata.admin.form.WebForm;
-import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.CommonData;
 import nl.gamedata.common.SqlUtils;

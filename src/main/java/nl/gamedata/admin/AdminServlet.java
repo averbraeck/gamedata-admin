@@ -201,20 +201,23 @@ public class AdminServlet extends HttpServlet
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD CANCEL: " + click + " with recordId: " + recordId);
-        if (((TableForm) data.getEditForm()).checkFieldsChanged(data.getEditRecord(), request, data))
+        if (data.getEditForm() instanceof TableForm)
         {
-            String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
-            String reEditMethod = "clickRecordId('record-reedit', " + recordId + ")";
-            data.fillPreviousParameterMap(request);
-            ModalWindowUtils.make2ButtonModalWindow(data, "Data has changed",
-                    "Data has changed. Do you want to continue editing or cancel without saving?", "Edit", reEditMethod,
-                    "Cancel", cancelMethod, cancelMethod);
-            handleRecordReEdit(request, response, click, data, recordId);
+            TableForm tableForm = (TableForm) data.getEditForm();
+            if (tableForm.checkFieldsChanged(data.getEditRecord(), request, data))
+            {
+                String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+                String reEditMethod = "clickRecordId('record-reedit', " + recordId + ")";
+                data.fillPreviousParameterMap(request);
+                ModalWindowUtils.make2ButtonModalWindow(data, "Data has changed",
+                        "Data has changed. Do you want to continue editing or cancel without saving?", "Edit", reEditMethod,
+                        "Cancel", cancelMethod, cancelMethod);
+                handleRecordReEdit(request, response, click, data, recordId);
+                return;
+            }
         }
-        else
-        {
-            handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
-        }
+
+        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
     }
 
     private void handleRecordOk(final HttpServletRequest request, final HttpServletResponse response, final String click,

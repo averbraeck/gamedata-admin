@@ -3,6 +3,8 @@ package nl.gamedata.admin;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 
+import nl.gamedata.admin.Menus.Tab;
+
 /**
  * Table.java.
  * <p>
@@ -13,13 +15,20 @@ import java.util.TreeMap;
  */
 public class AdminTable
 {
-    /** 1 = Title, 2 = visible/hidden for New button. */
-    private static final String tableTitle = """
+    /** 1 = Title. */
+    private static final String tableTitleNew = """
             <div class="gd-table-caption">
               <div class="gd-table-title"><h3>%s</h3></div>
-              <div class="gd-button" style="visibility:%s;">
+              <div class="gd-button">
                 <button type="button" class="btn btn-primary" onclick="clickMenu('record-new')">New</button>
               </div>
+            </div>
+            """;
+
+    /** 1 = Title. */
+    private static final String tableTitleNoNew = """
+            <div class="gd-table-caption">
+              <div class="gd-table-title"><h3>%s</h3></div>
             </div>
             """;
 
@@ -28,22 +37,27 @@ public class AdminTable
             <table class="table">
               <thead>
                 <tr>
-                  <th class="gd-col-icon" scope="col"><i class="fas fa-square fa-fw"></i></th>
-                  <th class="gd-col-icon" scope="col"><i class="far fa-eye fa-fw"></i></th>
-                  <th class="gd-col-icon" scope="col"><i class="fas fa-pencil fa-fw"></i></th>
-                  <th class="gd-col-icon" scope="col"><i class="far fa-trash-can fa-fw"></i></th>
-                  <th class="gd-col-icon" scope="col">&nbsp;</th>
                   """;
+
+    /** 1 = icon. */
+    private static final String tableheaderIcon = """
+                  <th class="gd-col-icon" scope="col"><i class="fas %s fa-fw"></i></th>
+            """;
 
     /** 1 = name of column, 2 = name of clickMenu for a-z, 3=arrow to use for a-z. */
     private static final String tableHeaderCol = """
-            <th scope="col">
-              %s &nbsp;
-              <a href="#" onclick="clickMenu('%s')">
-                <i class="fas %s fa-fw"></i>
-              </a>
-            </th>
-              """;
+                  <th scope="col">
+                    %s &nbsp;
+                    <a href="#" onclick="clickMenu('%s')">
+                      <i class="fas %s fa-fw"></i>
+                    </a>
+                  </th>
+            """;
+
+    /** No args. */
+    private static final String tableHeaderSpacing = """
+                  <th class="gd-col-icon" scope="col">&nbsp;</th>
+            """;
 
     /** No args for now. */
     private static final String tableHeaderBottom = """
@@ -53,27 +67,22 @@ public class AdminTable
               <tbody>
             """;
 
-    /** 1, 2, 3, 4 = record nr. */
+    /** 1 = record nr. */
     private static final String tableRowStart = """
                 <tr>
+            """;
+
+    /** 1 = function, 2 = record nr, 3 = icon */
+    private static final String tableRowIcon = """
                   <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('record-select', %d)">
-                      <i class="far fa-square fa-fw"></i>
+                    <a href="#" onclick="clickRecordId('%s', %d)">
+                      <i class="fas %s fa-fw"></i>
                     </a>
                   </td>
-                  <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('record-view', %d)">
-                      <i class="far fa-eye fa-fw"></i>
-                    </a>
-                  </td>
-                  <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('record-edit', %d)">
-                      <i class="fas fa-pencil fa-fw"></i></td>
-                    </a>
-                  <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('record-delete', %d)">
-                      <i class="far fa-trash-can fa-fw"></i></td>
-                    </a>
+            """;
+
+    /** No args. */
+    private static final String tableRowSpacing = """
                   <td class="gd-col-icon" scope="col">&nbsp;</td>
             """;
 
@@ -91,13 +100,15 @@ public class AdminTable
     private static final String tableEnd = """
               </tbody>
             </table>
-            """;
+              """;
 
     private final AdminData data;
 
     private final String title;
 
     private boolean newButton = false;
+
+    private boolean select = false;
 
     private String[] header;
 
@@ -117,6 +128,8 @@ public class AdminTable
     {
         this.data = data;
         this.title = title;
+        Tab tab = Menus.getActiveTab(data);
+        this.select = tab.selectField() != null;
         if (data.getTableColumnSort() == null)
             data.selectTableColumnSort(defaultSortField);
         this.sortColumn = this.data.getTableColumnSort().fieldName();
@@ -149,8 +162,15 @@ public class AdminTable
     {
         // TABLE START
         StringBuilder s = new StringBuilder();
-        s.append(tableTitle.formatted(this.title, this.newButton ? "visible" : "hidden"));
+        if (this.newButton)
+            s.append(tableTitleNew.formatted(this.title));
+        else
+            s.append(tableTitleNoNew.formatted(this.title));
         s.append(tableHeaderTop);
+        if (this.select)
+            s.append(tableheaderIcon.formatted("fa-filter"));
+        s.append(tableheaderIcon.formatted("fa-pencil"));
+        s.append(tableHeaderSpacing);
         for (String h : this.header)
         {
             String sort = "fa-sort";
@@ -158,6 +178,8 @@ public class AdminTable
                 sort = this.az ? "fa-arrow-down-a-z" : "fa-arrow-up-z-a";
             s.append(tableHeaderCol.formatted(h, "az-" + h.toLowerCase().replace(' ', '-'), sort));
         }
+        if (this.newButton)
+            s.append(tableheaderIcon.formatted("fa-trash-can"));
         s.append(tableHeaderBottom);
 
         // ROWS
@@ -165,11 +187,20 @@ public class AdminTable
         for (String key : keys)
         {
             Row row = this.rows.get(key);
-            s.append(tableRowStart.formatted(row.recordId(), row.recordId(), row.recordId(), row.recordId()));
+            s.append(tableRowStart);
+            if (this.select)
+                s.append(tableRowIcon.formatted("record-select", row.recordId(), "fa-filter"));
+            if (row.edit)
+                s.append(tableRowIcon.formatted("record-edit", row.recordId(), "fa-pencil"));
+            else
+                s.append(tableRowIcon.formatted("record-view", row.recordId(), "fa-eye"));
+            s.append(tableRowSpacing);
             for (String c : row.cells())
             {
                 s.append(tableCell.formatted(c));
             }
+            if (this.newButton)
+                s.append(tableRowIcon.formatted("record-delete", row.recordId(), "fa-trash-can"));
             s.append(tableRowEnd);
         }
 
