@@ -202,9 +202,16 @@ public class AdminServlet extends HttpServlet
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD DELETE OK: " + click + " with recordId: " + recordId);
-
-        data.resetRoles();
-        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        try
+        {
+            data.getEditRecord().delete();
+            data.resetRoles();
+        }
+        catch (Exception exception)
+        {
+            String okMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+            ModalWindowUtils.makeOkModalWindow("Error deleting record", "<p>" + exception.getMessage() + "</p>", okMethod);
+        }
     }
 
     private void handleRecordSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,

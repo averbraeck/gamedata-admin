@@ -88,8 +88,8 @@ public class AdminData extends CommonData
     /** The parameters of the previous http-request to be able to re-edit a record (preserving the fields). */
     private Map<String, String> previousParameterMap;
 
-    /** An error occurred during save, delete, or cancel. */
-    private boolean error = false;
+    /** When the String is non-empty, an error occurred during save, delete, or cancel. */
+    private String error = "";
 
     /** Record that has the field name and the direction of sorting; A-Z is true, Z-A is false. */
     public record ColumnSort(String fieldName, boolean az)
@@ -789,12 +789,10 @@ public class AdminData extends CommonData
         R record = recordId == 0 ? getDSL().newRecord(table) : (R) this.editRecord;
         // getDSL().selectFrom(table).where(((TableField<R, Integer>) table.field("id")).eq(recordId)).fetchOne();
         String errors = ((TableForm) this.editForm).setFields(record, request, this);
-        String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
         if (errors.length() > 0)
         {
             System.err.println(errors);
-            ModalWindowUtils.popup(this, "Error storing record (1)", errors, backToMenu);
-            setError(true);
+            setError("Error storing record (1)<p>" + errors + "</p>");
             return -1;
         }
         else
@@ -807,37 +805,12 @@ public class AdminData extends CommonData
             {
                 System.err.println(exception.getMessage());
                 System.err.println(record);
-                ModalWindowUtils.popup(this, "Error storing record (2)", "<p>" + exception.getMessage() + "</p>", backToMenu);
-                setError(true);
+                setError("Error storing record (2)<p>" + exception.getMessage() + "</p>");
                 return -1;
             }
         }
-        setError(false);
+        setError("");
         return Integer.valueOf(record.get("id").toString());
-    }
-
-    public <R extends org.jooq.UpdatableRecord<R>> void askDeleteRecord()
-    {
-        String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
-        ModalWindowUtils.make2ButtonModalWindow(this, "Delete " + this.editRecord.getTable().getName(),
-                "<p>Delete " + this.editRecord.getTable().getName() + "?</p>", "DELETE",
-                "clickRecordId('OK', " + Provider.getId(this.editRecord) + ")", "Cancel", backToMenu, backToMenu);
-        setShowModalWindow(true);
-    }
-
-    public <R extends org.jooq.UpdatableRecord<R>> void deleteRecordOk()
-    {
-        String backToMenu = "clickMenu('menu-" + getMenuChoice() + "')";
-        try
-        {
-            this.editRecord.delete();
-            setError(false);
-        }
-        catch (Exception exception)
-        {
-            ModalWindowUtils.popup(this, "Error deleting record", "<p>" + exception.getMessage() + "</p>", backToMenu);
-            setError(true);
-        }
     }
 
     /* ******************* */
@@ -945,12 +918,12 @@ public class AdminData extends CommonData
         this.tabFilterChoices.remove(this.menuChoice + "#" + tabChoice);
     }
 
-    public boolean isError()
+    public String getError()
     {
         return this.error;
     }
 
-    public void setError(final boolean error)
+    public void setError(final String error)
     {
         this.error = error;
     }
