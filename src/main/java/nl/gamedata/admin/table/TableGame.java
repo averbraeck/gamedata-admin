@@ -43,16 +43,18 @@ public class TableGame
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
         GameRecord game = recordId == 0 ? Tables.GAME.newRecord() : SqlUtils.readRecordFromId(data, Tables.GAME, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(game);
         TableForm form = new TableForm(data);
         form.startMultipartForm();
         form.setHeader("Game", click, recordId);
-        form.addEntry(new TableEntryString(Tables.GAME.CODE, game).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.GAME.NAME, game).setMinLength(2));
-        form.addEntry(new TableEntryText(Tables.GAME.DESCRIPTION, game));
-        form.addEntry(new TableEntryBoolean(Tables.GAME.TOKEN_FORCED, game).setLabel("Token forced?"));
-        form.addEntry(new TableEntryBoolean(Tables.GAME.ARCHIVED, game).setLabel("Archived?"));
-        form.addEntry(new TableEntryImage(Tables.GAME.LOGO, game).setImageRecordId(recordId).setImageServlet("imageGame"));
+        form.addEntry(new TableEntryString(data, reedit, Tables.GAME.CODE, game).setMinLength(2));
+        form.addEntry(new TableEntryString(data, reedit, Tables.GAME.NAME, game).setMinLength(2));
+        form.addEntry(new TableEntryText(data, reedit, Tables.GAME.DESCRIPTION, game));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME.TOKEN_FORCED, game).setLabel("Token forced?"));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME.ARCHIVED, game).setLabel("Archived?"));
+        form.addEntry(new TableEntryImage(data, reedit, Tables.GAME.LOGO, game).setImageRecordId(recordId)
+                .setImageServlet("imageGame"));
         form.endForm();
         data.setContent(form.process());
     }

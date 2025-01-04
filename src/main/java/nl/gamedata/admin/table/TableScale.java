@@ -55,17 +55,18 @@ public class TableScale
     public static void edit(final AdminData data, final HttpServletRequest request, final String click, final int recordId)
     {
         ScaleRecord scale = recordId == 0 ? Tables.SCALE.newRecord() : SqlUtils.readRecordFromId(data, Tables.SCALE, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(scale);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Scale", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.SCALE.GAME_ID, scale)
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.SCALE.GAME_ID, scale)
                 .setPickTable(data, data.getGamePicklist(Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
-        form.addEntry(new TableEntryString(Tables.SCALE.TYPE, scale).setMinLength(2));
-        form.addEntry(new TableEntryDouble(Tables.SCALE.MIN_VALUE, scale));
-        form.addEntry(new TableEntryDouble(Tables.SCALE.MAX_VALUE, scale));
-        form.addEntry(new TableEntryString(Tables.SCALE.VALUE_LIST, scale));
-        form.addEntry(new TableEntryString(Tables.SCALE.VALUE_SCORES, scale));
+        form.addEntry(new TableEntryString(data, reedit, Tables.SCALE.TYPE, scale).setMinLength(2));
+        form.addEntry(new TableEntryDouble(data, reedit, Tables.SCALE.MIN_VALUE, scale));
+        form.addEntry(new TableEntryDouble(data, reedit, Tables.SCALE.MAX_VALUE, scale));
+        form.addEntry(new TableEntryString(data, reedit, Tables.SCALE.VALUE_LIST, scale));
+        form.addEntry(new TableEntryString(data, reedit, Tables.SCALE.VALUE_SCORES, scale));
         form.endForm();
         data.setContent(form.process());
     }

@@ -143,6 +143,7 @@ public class TableLearningGoal
 
             TableForm form = new TableForm(data);
             form.startForm();
+            boolean reedit = click.contains("reedit");
             data.setEditRecord(learningGoal);
             form.setHeader("Larning Goal", click, recordId);
             form.setPhase(1);
@@ -152,13 +153,13 @@ public class TableLearningGoal
                     .setInitialValue(gameVersionId, gameVersionId));
             form.addEntry(new FormEntryString("Game Version", "game_version").setReadOnly()
                     .setInitialValue(gameVersion.getName(), gameVersion.getName()));
-            form.addEntry(new TableEntryInt(Tables.LEARNING_GOAL.GAME_MISSION_ID, learningGoal).setInitialValue(gameMissionId)
-                    .setHidden().setReadOnly());
+            form.addEntry(new TableEntryInt(data, reedit, Tables.LEARNING_GOAL.GAME_MISSION_ID, learningGoal)
+                    .setInitialValue(gameMissionId).setHidden().setReadOnly());
             form.addEntry(new FormEntryString("Game Mission", "game_mission").setReadOnly()
                     .setInitialValue(gameMission.getName(), gameMission.getName()));
-            form.addEntry(new TableEntryString(Tables.LEARNING_GOAL.CODE, learningGoal).setMinLength(2));
-            form.addEntry(new TableEntryString(Tables.LEARNING_GOAL.NAME, learningGoal).setMinLength(2));
-            form.addEntry(new TableEntryText(Tables.LEARNING_GOAL.DESCRIPTION, learningGoal));
+            form.addEntry(new TableEntryString(data, reedit, Tables.LEARNING_GOAL.CODE, learningGoal).setMinLength(2));
+            form.addEntry(new TableEntryString(data, reedit, Tables.LEARNING_GOAL.NAME, learningGoal).setMinLength(2));
+            form.addEntry(new TableEntryText(data, reedit, Tables.LEARNING_GOAL.DESCRIPTION, learningGoal));
             form.endForm();
             data.setContent(form.process());
             return;

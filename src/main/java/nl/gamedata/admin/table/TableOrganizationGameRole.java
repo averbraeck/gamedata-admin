@@ -60,17 +60,19 @@ public class TableOrganizationGameRole
     {
         OrganizationGameRoleRecord ogr = recordId == 0 ? Tables.ORGANIZATION_GAME_ROLE.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION_GAME_ROLE, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(ogr);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("User-Role for Organization-Game", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID, ogr).setPickTable(data,
-                data.getOrganizationGamePicklist(Access.EDIT), Tables.ORGANIZATION_GAME.ID, Tables.ORGANIZATION_GAME.NAME)
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.ORGANIZATION_GAME_ROLE.ORGANIZATION_GAME_ID, ogr)
+                .setPickTable(data, data.getOrganizationGamePicklist(Access.EDIT), Tables.ORGANIZATION_GAME.ID,
+                        Tables.ORGANIZATION_GAME.NAME)
                 .setLabel("Organization-Game"));
-        form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME_ROLE.USER_ID, ogr)
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.ORGANIZATION_GAME_ROLE.USER_ID, ogr)
                 .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));
-        form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_GAME_ROLE.EDIT, ogr));
-        form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_GAME_ROLE.VIEW, ogr));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.ORGANIZATION_GAME_ROLE.EDIT, ogr));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.ORGANIZATION_GAME_ROLE.VIEW, ogr));
         form.endForm();
         data.setContent(form.process());
     }

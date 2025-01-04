@@ -3,6 +3,8 @@ package nl.gamedata.admin.form.table;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
+
 public class TableEntryInt extends AbstractTableEntry<TableEntryInt, Integer>
 {
 
@@ -14,9 +16,10 @@ public class TableEntryInt extends AbstractTableEntry<TableEntryInt, Integer>
 
     String pattern;
 
-    public <R extends UpdatableRecord<R>> TableEntryInt(final TableField<R, Integer> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryInt(final AdminData data, final boolean reedit,
+            final TableField<R, Integer> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
         this.min = -Integer.MAX_VALUE;
         this.max = Integer.MAX_VALUE;
         this.step = 1;

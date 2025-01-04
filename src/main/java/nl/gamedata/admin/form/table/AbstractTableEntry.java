@@ -4,6 +4,7 @@ import org.jooq.Record;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.form.AbstractFormEntry;
 
 public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> extends AbstractFormEntry<F, T>
@@ -15,7 +16,8 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
 
     private boolean noWrite = false;
 
-    public <R extends UpdatableRecord<R>> AbstractTableEntry(final TableField<R, T> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> AbstractTableEntry(final AdminData data, final boolean reedit,
+            final TableField<R, T> tableField, final UpdatableRecord<R> record)
     {
         super(tableField.getName(), tableField.getName());
         this.tableField = tableField;
@@ -39,6 +41,8 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         setLabel(String.valueOf(name));
         setReadOnly(false);
         setInitialValue(record);
+        if (reedit)
+            fillPreviousValue(data);
         this.errors = "";
     }
 
@@ -78,6 +82,7 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
         return (F) this;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public F setInitialValue(final T initialValue)
     {
@@ -97,6 +102,25 @@ public abstract class AbstractTableEntry<F extends AbstractTableEntry<F, T>, T> 
     public F setInitialValue(final UpdatableRecord<?> record)
     {
         return setInitialValue(record.get(this.tableField));
+    }
+
+    public void fillPreviousValue(final AdminData data)
+    {
+        String value = data.getPreviousParameterMap().get(getTableField().getName());
+        if (getTableField().getDataType().nullable())
+        {
+            var nullField = getTableField().getName() + "-null";
+            var nullValue = data.getPreviousParameterMap().get(nullField);
+            if ("null".equals(nullValue) || "on".equals(nullValue))
+                setLastEnteredValue(null);
+            else
+                setLastEnteredValue(value);
+        }
+        else
+        {
+            System.out.println("fill: " + getName() + " = " + value);
+            setLastEnteredValue(value);
+        }
     }
 
     protected abstract T getDefaultValue();

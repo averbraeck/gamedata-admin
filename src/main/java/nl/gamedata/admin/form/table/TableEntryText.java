@@ -3,6 +3,8 @@ package nl.gamedata.admin.form.table;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
+
 public class TableEntryText extends AbstractTableEntry<TableEntryText, String>
 {
 
@@ -10,9 +12,10 @@ public class TableEntryText extends AbstractTableEntry<TableEntryText, String>
 
     int rows;
 
-    public <R extends UpdatableRecord<R>> TableEntryText(final TableField<R, String> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryText(final AdminData data, final boolean reedit,
+            final TableField<R, String> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
         this.maxChars = 65535;
         this.rows = 10;
     }

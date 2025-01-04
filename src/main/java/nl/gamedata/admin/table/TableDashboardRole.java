@@ -60,17 +60,18 @@ public class TableDashboardRole
     {
         DashboardRoleRecord dashboardRole = recordId == 0 ? Tables.DASHBOARD_ROLE.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.DASHBOARD_ROLE, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(dashboardRole);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Dashboard Role", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.DASHBOARD_ROLE.DASHBOARD_TEMPLATE_ID, dashboardRole).setPickTable(data,
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.DASHBOARD_ROLE.DASHBOARD_TEMPLATE_ID, dashboardRole).setPickTable(data,
                 data.getDashboardTemplatePicklist(Access.EDIT), Tables.DASHBOARD_TEMPLATE.ID, Tables.DASHBOARD_TEMPLATE.NAME)
                 .setLabel("Template"));
-        form.addEntry(new TableEntryPickRecord(Tables.DASHBOARD_ROLE.USER_ID, dashboardRole)
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.DASHBOARD_ROLE.USER_ID, dashboardRole)
                 .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));
-        form.addEntry(new TableEntryBoolean(Tables.DASHBOARD_ROLE.EDIT, dashboardRole));
-        form.addEntry(new TableEntryBoolean(Tables.DASHBOARD_ROLE.VIEW, dashboardRole));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.DASHBOARD_ROLE.EDIT, dashboardRole));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.DASHBOARD_ROLE.VIEW, dashboardRole));
         form.endForm();
         data.setContent(form.process());
     }

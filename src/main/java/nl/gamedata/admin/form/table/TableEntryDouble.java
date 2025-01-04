@@ -3,6 +3,8 @@ package nl.gamedata.admin.form.table;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
+
 public class TableEntryDouble extends AbstractTableEntry<TableEntryDouble, Double>
 {
 
@@ -12,9 +14,10 @@ public class TableEntryDouble extends AbstractTableEntry<TableEntryDouble, Doubl
 
     Double step;
 
-    public <R extends UpdatableRecord<R>> TableEntryDouble(final TableField<R, Double> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryDouble(final AdminData data, final boolean reedit,
+            final TableField<R, Double> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
         this.min = -Double.MAX_VALUE;
         this.max = Double.MAX_VALUE;
         this.step = Double.NaN;

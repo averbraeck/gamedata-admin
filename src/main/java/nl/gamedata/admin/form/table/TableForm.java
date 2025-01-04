@@ -63,6 +63,13 @@ public class TableForm extends WebForm
             if (!click.equals("record-new"))
                 setDeleteMethod("record-delete");
         }
+        else if (click.equals("record-reedit"))
+        {
+            header = "Edit " + recordType;
+            setEdit(true);
+            setSaveMethod("record-save");
+            setDeleteMethod("record-delete");
+        }
         else
         {
             header = "View " + recordType;
@@ -290,12 +297,12 @@ public class TableForm extends WebForm
                             }
                         }
                     }
-                    if (value != null && !value.equals(tableEntry.getLastEnteredValue()))
+                    if (value != null && !value.equals(record.get(tableEntry.getTableField()).toString()))
                     {
                         if (entry instanceof TableEntryText)
                         {
                             return !value.replaceAll("[\\n\\r]", "")
-                                    .equals(tableEntry.getLastEnteredValue().replaceAll("[\\n\\r]", ""));
+                                    .equals(record.get(tableEntry.getTableField()).toString().replaceAll("[\\n\\r]", ""));
                         }
                         else
                             return true;
@@ -310,5 +317,4 @@ public class TableForm extends WebForm
             return false;
         }
     }
-
 }

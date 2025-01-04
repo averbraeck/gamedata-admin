@@ -3,14 +3,17 @@ package nl.gamedata.admin.form.table;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
+
 public class TableEntryString extends AbstractTableEntry<TableEntryString, String>
 {
 
     int maxChars;
 
-    public <R extends UpdatableRecord<R>> TableEntryString(final TableField<R, String> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryString(final AdminData data, final boolean reedit,
+            final TableField<R, String> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
         this.maxChars = tableField.getDataType().length();
     }
 

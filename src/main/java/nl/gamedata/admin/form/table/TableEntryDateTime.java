@@ -5,12 +5,15 @@ import java.time.LocalDateTime;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
+
 public class TableEntryDateTime extends AbstractTableEntry<TableEntryDateTime, LocalDateTime>
 {
 
-    public <R extends UpdatableRecord<R>> TableEntryDateTime(final TableField<R, LocalDateTime> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryDateTime(final AdminData data, final boolean reedit,
+            final TableField<R, LocalDateTime> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
     }
 
     @Override

@@ -85,6 +85,9 @@ public class AdminData extends CommonData
     /** The record that is currently being edited. */
     private UpdatableRecord<?> editRecord = null;
 
+    /** The parameters of the previous http-request to be able to re-edit a record (preserving the fields). */
+    private Map<String, String> previousParameterMap;
+
     /** An error occurred during save, delete, or cancel. */
     private boolean error = false;
 
@@ -770,6 +773,7 @@ public class AdminData extends CommonData
 
     public void setEditForm(final WebForm editForm)
     {
+        System.err.println("setEditForm is called!!!");
         this.editForm = editForm;
     }
 
@@ -959,6 +963,18 @@ public class AdminData extends CommonData
     public UpdatableRecord<?> getEditRecord()
     {
         return this.editRecord;
+    }
+
+    public Map<String, String> getPreviousParameterMap()
+    {
+        return this.previousParameterMap;
+    }
+
+    public void fillPreviousParameterMap(final HttpServletRequest previousRequest)
+    {
+        this.previousParameterMap = new HashMap<>();
+        for (var entry : previousRequest.getParameterMap().entrySet())
+            this.previousParameterMap.put(entry.getKey(), entry.getValue()[0]);
     }
 
 }

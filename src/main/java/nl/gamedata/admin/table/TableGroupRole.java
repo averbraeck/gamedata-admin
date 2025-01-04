@@ -38,8 +38,7 @@ public class TableGroupRole
             for (var group : groupList)
             {
                 List<Record> prList = data.getDSL()
-                        .selectFrom(
-                                Tables.PLAYER.join(Tables.GROUP_ROLE).on(Tables.GROUP_ROLE.PLAYER_ID.eq(Tables.PLAYER.ID)))
+                        .selectFrom(Tables.PLAYER.join(Tables.GROUP_ROLE).on(Tables.GROUP_ROLE.PLAYER_ID.eq(Tables.PLAYER.ID)))
                         .where(Tables.GROUP_ROLE.GROUP_ID.eq(group.getId())).fetch();
                 for (var pr : prList)
                 {

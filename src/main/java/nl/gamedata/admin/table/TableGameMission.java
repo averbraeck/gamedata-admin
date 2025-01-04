@@ -86,9 +86,11 @@ public class TableGameMission
         {
             GameMissionRecord gameMission = recordId == 0 ? Tables.GAME_MISSION.newRecord()
                     : SqlUtils.readRecordFromId(data, Tables.GAME_MISSION, recordId);
+            boolean reedit = click.contains("reedit");
             if (!click.equals("record-new"))
             {
-                GameVersionRecord gameVersion = SqlUtils.readRecordFromId(data, Tables.GAME_VERSION, gameMission.getGameVersionId());
+                GameVersionRecord gameVersion =
+                        SqlUtils.readRecordFromId(data, Tables.GAME_VERSION, gameMission.getGameVersionId());
                 gameId = gameVersion.getGameId();
             }
             TableForm form = new TableForm(data);
@@ -99,11 +101,11 @@ public class TableGameMission
             GameRecord game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
             form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
             form.addEntry(new FormEntryString("Game", "game").setReadOnly().setInitialValue(game.getCode(), game.getCode()));
-            form.addEntry(new TableEntryPickRecord(Tables.GAME_MISSION.GAME_VERSION_ID, gameMission)
+            form.addEntry(new TableEntryPickRecord(data, reedit, Tables.GAME_MISSION.GAME_VERSION_ID, gameMission)
                     .setPickTable(data, data.getGameVersionPicklist(gameId, Access.EDIT)).setLabel("Game Version"));
-            form.addEntry(new TableEntryString(Tables.GAME_MISSION.CODE, gameMission).setMinLength(2));
-            form.addEntry(new TableEntryString(Tables.GAME_MISSION.NAME, gameMission).setMinLength(2));
-            form.addEntry(new TableEntryText(Tables.GAME_MISSION.DESCRIPTION, gameMission));
+            form.addEntry(new TableEntryString(data, reedit, Tables.GAME_MISSION.CODE, gameMission).setMinLength(2));
+            form.addEntry(new TableEntryString(data, reedit, Tables.GAME_MISSION.NAME, gameMission).setMinLength(2));
+            form.addEntry(new TableEntryText(data, reedit, Tables.GAME_MISSION.DESCRIPTION, gameMission));
             form.endForm();
             data.setContent(form.process());
             return;

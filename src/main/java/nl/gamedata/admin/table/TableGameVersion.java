@@ -59,16 +59,17 @@ public class TableGameVersion
     {
         GameVersionRecord gameVersion = recordId == 0 ? Tables.GAME_VERSION.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.GAME_VERSION, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(gameVersion);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game Version", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_VERSION.GAME_ID, gameVersion)
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.GAME_VERSION.GAME_ID, gameVersion)
                 .setPickTable(data, data.getGamePicklist(Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
-        form.addEntry(new TableEntryString(Tables.GAME_VERSION.CODE, gameVersion).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.GAME_VERSION.NAME, gameVersion).setMinLength(2));
-        form.addEntry(new TableEntryText(Tables.GAME_VERSION.DESCRIPTION, gameVersion));
-        form.addEntry(new TableEntryBoolean(Tables.GAME_VERSION.ARCHIVED, gameVersion).setLabel("Archived?"));
+        form.addEntry(new TableEntryString(data, reedit, Tables.GAME_VERSION.CODE, gameVersion).setMinLength(2));
+        form.addEntry(new TableEntryString(data, reedit, Tables.GAME_VERSION.NAME, gameVersion).setMinLength(2));
+        form.addEntry(new TableEntryText(data, reedit, Tables.GAME_VERSION.DESCRIPTION, gameVersion));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME_VERSION.ARCHIVED, gameVersion).setLabel("Archived?"));
         form.endForm();
         data.setContent(form.process());
     }

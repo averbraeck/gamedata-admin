@@ -4,14 +4,17 @@ import org.jooq.EnumType;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
+
 public class TableEntryEnum<T extends EnumType> extends AbstractTableEntry<TableEntryEnum<T>, T>
 {
 
     private T[] pickListEntries;
 
-    public <R extends UpdatableRecord<R>> TableEntryEnum(final TableField<R, T> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryEnum(final AdminData data, final boolean reedit,
+            final TableField<R, T> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
     }
 
     @Override

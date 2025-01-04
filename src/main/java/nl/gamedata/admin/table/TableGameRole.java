@@ -58,16 +58,17 @@ public class TableGameRole
     {
         GameRoleRecord gameRole =
                 recordId == 0 ? Tables.GAME_ROLE.newRecord() : SqlUtils.readRecordFromId(data, Tables.GAME_ROLE, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(gameRole);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game Role", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_ROLE.GAME_ID, gameRole)
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.GAME_ROLE.GAME_ID, gameRole)
                 .setPickTable(data, data.getGamePicklist(Access.EDIT), Tables.GAME.ID, Tables.GAME.CODE).setLabel("Game"));
-        form.addEntry(new TableEntryPickRecord(Tables.GAME_ROLE.USER_ID, gameRole)
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.GAME_ROLE.USER_ID, gameRole)
                 .setPickTable(data, Tables.USER, Tables.USER.ID, Tables.USER.NAME).setLabel("User"));
-        form.addEntry(new TableEntryBoolean(Tables.GAME_ROLE.EDIT, gameRole));
-        form.addEntry(new TableEntryBoolean(Tables.GAME_ROLE.VIEW, gameRole));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME_ROLE.EDIT, gameRole));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME_ROLE.VIEW, gameRole));
         form.endForm();
         data.setContent(form.process());
     }

@@ -42,13 +42,14 @@ public class TableDashboardLayout
     {
         DashboardLayoutRecord dashboardLayout = recordId == 0 ? Tables.DASHBOARD_LAYOUT.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.DASHBOARD_LAYOUT, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(dashboardLayout);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Dashboard Layout", click, recordId);
-        form.addEntry(new TableEntryString(Tables.DASHBOARD_LAYOUT.CODE, dashboardLayout).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.DASHBOARD_LAYOUT.NAME, dashboardLayout).setMinLength(2));
-        form.addEntry(new TableEntryText(Tables.DASHBOARD_LAYOUT.DESCRIPTION, dashboardLayout));
+        form.addEntry(new TableEntryString(data, reedit, Tables.DASHBOARD_LAYOUT.CODE, dashboardLayout).setMinLength(2));
+        form.addEntry(new TableEntryString(data, reedit, Tables.DASHBOARD_LAYOUT.NAME, dashboardLayout).setMinLength(2));
+        form.addEntry(new TableEntryText(data, reedit, Tables.DASHBOARD_LAYOUT.DESCRIPTION, dashboardLayout));
         form.endForm();
         data.setContent(form.process());
     }

@@ -60,17 +60,18 @@ public class TableOrganizationGame
     {
         OrganizationGameRecord og = recordId == 0 ? Tables.ORGANIZATION_GAME.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION_GAME, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(og);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Game Access for Organization", click, recordId);
-        form.addEntry(new TableEntryString(Tables.ORGANIZATION_GAME.NAME, og));
-        form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME.ORGANIZATION_ID, og).setPickTable(data,
+        form.addEntry(new TableEntryString(data, reedit, Tables.ORGANIZATION_GAME.NAME, og));
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.ORGANIZATION_GAME.ORGANIZATION_ID, og).setPickTable(data,
                 data.getOrganizationPicklist(Access.EDIT), Tables.ORGANIZATION.ID, Tables.ORGANIZATION.CODE));
-        form.addEntry(new TableEntryPickRecord(Tables.ORGANIZATION_GAME.GAME_ID, og).setPickTable(data,
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.ORGANIZATION_GAME.GAME_ID, og).setPickTable(data,
                 data.getGamePicklist(Access.VIEW), Tables.GAME.ID, Tables.GAME.CODE));
-        form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_GAME.TOKEN_FORCED, og));
-        form.addEntry(new TableEntryBoolean(Tables.ORGANIZATION_GAME.ANONYMOUS_SESSIONS, og));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.ORGANIZATION_GAME.TOKEN_FORCED, og));
+        form.addEntry(new TableEntryBoolean(data, reedit, Tables.ORGANIZATION_GAME.ANONYMOUS_SESSIONS, og));
         form.endForm();
         data.setContent(form.process());
     }

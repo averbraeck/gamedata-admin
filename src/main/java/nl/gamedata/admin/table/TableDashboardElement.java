@@ -42,13 +42,14 @@ public class TableDashboardElement
     {
         DashboardElementRecord dashboardElement = recordId == 0 ? Tables.DASHBOARD_ELEMENT.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.DASHBOARD_ELEMENT, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(dashboardElement);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Dashboard Element", click, recordId);
-        form.addEntry(new TableEntryString(Tables.DASHBOARD_ELEMENT.CODE, dashboardElement).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.DASHBOARD_ELEMENT.NAME, dashboardElement).setMinLength(2));
-        form.addEntry(new TableEntryText(Tables.DASHBOARD_ELEMENT.DESCRIPTION, dashboardElement));
+        form.addEntry(new TableEntryString(data, reedit, Tables.DASHBOARD_ELEMENT.CODE, dashboardElement).setMinLength(2));
+        form.addEntry(new TableEntryString(data, reedit, Tables.DASHBOARD_ELEMENT.NAME, dashboardElement).setMinLength(2));
+        form.addEntry(new TableEntryText(data, reedit, Tables.DASHBOARD_ELEMENT.DESCRIPTION, dashboardElement));
         form.endForm();
         data.setContent(form.process());
     }

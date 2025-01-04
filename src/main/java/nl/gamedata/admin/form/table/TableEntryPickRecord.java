@@ -21,10 +21,10 @@ public class TableEntryPickRecord extends AbstractTableEntry<TableEntryPickRecor
     /** Entries alphabetically sorted on pick name. */
     private SortedMap<String, Integer> records = new TreeMap<>();
 
-    public <R extends UpdatableRecord<R>> TableEntryPickRecord(final TableField<R, Integer> tableField,
-            final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryPickRecord(final AdminData data, final boolean reedit,
+            final TableField<R, Integer> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
     }
 
     @Override

@@ -4,13 +4,16 @@ import org.jooq.Record;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
+
 public class TableEntryBoolean extends AbstractTableEntry<TableEntryBoolean, Byte>
 {
 
     // assumes boolean is coded as TINYINT
-    public <R extends UpdatableRecord<R>> TableEntryBoolean(final TableField<R, Byte> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryBoolean(final AdminData data, final boolean reedit,
+            final TableField<R, Byte> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
     }
 
     @Override

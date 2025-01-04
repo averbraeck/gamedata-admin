@@ -117,6 +117,7 @@ public class TableGameSession
         {
             GameSessionRecord gameSession = recordId == 0 ? Tables.GAME_SESSION.newRecord()
                     : SqlUtils.readRecordFromId(data, Tables.GAME_SESSION, recordId);
+            boolean reedit = click.contains("reedit");
             if (!click.equals("record-new"))
             {
                 organizationId = gameSession.getOrganizationId();
@@ -130,27 +131,27 @@ public class TableGameSession
             form.setHeader("Game Session", click, recordId);
             form.setPhase(1);
             OrganizationRecord organization = SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, organizationId);
-            form.addEntry(new TableEntryInt(Tables.GAME_SESSION.ORGANIZATION_ID, gameSession).setInitialValue(organizationId)
-                    .setHidden().setReadOnly());
+            form.addEntry(new TableEntryInt(data, reedit, Tables.GAME_SESSION.ORGANIZATION_ID, gameSession)
+                    .setInitialValue(organizationId).setHidden().setReadOnly());
             form.addEntry(new FormEntryString("Organization", "organization").setReadOnly()
                     .setInitialValue(organization.getCode(), organization.getCode()));
             GameRecord game = SqlUtils.readRecordFromId(data, Tables.GAME, gameId);
             form.addEntry(new FormEntryInt("Game id", "game_id").setHidden().setReadOnly().setInitialValue(gameId, gameId));
             form.addEntry(new FormEntryString("Game", "game").setReadOnly().setInitialValue(game.getCode(), game.getCode()));
-            form.addEntry(new TableEntryPickRecord(Tables.GAME_SESSION.GAME_VERSION_ID, gameSession)
+            form.addEntry(new TableEntryPickRecord(data, reedit, Tables.GAME_SESSION.GAME_VERSION_ID, gameSession)
                     .setPickTable(data, data.getGameVersionPicklist(gameId, Access.VIEW)).setLabel("Game Version"));
-            form.addEntry(new TableEntryString(Tables.GAME_SESSION.CODE, gameSession).setMinLength(2));
-            form.addEntry(new TableEntryString(Tables.GAME_SESSION.NAME, gameSession).setMinLength(2));
-            form.addEntry(new TableEntryText(Tables.GAME_SESSION.DESCRIPTION, gameSession));
-            form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_TOKEN, gameSession).setMinLength(2));
-            form.addEntry(new TableEntryString(Tables.GAME_SESSION.SESSION_STATUS, gameSession).setMinLength(2));
-            form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.TOKEN_FORCED, gameSession));
-            form.addEntry(new TableEntryDate(Tables.GAME_SESSION.PLAY_DATE, gameSession));
-            form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.VALID, gameSession));
-            form.addEntry(new TableEntryDateTime(Tables.GAME_SESSION.VALID_FROM, gameSession));
-            form.addEntry(new TableEntryDateTime(Tables.GAME_SESSION.VALID_UNTIL, gameSession));
-            form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.TOKEN_FOR_DASHBOARD, gameSession));
-            form.addEntry(new TableEntryBoolean(Tables.GAME_SESSION.ARCHIVED, gameSession).setLabel("Archived?"));
+            form.addEntry(new TableEntryString(data, reedit, Tables.GAME_SESSION.CODE, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryString(data, reedit, Tables.GAME_SESSION.NAME, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryText(data, reedit, Tables.GAME_SESSION.DESCRIPTION, gameSession));
+            form.addEntry(new TableEntryString(data, reedit, Tables.GAME_SESSION.SESSION_TOKEN, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryString(data, reedit, Tables.GAME_SESSION.SESSION_STATUS, gameSession).setMinLength(2));
+            form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME_SESSION.TOKEN_FORCED, gameSession));
+            form.addEntry(new TableEntryDate(data, reedit, Tables.GAME_SESSION.PLAY_DATE, gameSession));
+            form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME_SESSION.VALID, gameSession));
+            form.addEntry(new TableEntryDateTime(data, reedit, Tables.GAME_SESSION.VALID_FROM, gameSession));
+            form.addEntry(new TableEntryDateTime(data, reedit, Tables.GAME_SESSION.VALID_UNTIL, gameSession));
+            form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME_SESSION.TOKEN_FOR_DASHBOARD, gameSession));
+            form.addEntry(new TableEntryBoolean(data, reedit, Tables.GAME_SESSION.ARCHIVED, gameSession).setLabel("Archived?"));
             form.endForm();
             data.setContent(form.process());
             return;

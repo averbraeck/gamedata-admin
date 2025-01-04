@@ -53,13 +53,14 @@ public class TableOrganization
     {
         OrganizationRecord organization = recordId == 0 ? Tables.ORGANIZATION.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.ORGANIZATION, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(organization);
         TableForm form = new TableForm(data);
         form.startMultipartForm();
         form.setHeader("Organization", click, recordId);
-        form.addEntry(new TableEntryString(Tables.ORGANIZATION.CODE, organization).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.ORGANIZATION.NAME, organization).setMinLength(2));
-        form.addEntry(new TableEntryImage(Tables.ORGANIZATION.LOGO, organization).setImageRecordId(recordId)
+        form.addEntry(new TableEntryString(data, reedit, Tables.ORGANIZATION.CODE, organization).setMinLength(2));
+        form.addEntry(new TableEntryString(data, reedit, Tables.ORGANIZATION.NAME, organization).setMinLength(2));
+        form.addEntry(new TableEntryImage(data, reedit, Tables.ORGANIZATION.LOGO, organization).setImageRecordId(recordId)
                 .setImageServlet("imageOrganization"));
         form.endForm();
         data.setContent(form.process());

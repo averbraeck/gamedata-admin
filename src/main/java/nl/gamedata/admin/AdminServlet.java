@@ -73,10 +73,16 @@ public class AdminServlet extends HttpServlet
             handleRecordEdit(request, response, click, data, recordId);
         else if (click.equals("record-save"))
             handleRecordSave(request, response, click, data, recordId);
-        else if (click.equals("record-cancel") || click.equals("record-ok"))
+        else if (click.equals("record-cancel"))
             handleRecordCancel(request, response, click, data, recordId);
+        else if (click.equals("record-ok"))
+            handleRecordOk(request, response, click, data, recordId);
+        else if (click.equals("record-reedit"))
+            handleRecordReEdit(request, response, click, data, recordId);
         else if (click.equals("record-delete"))
             handleRecordDelete(request, response, click, data, recordId);
+        else if (click.equals("record-delete-ok"))
+            handleRecordDeleteOk(request, response, click, data, recordId);
         else if (click.equals("record-select"))
             handleRecordSelect(request, response, click, data, recordId);
         else if (click.startsWith("close-"))
@@ -130,6 +136,13 @@ public class AdminServlet extends HttpServlet
         Menus.edit(data, request, click, recordId);
     }
 
+    private void handleRecordReEdit(final HttpServletRequest request, final HttpServletResponse response, final String click,
+            final AdminData data, final int recordId) throws IOException
+    {
+        System.err.println("RECORD choice: " + "record-reedit" + " with recordId: " + recordId);
+        Menus.edit(data, request, "record-reedit", recordId);
+    }
+
     private void handleRecordSave(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
@@ -154,10 +167,12 @@ public class AdminServlet extends HttpServlet
         if (((TableForm) data.getEditForm()).checkFieldsChanged(data.getEditRecord(), request, data))
         {
             String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
-            String reEditMethod = "clickMenu('recordReEdit')";
+            String reEditMethod = "clickRecordId('record-reedit', " + recordId + ")";
+            data.fillPreviousParameterMap(request);
             ModalWindowUtils.make2ButtonModalWindow(data, "Data has changed",
                     "Data has changed. Do you want to continue editing or cancel without saving?", "Edit", reEditMethod,
                     "Cancel", cancelMethod, cancelMethod);
+            handleRecordReEdit(request, response, click, data, recordId);
         }
         else
         {
@@ -165,12 +180,28 @@ public class AdminServlet extends HttpServlet
         }
     }
 
+    private void handleRecordOk(final HttpServletRequest request, final HttpServletResponse response, final String click,
+            final AdminData data, final int recordId) throws IOException
+    {
+        System.err.println("RECORD OK: " + click + " with recordId: " + recordId);
+        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+    }
+
     private void handleRecordDelete(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD DELETE: " + click + " with recordId: " + recordId);
+        String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+        String deleteOkMethod = "clickRecordId('record-delete-ok', " + recordId + ")";
+        ModalWindowUtils.make2ButtonModalWindow(data, "Delete confirmation",
+                "Are you sure you want to delete this record?", "Delete", deleteOkMethod,
+                "Cancel", cancelMethod, cancelMethod);
+    }
 
-        // TODO: check for ok -> delete/cancel
+    private void handleRecordDeleteOk(final HttpServletRequest request, final HttpServletResponse response, final String click,
+            final AdminData data, final int recordId) throws IOException
+    {
+        System.err.println("RECORD DELETE OK: " + click + " with recordId: " + recordId);
 
         data.resetRoles();
         handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);

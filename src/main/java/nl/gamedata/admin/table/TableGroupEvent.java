@@ -69,8 +69,7 @@ public class TableGroupEvent
         form.addEntry(new FormEntryString("Game Session", "game_session").setReadOnly().setInitialValue(gameSession.getName()));
         form.addEntry(new FormEntryString("Group", "game_group").setReadOnly().setInitialValue(group.getName()));
         form.addEntry(new FormEntryInt("Attempt", "attempt").setReadOnly().setInitialValue(groupAttempt.getAttemptNr()));
-        form.addEntry(
-                new FormEntryDateTime("Timestamp", "timestamp").setReadOnly().setInitialValue(groupEvent.getTimestamp()));
+        form.addEntry(new FormEntryDateTime("Timestamp", "timestamp").setReadOnly().setInitialValue(groupEvent.getTimestamp()));
         form.addEntry(new FormEntryString("Type", "type").setReadOnly().setInitialValue(groupEvent.getType()));
         form.addEntry(new FormEntryString("Key", "key").setReadOnly().setInitialValue(groupEvent.getKey()));
         form.addEntry(new FormEntryString("Value", "value").setReadOnly().setInitialValue(groupEvent.getValue()));

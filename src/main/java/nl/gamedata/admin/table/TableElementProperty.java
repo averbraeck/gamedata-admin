@@ -44,16 +44,17 @@ public class TableElementProperty
     {
         ElementPropertyRecord elementProperty = recordId == 0 ? Tables.ELEMENT_PROPERTY.newRecord()
                 : SqlUtils.readRecordFromId(data, Tables.ELEMENT_PROPERTY, recordId);
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(elementProperty);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("Dashboard Element Property", click, recordId);
-        form.addEntry(new TableEntryPickRecord(Tables.ELEMENT_PROPERTY.DASHBOARD_ELEMENT_ID, elementProperty).setPickTable(data,
-                Tables.DASHBOARD_ELEMENT, Tables.DASHBOARD_ELEMENT.ID, Tables.DASHBOARD_ELEMENT.NAME));
-        form.addEntry(new TableEntryString(Tables.ELEMENT_PROPERTY.CODE, elementProperty).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.ELEMENT_PROPERTY.NAME, elementProperty).setMinLength(2));
-        form.addEntry(new TableEntryText(Tables.ELEMENT_PROPERTY.DESCRIPTION, elementProperty));
-        form.addEntry(new TableEntryString(Tables.ELEMENT_PROPERTY.TYPE, elementProperty).setMinLength(2));
+        form.addEntry(new TableEntryPickRecord(data, reedit, Tables.ELEMENT_PROPERTY.DASHBOARD_ELEMENT_ID, elementProperty)
+                .setPickTable(data, Tables.DASHBOARD_ELEMENT, Tables.DASHBOARD_ELEMENT.ID, Tables.DASHBOARD_ELEMENT.NAME));
+        form.addEntry(new TableEntryString(data, reedit, Tables.ELEMENT_PROPERTY.CODE, elementProperty).setMinLength(2));
+        form.addEntry(new TableEntryString(data, reedit, Tables.ELEMENT_PROPERTY.NAME, elementProperty).setMinLength(2));
+        form.addEntry(new TableEntryText(data, reedit, Tables.ELEMENT_PROPERTY.DESCRIPTION, elementProperty));
+        form.addEntry(new TableEntryString(data, reedit, Tables.ELEMENT_PROPERTY.TYPE, elementProperty).setMinLength(2));
         form.endForm();
         data.setContent(form.process());
     }

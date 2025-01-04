@@ -89,19 +89,20 @@ public class TableUser
     {
         UserRecord user = recordId == 0 ? Tables.USER.newRecord() : SqlUtils.readRecordFromId(data, Tables.USER, recordId);
         String salt = recordId == 0 ? UUID.randomUUID().toString() : user.getSalt();
+        boolean reedit = click.contains("reedit");
         data.setEditRecord(user);
         TableForm form = new TableForm(data);
         form.startForm();
         form.setHeader("User", click, recordId);
-        form.addEntry(new TableEntryString(Tables.USER.NAME, user).setMinLength(2));
-        form.addEntry(new TableEntryString(Tables.USER.EMAIL, user));
-        form.addEntry(new TableEntryString(Tables.USER.PASSWORD, user).setInitialValue("").setRequired(recordId == 0)
-                .setMinLength(recordId == 0 ? 8 : 0));
-        form.addEntry(new TableEntryString(Tables.USER.SALT, user).setInitialValue(salt).setHidden());
+        form.addEntry(new TableEntryString(data, reedit, Tables.USER.NAME, user).setMinLength(2));
+        form.addEntry(new TableEntryString(data, reedit, Tables.USER.EMAIL, user));
+        form.addEntry(new TableEntryString(data, reedit, Tables.USER.PASSWORD, user).setInitialValue("")
+                .setRequired(recordId == 0).setMinLength(recordId == 0 ? 8 : 0));
+        form.addEntry(new TableEntryString(data, reedit, Tables.USER.SALT, user).setInitialValue(salt).setHidden());
         if (data.isSuperAdmin())
         {
-            form.addEntry(new TableEntryBoolean(Tables.USER.SUPER_ADMIN, user));
-            form.addEntry(new TableEntryBoolean(Tables.USER.GAME_ADMIN, user));
+            form.addEntry(new TableEntryBoolean(data, reedit, Tables.USER.SUPER_ADMIN, user));
+            form.addEntry(new TableEntryBoolean(data, reedit, Tables.USER.GAME_ADMIN, user));
         }
         form.endForm();
         data.setContent(form.process());

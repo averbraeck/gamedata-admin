@@ -185,6 +185,7 @@ public class TablePlayerObjective
 
             TableForm form = new TableForm(data);
             form.startForm();
+            boolean reedit = click.contains("reedit");
             data.setEditRecord(playerObjective);
             form.setHeader("Larning Goal", click, recordId);
             form.setPhase(1);
@@ -198,16 +199,16 @@ public class TablePlayerObjective
                     .setInitialValue(gameMissionId, gameMissionId));
             form.addEntry(new FormEntryString("Game Mission", "game_mission").setReadOnly()
                     .setInitialValue(gameMission.getName(), gameMission.getName()));
-            form.addEntry(new TableEntryInt(Tables.PLAYER_OBJECTIVE.LEARNING_GOAL_ID, playerObjective)
+            form.addEntry(new TableEntryInt(data, reedit, Tables.PLAYER_OBJECTIVE.LEARNING_GOAL_ID, playerObjective)
                     .setInitialValue(learningGoalId).setHidden().setReadOnly());
             form.addEntry(new FormEntryString("Learning Goal", "learning_goal").setReadOnly()
                     .setInitialValue(learningGoal.getName(), learningGoal.getName()));
-            form.addEntry(new TableEntryString(Tables.PLAYER_OBJECTIVE.CODE, playerObjective).setMinLength(2));
-            form.addEntry(new TableEntryString(Tables.PLAYER_OBJECTIVE.NAME, playerObjective).setMinLength(2));
-            form.addEntry(new TableEntryText(Tables.PLAYER_OBJECTIVE.DESCRIPTION, playerObjective));
-            form.addEntry(new TableEntryPickRecord(Tables.PLAYER_OBJECTIVE.SCALE_ID, playerObjective).setPickTable(data,
-                    Tables.SCALE, Tables.SCALE.ID, Tables.SCALE.TYPE, Tables.SCALE.GAME_ID.eq(gameId)));
-            form.addEntry(new TableEntryString(Tables.PLAYER_OBJECTIVE.THRESHOLD, playerObjective));
+            form.addEntry(new TableEntryString(data, reedit, Tables.PLAYER_OBJECTIVE.CODE, playerObjective).setMinLength(2));
+            form.addEntry(new TableEntryString(data, reedit, Tables.PLAYER_OBJECTIVE.NAME, playerObjective).setMinLength(2));
+            form.addEntry(new TableEntryText(data, reedit, Tables.PLAYER_OBJECTIVE.DESCRIPTION, playerObjective));
+            form.addEntry(new TableEntryPickRecord(data, reedit, Tables.PLAYER_OBJECTIVE.SCALE_ID, playerObjective)
+                    .setPickTable(data, Tables.SCALE, Tables.SCALE.ID, Tables.SCALE.TYPE, Tables.SCALE.GAME_ID.eq(gameId)));
+            form.addEntry(new TableEntryString(data, reedit, Tables.PLAYER_OBJECTIVE.THRESHOLD, playerObjective));
             form.endForm();
             data.setContent(form.process());
             return;

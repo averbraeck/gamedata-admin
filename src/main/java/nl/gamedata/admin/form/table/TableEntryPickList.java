@@ -5,14 +5,17 @@ import java.util.List;
 import org.jooq.TableField;
 import org.jooq.UpdatableRecord;
 
+import nl.gamedata.admin.AdminData;
+
 public class TableEntryPickList extends AbstractTableEntry<TableEntryPickList, String>
 {
 
     private String[] pickListEntries;
 
-    public <R extends UpdatableRecord<R>> TableEntryPickList(final TableField<R, String> tableField, final UpdatableRecord<R> record)
+    public <R extends UpdatableRecord<R>> TableEntryPickList(final AdminData data, final boolean reedit,
+            final TableField<R, String> tableField, final UpdatableRecord<R> record)
     {
-        super(tableField, record);
+        super(data, reedit, tableField, record);
     }
 
     @Override
@@ -61,7 +64,7 @@ public class TableEntryPickList extends AbstractTableEntry<TableEntryPickList, S
     {
         var enumArray = pickListClass.getEnumConstants();
         this.pickListEntries = new String[enumArray.length];
-        for (int i=0; i<enumArray.length; i++)
+        for (int i = 0; i < enumArray.length; i++)
             this.pickListEntries[i] = enumArray[i].toString();
         return this;
     }
