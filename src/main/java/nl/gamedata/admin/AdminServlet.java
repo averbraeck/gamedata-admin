@@ -10,7 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jooq.Field;
 import org.jooq.Record;
+import org.jooq.Table;
+import org.jooq.UpdatableRecord;
+import org.jooq.impl.DSL;
 
 import nl.gamedata.admin.Menus.Tab;
 import nl.gamedata.admin.form.table.TableForm;
@@ -147,15 +151,48 @@ public class AdminServlet extends HttpServlet
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD SAVE: " + click + " with recordId: " + recordId);
-        if (data.getEditRecord().getTable().getName().toLowerCase().equals("user"))
-            TableUser.saveUser(request, data, recordId);
-        else
-            data.saveRecord(request, recordId);
-
-        // TODO: check, popup for errors -> repair/discard
-
-        // TODO: save, popup if error during saving -> repair/discard
-
+        String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+        String reEditMethod = "clickRecordId('record-reedit', " + recordId + ")";
+        try
+        {
+            data.fillPreviousParameterMap(request);
+            if (data.getEditRecord().getTable().getName().toLowerCase().equals("user"))
+                TableUser.saveUser(request, data, recordId);
+            else
+            {
+                Table<?> table = (Table<?>) data.getEditRecord().getTable();
+                UpdatableRecord<?> record =
+                        recordId == 0 ? (UpdatableRecord<?>) data.getDSL().newRecord(table) : data.getEditRecord();
+                String errors = ((TableForm) data.getEditForm()).setFields(record, request, data);
+                if (errors.length() > 0)
+                {
+                    System.err.println(errors);
+                    ModalWindowUtils.make2ButtonModalWindow(data, "Error storing record (1)", "<p>" + errors + "</p>", "Edit",
+                            reEditMethod, "Cancel", cancelMethod, cancelMethod);
+                }
+                else
+                {
+                    try
+                    {
+                        record.store();
+                    }
+                    catch (Exception exception)
+                    {
+                        System.err.println(exception.getMessage());
+                        System.err.println(record);
+                        ModalWindowUtils.make2ButtonModalWindow(data, "Error storing record (2)",
+                                "<p>" + exception.getMessage() + "</p>", "Edit", reEditMethod, "Cancel", cancelMethod,
+                                cancelMethod);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.err.println(e.getMessage());
+            ModalWindowUtils.make2ButtonModalWindow(data, "Error storing record (3)", "<p>" + e.getMessage() + "</p>", "Edit",
+                    reEditMethod, "Cancel", cancelMethod, cancelMethod);
+        }
         data.resetRoles();
         handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
     }
@@ -193,9 +230,8 @@ public class AdminServlet extends HttpServlet
         System.err.println("RECORD DELETE: " + click + " with recordId: " + recordId);
         String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
         String deleteOkMethod = "clickRecordId('record-delete-ok', " + recordId + ")";
-        ModalWindowUtils.make2ButtonModalWindow(data, "Delete confirmation",
-                "Are you sure you want to delete this record?", "Delete", deleteOkMethod,
-                "Cancel", cancelMethod, cancelMethod);
+        ModalWindowUtils.make2ButtonModalWindow(data, "Delete confirmation", "Are you sure you want to delete this record?",
+                "Delete", deleteOkMethod, "Cancel", cancelMethod, cancelMethod);
     }
 
     private void handleRecordDeleteOk(final HttpServletRequest request, final HttpServletResponse response, final String click,
@@ -204,14 +240,21 @@ public class AdminServlet extends HttpServlet
         System.err.println("RECORD DELETE OK: " + click + " with recordId: " + recordId);
         try
         {
-            data.getEditRecord().delete();
+            var dslContext = data.getDSL();
+            Tab tab = Menus.getActiveTab(data);
+            String tableName = tab.tableName();
+            Table<?> table = DSL.table(DSL.name(tableName));
+            Field<Integer> idField = DSL.field(DSL.name("id"), Integer.class);
+            dslContext.delete(table).where(idField.eq(recordId)).execute();
             data.resetRoles();
         }
         catch (Exception exception)
         {
+            exception.printStackTrace();
             String okMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
             ModalWindowUtils.makeOkModalWindow("Error deleting record", "<p>" + exception.getMessage() + "</p>", okMethod);
         }
+        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
     }
 
     private void handleRecordSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,

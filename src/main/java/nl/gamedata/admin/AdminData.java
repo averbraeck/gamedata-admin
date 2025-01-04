@@ -782,37 +782,6 @@ public class AdminData extends CommonData
         this.editRecord = editRecord;
     }
 
-    @SuppressWarnings("unchecked")
-    public <R extends org.jooq.UpdatableRecord<R>> int saveRecord(final HttpServletRequest request, final int recordId)
-    {
-        Table<R> table = (Table<R>) this.editRecord.getTable();
-        R record = recordId == 0 ? getDSL().newRecord(table) : (R) this.editRecord;
-        // getDSL().selectFrom(table).where(((TableField<R, Integer>) table.field("id")).eq(recordId)).fetchOne();
-        String errors = ((TableForm) this.editForm).setFields(record, request, this);
-        if (errors.length() > 0)
-        {
-            System.err.println(errors);
-            setError("Error storing record (1)<p>" + errors + "</p>");
-            return -1;
-        }
-        else
-        {
-            try
-            {
-                record.store();
-            }
-            catch (Exception exception)
-            {
-                System.err.println(exception.getMessage());
-                System.err.println(record);
-                setError("Error storing record (2)<p>" + exception.getMessage() + "</p>");
-                return -1;
-            }
-        }
-        setError("");
-        return Integer.valueOf(record.get("id").toString());
-    }
-
     /* ******************* */
     /* GETTERS AND SETTERS */
     /* ******************* */
