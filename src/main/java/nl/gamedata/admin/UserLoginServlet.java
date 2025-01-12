@@ -148,8 +148,8 @@ public class UserLoginServlet extends HttpServlet
             {
                 data.setUsername(user.getName());
                 data.setUser(user);
-                data.setMenuChoice("admin-panel");
-                data.putTabChoice("admin-panel", "");
+                data.setMenuChoice("home");
+                data.putTabChoice("home", "");
                 response.sendRedirect("jsp/admin/admin.jsp");
                 return;
             }

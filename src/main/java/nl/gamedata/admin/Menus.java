@@ -59,9 +59,9 @@ public class Menus
 
     static
     {
-        menuList.add("admin-panel");
-        menuMap.put("admin-panel",
-                new Menu("fa-house", "admin-panel", "Admin panel", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
+        menuList.add("home");
+        menuMap.put("home",
+                new Menu("fa-house", "home", "Admin panel", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("organization");
         List<Tab> organizationTabs = new ArrayList<>();
@@ -305,7 +305,7 @@ public class Menus
 
     public static void initializeTabChoices(final AdminData data)
     {
-        data.putTabChoice("admin-panel", "");
+        data.putTabChoice("home", "");
         data.putTabChoice("organization", "organization");
         data.putTabChoice("user", "user");
         data.putTabChoice("game", "game");
