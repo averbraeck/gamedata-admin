@@ -28,6 +28,11 @@ public class Sidebar
             <a href="#" class="list-group-item py-2"></a>
                           """;
 
+    /** Sidebar group item with: 1. text. */
+    private static String sidebarGroup = """
+            <div class="gd-sidebar-menu-group">%s</div>
+                          """;
+
     /** Sidebar item with: 1. active/blank, 2. true/false, 3. onclick menu, 4. fa-icon, 5. text. */
     private static String sidebarItem = """
             <a href="#" class="list-group-item list-group-item-action py-2 ripple %s" aria-current="%s"
@@ -52,7 +57,13 @@ public class Sidebar
         for (String menuName : Menus.menuList)
         {
             Menu menu = Menus.menuMap.get(menuName);
-            item(s, data, menu.icon(), menu.menuChoice(), menu.menuText());
+            if (menu.menuChoice().length() == 0)
+            {
+                if (Menus.showMenu(data, menu.menuChoice()))
+                    s.append(sidebarGroup.formatted(menu.menuText()));
+            }
+            else
+                item(s, data, menu.icon(), menu.menuChoice(), menu.menuText());
         }
         s.append(sidebarBottom);
         return s.toString();

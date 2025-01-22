@@ -59,13 +59,16 @@ public class Menus
 
     static
     {
+        menuMap.put("ADMIN",
+                new Menu("", "", "ADMIN", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
+
         menuList.add("home");
         menuMap.put("home",
-                new Menu("fa-house", "home", "Admin panel", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
+                new Menu("fa-house", "home", "home", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("organization");
         List<Tab> organizationTabs = new ArrayList<>();
-        menuMap.put("organization", new Menu("fa-sitemap", "organization", "Organization", organizationTabs, Set.of(0, 2)));
+        menuMap.put("organization", new Menu("fa-sitemap", "organization", "organizations", organizationTabs, Set.of(0, 2)));
         organizationTabs.add(new Tab("organization", "Organization", "organization", "code", Set.of(0, 2),
                 TableOrganization::table, TableOrganization::edit));
         organizationTabs.add(new Tab("user", "User", "user", "name", Set.of(0, 2), TableUser::table, TableUser::edit));
@@ -81,7 +84,7 @@ public class Menus
 
         menuList.add("user");
         List<Tab> userTabs = new ArrayList<>();
-        menuMap.put("user", new Menu("fa-user", "user", "User", userTabs, Set.of(0, 1, 2)));
+        menuMap.put("user", new Menu("fa-user", "user", "users", userTabs, Set.of(0, 1, 2)));
         userTabs.add(new Tab("user", "User", "user", "name", Set.of(0, 1, 2), TableUser::table, TableUser::edit));
         userTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 1), TableGame::table, TableGame::edit));
         userTabs.add(new Tab("organization-role", "Organization Role", "organization_role", null, Set.of(0, 2),
@@ -97,7 +100,7 @@ public class Menus
 
         menuList.add("game");
         List<Tab> gameTabs = new ArrayList<>();
-        menuMap.put("game", new Menu("fa-dice", "game", "Game", gameTabs, Set.of(0, 1)));
+        menuMap.put("game", new Menu("fa-dice", "game", "games", gameTabs, Set.of(0, 1)));
         gameTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 1), TableGame::table, TableGame::edit));
         gameTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 1), TableGameVersion::table,
                 TableGameVersion::edit));
@@ -114,7 +117,7 @@ public class Menus
         menuList.add("game-control");
         List<Tab> gameControlTabs = new ArrayList<>();
         menuMap.put("game-control",
-                new Menu("fa-square-binary", "game-control", "Game Control", gameControlTabs, Set.of(0, 3)));
+                new Menu("fa-square-binary", "game-control", "game access", gameControlTabs, Set.of(0, 3)));
         gameControlTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 3), TableGame::table, TableGame::edit));
         gameControlTabs.add(new Tab("organization", "Organization", "organization", "code", Set.of(0, 3),
                 TableOrganization::table, TableOrganization::edit));
@@ -126,7 +129,7 @@ public class Menus
         menuList.add("game-session");
         List<Tab> gameSessionTabs = new ArrayList<>();
         menuMap.put("game-session",
-                new Menu("fa-calendar-check", "game-session", "Game Session", gameSessionTabs, Set.of(0, 4)));
+                new Menu("fa-calendar-check", "game-session", "game sessions", gameSessionTabs, Set.of(0, 4)));
         gameSessionTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
         gameSessionTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 4),
                 TableGameVersion::table, TableGameVersion::edit));
@@ -134,28 +137,8 @@ public class Menus
                 TableGameSession::table, TableGameSession::edit));
         // gameSessionTabs.add(new Tab("session-dashboard", "Session Dashboard", null, Set.of(0, 4)));
 
-        menuList.add("layout");
-        List<Tab> layoutTabs = new ArrayList<>();
-        menuMap.put("layout", new Menu("fa-display", "layout", "Layout", layoutTabs, Set.of(0)));
-        layoutTabs.add(new Tab("dashboard-layout", "Dashboard Layout", "dashboard_layout", "code", Set.of(0),
-                TableDashboardLayout::table, TableDashboardLayout::edit));
-        layoutTabs.add(new Tab("dashboard-element", "Dashboard Element", "dashboard_element", "code", Set.of(0),
-                TableDashboardElement::table, TableDashboardElement::edit));
-        layoutTabs.add(new Tab("element-property", "Element Property", "element_property", "code", Set.of(0),
-                TableElementProperty::table, TableElementProperty::edit));
-
-        menuList.add("dashboard");
-        List<Tab> dashboardTabs = new ArrayList<>();
-        menuMap.put("dashboard", new Menu("fa-table-cells-large", "dashboard", "Dashboard", dashboardTabs, Set.of(0, 5)));
-        dashboardTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 5), TableGame::table, TableGame::edit));
-        dashboardTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 5), TableGameVersion::table,
-                TableGameVersion::edit));
-        // dashboardTabs.add(new Tab("dashboard-template", "Dashboard Template", "code", Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("template-element", "Template Element", null, Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("property-value", "Property Value", null, Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("dashboard", "Dashboard", "name", Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("session-dashboard", "Session Dashboard", null, Set.of(0, 5)));
-        // dashboardTabs.add(new Tab("dashboard-token", "Dashboard Token", null, Set.of(0, 5)));
+        menuMap.put("DASHBOARDS",
+                new Menu("", "", "DASHBOARDS", new ArrayList<>(), Set.of(0, 1, 2, 4)));
 
         menuList.add("data-session");
         List<Tab> dataSessionTabs = new ArrayList<>();
@@ -210,6 +193,35 @@ public class Menus
         List<Tab> errorsTabs = new ArrayList<>();
         menuMap.put("errors", new Menu("fa-triangle-exclamation", "errors", "Errors", errorsTabs, Set.of(0, 1, 2)));
         errorsTabs.add(new Tab("last-100", "Last 100", null, null, Set.of(0, 1, 2), TableErrors::table100, TableErrors::view));
+
+        menuMap.put("DASHBOARDS",
+                new Menu("", "", "DASHBOARDS", new ArrayList<>(), Set.of(0, 5)));
+
+        menuList.add("layout");
+        List<Tab> layoutTabs = new ArrayList<>();
+        menuMap.put("layout", new Menu("fa-display", "layout", "Layout", layoutTabs, Set.of(0)));
+        layoutTabs.add(new Tab("dashboard-layout", "Dashboard Layout", "dashboard_layout", "code", Set.of(0),
+                TableDashboardLayout::table, TableDashboardLayout::edit));
+        layoutTabs.add(new Tab("dashboard-element", "Dashboard Element", "dashboard_element", "code", Set.of(0),
+                TableDashboardElement::table, TableDashboardElement::edit));
+        layoutTabs.add(new Tab("element-property", "Element Property", "element_property", "code", Set.of(0),
+                TableElementProperty::table, TableElementProperty::edit));
+
+        menuList.add("dashboard");
+        List<Tab> dashboardTabs = new ArrayList<>();
+        menuMap.put("dashboard", new Menu("fa-table-cells-large", "dashboard", "Dashboard", dashboardTabs, Set.of(0, 5)));
+        dashboardTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 5), TableGame::table, TableGame::edit));
+        dashboardTabs.add(new Tab("game-version", "Game Version", "game_version", "code", Set.of(0, 5), TableGameVersion::table,
+                TableGameVersion::edit));
+        // dashboardTabs.add(new Tab("dashboard-template", "Dashboard Template", "code", Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("template-element", "Template Element", null, Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("property-value", "Property Value", null, Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("dashboard", "Dashboard", "name", Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("session-dashboard", "Session Dashboard", null, Set.of(0, 5)));
+        // dashboardTabs.add(new Tab("dashboard-token", "Dashboard Token", null, Set.of(0, 5)));
+
+        menuMap.put("SETTINGS",
+                new Menu("", "", "SETTINGS", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("settings");
         menuMap.put("settings",
