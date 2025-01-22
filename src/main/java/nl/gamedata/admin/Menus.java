@@ -59,12 +59,11 @@ public class Menus
 
     static
     {
-        menuMap.put("ADMIN",
-                new Menu("", "", "ADMIN", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
+        menuList.add("ADMIN");
+        menuMap.put("ADMIN", new Menu("ADMIN", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("home");
-        menuMap.put("home",
-                new Menu("fa-house", "home", "home", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
+        menuMap.put("home", new Menu("fa-house", "home", "home", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("organization");
         List<Tab> organizationTabs = new ArrayList<>();
@@ -116,8 +115,7 @@ public class Menus
 
         menuList.add("game-control");
         List<Tab> gameControlTabs = new ArrayList<>();
-        menuMap.put("game-control",
-                new Menu("fa-square-binary", "game-control", "game access", gameControlTabs, Set.of(0, 3)));
+        menuMap.put("game-control", new Menu("fa-square-binary", "game-control", "game access", gameControlTabs, Set.of(0, 3)));
         gameControlTabs.add(new Tab("game", "Game", "game", "code", Set.of(0, 3), TableGame::table, TableGame::edit));
         gameControlTabs.add(new Tab("organization", "Organization", "organization", "code", Set.of(0, 3),
                 TableOrganization::table, TableOrganization::edit));
@@ -137,8 +135,8 @@ public class Menus
                 TableGameSession::table, TableGameSession::edit));
         // gameSessionTabs.add(new Tab("session-dashboard", "Session Dashboard", null, Set.of(0, 4)));
 
-        menuMap.put("DASHBOARDS",
-                new Menu("", "", "DASHBOARDS", new ArrayList<>(), Set.of(0, 1, 2, 4)));
+        menuList.add("DATA");
+        menuMap.put("DATA", new Menu("DATA", new ArrayList<>(), Set.of(0, 1, 2, 4)));
 
         menuList.add("data-session");
         List<Tab> dataSessionTabs = new ArrayList<>();
@@ -194,8 +192,8 @@ public class Menus
         menuMap.put("errors", new Menu("fa-triangle-exclamation", "errors", "Errors", errorsTabs, Set.of(0, 1, 2)));
         errorsTabs.add(new Tab("last-100", "Last 100", null, null, Set.of(0, 1, 2), TableErrors::table100, TableErrors::view));
 
-        menuMap.put("DASHBOARDS",
-                new Menu("", "", "DASHBOARDS", new ArrayList<>(), Set.of(0, 5)));
+        menuList.add("DASHBOARDS");
+        menuMap.put("DASHBOARDS", new Menu("DASHBOARDS", new ArrayList<>(), Set.of(0, 5)));
 
         menuList.add("layout");
         List<Tab> layoutTabs = new ArrayList<>();
@@ -220,8 +218,8 @@ public class Menus
         // dashboardTabs.add(new Tab("session-dashboard", "Session Dashboard", null, Set.of(0, 5)));
         // dashboardTabs.add(new Tab("dashboard-token", "Dashboard Token", null, Set.of(0, 5)));
 
-        menuMap.put("SETTINGS",
-                new Menu("", "", "SETTINGS", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
+        menuList.add("SETTINGS");
+        menuMap.put("SETTINGS", new Menu("SETTINGS", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
 
         menuList.add("settings");
         menuMap.put("settings",
@@ -332,8 +330,20 @@ public class Menus
         data.putTabChoice("settings", "");
     }
 
-    public static record Menu(String icon, String menuChoice, String menuText, List<Tab> tabs, Set<Integer> access)
+    public static record Menu(boolean header, String icon, String menuChoice, String menuText, List<Tab> tabs,
+            Set<Integer> access)
     {
+        public Menu(final String icon, final String menuChoice, final String menuText, final List<Tab> tabs,
+                final Set<Integer> access)
+        {
+            this(false, icon, menuChoice, menuText, tabs, access);
+        }
+
+        public Menu(final String menuText, final List<Tab> tabs, final Set<Integer> access)
+        {
+            this(true, "", menuText, menuText, tabs, access);
+        }
+
     }
 
     public static record Tab(String tabChoice, String tabText, String tableName, String selectField, Set<Integer> access,

@@ -57,7 +57,7 @@ public class Sidebar
         for (String menuName : Menus.menuList)
         {
             Menu menu = Menus.menuMap.get(menuName);
-            if (menu.menuChoice().length() == 0)
+            if (menu.header())
             {
                 if (Menus.showMenu(data, menu.menuChoice()))
                     s.append(sidebarGroup.formatted(menu.menuText()));
