@@ -1,6 +1,14 @@
-body {
-  background-color: #fbfbfb;
+:root {
+  --gd-background-color: white;
+  --gd-body-text-color: black;
+  --gd-button-inactive-color: white; 
+  --gd-button-active-color: #0d6efd; 
 }
+
+body {
+  background-color: var(--gd-background-color);
+}
+
 @media (min-width: 991.98px) {
   main {
     padding-left: 240px;
@@ -36,6 +44,11 @@ body {
   padding-top: 0.5rem;
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.gd-sidebar-menu-group {
+  padding-top: 1rem;
+  color: orange;
 }
 
 .gd-nav {
