@@ -15,17 +15,7 @@ public class Sidebar
     /** top of the sidebar. */
     private static String sidebarTop = """
             <!-- Sidebar -->
-            <nav id="sidebarMenu" class="d-lg-block sidebar collapse bg-white">
-              <div class="position-sticky">
-                <div class="list-group list-group-flush mx-3 mt-4">
-                                """;
-
-    /** User item with: text. */
-    private static String sidebarUser = """
-            <a href="#" class="list-group-item py-2">
-              <i class="fas fa-circle-user fa-fw me-3"></i><span>%s</span>
-            </a>
-            <a href="#" class="list-group-item py-2"></a>
+            <div id="sidebarMenu" class="gd-sidebar">
                           """;
 
     /** Sidebar group item with: 1. text. */
@@ -35,25 +25,22 @@ public class Sidebar
 
     /** Sidebar item with: 1. active/blank, 2. true/false, 3. onclick menu, 4. fa-icon, 5. text. */
     private static String sidebarItem = """
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple %s" aria-current="%s"
+            <a href="#" class="gd-sidebar-menu-item %s" aria-current="%s"
                 onclick="clickMenu('%s')">
-              <i class="fas %s fa-fw me-3"></i><span>%s</span>
+              <i class="fas %s fa-fw"></i><span>%s</span>
             </a>
                           """;
 
     /** bottom of the sidebar. */
     private static String sidebarBottom = """
-                </div>
-              </div>
-            </nav>
+            </div>
             <!-- Sidebar -->
-                                """;
+                          """;
 
     public static String makeSidebar(final AdminData data)
     {
         StringBuilder s = new StringBuilder();
         s.append(sidebarTop);
-        s.append(sidebarUser.formatted(data.getUsername()));
         for (String menuName : Menus.menuList)
         {
             Menu menu = Menus.menuMap.get(menuName);
@@ -75,7 +62,7 @@ public class Sidebar
         if (Menus.showMenu(data, menuChoice))
         {
             if (data.getMenuChoice().equals(menuChoice))
-                s.append(sidebarItem.formatted("active", "true", "menu-" + menuChoice, faIcon, menuText));
+                s.append(sidebarItem.formatted("gd-active", "true", "menu-" + menuChoice, faIcon, menuText));
             else
                 s.append(sidebarItem.formatted("", "false", "menu-" + menuChoice, faIcon, menuText));
         }
