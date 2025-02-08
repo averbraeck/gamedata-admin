@@ -3,7 +3,7 @@ package nl.gamedata.admin;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 
-import nl.gamedata.admin.Menus.Tab;
+import nl.gamedata.admin.Menus.SubMenu;
 
 /**
  * Table.java.
@@ -34,7 +34,7 @@ public class AdminTable
 
     /** No args for now. */
     private static final String tableHeaderTop = """
-            <table class="table">
+            <table class="gd-table">
               <thead>
                 <tr>
                   """;
@@ -128,7 +128,7 @@ public class AdminTable
     {
         this.data = data;
         this.title = title;
-        Tab tab = Menus.getActiveTab(data);
+        SubMenu tab = Menus.getActiveSubMenu(data);
         this.select = tab.selectField() != null;
         if (data.getTableColumnSort() == null)
             data.selectTableColumnSort(defaultSortField);

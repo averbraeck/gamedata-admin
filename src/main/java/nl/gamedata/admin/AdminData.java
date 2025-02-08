@@ -59,8 +59,8 @@ public class AdminData extends CommonData
     /** Which menu has been chosen, to maintain persistence after a POST. */
     private String menuChoice = "";
 
-    /** Which tab has been chosen, to maintain persistence after a POST. */
-    private Map<String, String> tabChoice = new HashMap<>();
+    /** Which submenu has been chosen, to maintain persistence after a POST. */
+    private Map<String, String> subMenuChoice = new HashMap<>();
 
     /** Map that links the menu#tab name to a potential filter choice (record and display name) in the navbar. */
     private Map<String, FilterChoice> tabFilterChoices = new HashMap<>();
@@ -105,7 +105,7 @@ public class AdminData extends CommonData
 
     public AdminData()
     {
-        Menus.initializeTabChoices(this);
+        Menus.initializeSubMenuChoices(this);
     }
 
     public String getSidebar()
@@ -113,10 +113,16 @@ public class AdminData extends CommonData
         return Sidebar.makeSidebar(this);
     }
 
-    public String getNavbar()
+    public String getSubMenubar()
     {
-        return Navbar.makeNavbar(this);
+        return SubMenubar.makeSubMenubar(this);
     }
+
+    public String getTopbar()
+    {
+        return Topbar.makeTopbar(this);
+    }
+
 
     public <R extends UpdatableRecord<R>> int getId(final R record)
     {
@@ -814,14 +820,14 @@ public class AdminData extends CommonData
         this.menuChoice = menuChoice;
     }
 
-    public String getTabChoice(final String menuChoice)
+    public String getSubMenuChoice(final String menuChoice)
     {
-        return this.tabChoice.get(menuChoice);
+        return this.subMenuChoice.get(menuChoice);
     }
 
-    public void putTabChoice(final String menuChoice, final String tabChoice)
+    public void putSubMenuChoice(final String menuChoice, final String subMenuChoice)
     {
-        this.tabChoice.put(menuChoice, tabChoice);
+        this.subMenuChoice.put(menuChoice, subMenuChoice);
     }
 
     public String getContent()
@@ -856,13 +862,13 @@ public class AdminData extends CommonData
 
     public ColumnSort getTableColumnSort()
     {
-        return this.tableColumnSort.get(this.menuChoice + "#" + getTabChoice(this.menuChoice));
+        return this.tableColumnSort.get(this.menuChoice + "#" + getSubMenuChoice(this.menuChoice));
     }
 
     public void selectTableColumnSort(final String fieldName)
     {
         String fn = fieldName.toLowerCase().replace(' ', '-');
-        String key = this.menuChoice + "#" + getTabChoice(this.menuChoice);
+        String key = this.menuChoice + "#" + getSubMenuChoice(this.menuChoice);
         ColumnSort oldColumnSort = getTableColumnSort();
         if (oldColumnSort != null && fn.equals(oldColumnSort.fieldName()))
             this.tableColumnSort.put(key, new ColumnSort(fn, !oldColumnSort.az()));

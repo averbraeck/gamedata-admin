@@ -16,7 +16,7 @@ import org.jooq.Table;
 import org.jooq.UpdatableRecord;
 import org.jooq.impl.DSL;
 
-import nl.gamedata.admin.Menus.Tab;
+import nl.gamedata.admin.Menus.SubMenu;
 import nl.gamedata.admin.form.table.TableForm;
 import nl.gamedata.admin.table.TableUser;
 
@@ -120,7 +120,7 @@ public class AdminServlet extends HttpServlet
     {
         String menuChoice = click.replace("menu-", "");
         data.setMenuChoice(menuChoice);
-        String tabChoice = "tab-" + data.getTabChoice(menuChoice);
+        String tabChoice = "tab-" + data.getSubMenuChoice(menuChoice);
         handleTab(request, response, tabChoice, data, recordId);
     }
 
@@ -128,7 +128,7 @@ public class AdminServlet extends HttpServlet
             final AdminData data, final int recordId) throws IOException
     {
         String tab = click.replace("tab-", "");
-        data.putTabChoice(data.getMenuChoice(), tab);
+        data.putSubMenuChoice(data.getMenuChoice(), tab);
         System.err.println("TAB choice: " + click + " with recordId: " + recordId);
         Menus.table(data, request, click);
     }
@@ -151,7 +151,7 @@ public class AdminServlet extends HttpServlet
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD SAVE: " + click + " with recordId: " + recordId);
-        String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+        String cancelMethod = "clickMenu('tab-" + data.getSubMenuChoice(data.getMenuChoice()) + "')";
         String reEditMethod = "clickRecordId('record-reedit', " + recordId + ")";
         try
         {
@@ -194,7 +194,7 @@ public class AdminServlet extends HttpServlet
                     reEditMethod, "Cancel", cancelMethod, cancelMethod);
         }
         data.resetRoles();
-        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
     }
 
     private void handleRecordCancel(final HttpServletRequest request, final HttpServletResponse response, final String click,
@@ -206,7 +206,7 @@ public class AdminServlet extends HttpServlet
             TableForm tableForm = (TableForm) data.getEditForm();
             if (tableForm.checkFieldsChanged(data.getEditRecord(), request, data))
             {
-                String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+                String cancelMethod = "clickMenu('tab-" + data.getSubMenuChoice(data.getMenuChoice()) + "')";
                 String reEditMethod = "clickRecordId('record-reedit', " + recordId + ")";
                 data.fillPreviousParameterMap(request);
                 ModalWindowUtils.make2ButtonModalWindow(data, "Data has changed",
@@ -217,21 +217,21 @@ public class AdminServlet extends HttpServlet
             }
         }
 
-        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
     }
 
     private void handleRecordOk(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD OK: " + click + " with recordId: " + recordId);
-        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
     }
 
     private void handleRecordDelete(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("RECORD DELETE: " + click + " with recordId: " + recordId);
-        String cancelMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+        String cancelMethod = "clickMenu('tab-" + data.getSubMenuChoice(data.getMenuChoice()) + "')";
         String deleteOkMethod = "clickRecordId('record-delete-ok', " + recordId + ")";
         ModalWindowUtils.make2ButtonModalWindow(data, "Delete confirmation", "Are you sure you want to delete this record?",
                 "Delete", deleteOkMethod, "Cancel", cancelMethod, cancelMethod);
@@ -244,7 +244,7 @@ public class AdminServlet extends HttpServlet
         try
         {
             var dslContext = data.getDSL();
-            Tab tab = Menus.getActiveTab(data);
+            SubMenu tab = Menus.getActiveSubMenu(data);
             String tableName = tab.tableName();
             Table<?> table = DSL.table(DSL.name(tableName));
             Field<Integer> idField = DSL.field(DSL.name("id"), Integer.class);
@@ -254,10 +254,10 @@ public class AdminServlet extends HttpServlet
         catch (Exception exception)
         {
             exception.printStackTrace();
-            String okMethod = "clickMenu('tab-" + data.getTabChoice(data.getMenuChoice()) + "')";
+            String okMethod = "clickMenu('tab-" + data.getSubMenuChoice(data.getMenuChoice()) + "')";
             ModalWindowUtils.makeOkModalWindow("Error deleting record", "<p>" + exception.getMessage() + "</p>", okMethod);
         }
-        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
     }
 
     private void handleRecordSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,
@@ -265,12 +265,12 @@ public class AdminServlet extends HttpServlet
     {
         System.err.println("RECORD SELECT: " + click + " with recordId: " + recordId);
         var dslContext = data.getDSL();
-        Tab tab = Menus.getActiveTab(data);
+        SubMenu tab = Menus.getActiveSubMenu(data);
         String table = tab.tableName();
         Record tableRecord = dslContext.selectFrom(table).where("id=" + recordId).fetchAny();
         String displayValue = tableRecord.get(tab.selectField()).toString();
-        data.setTabFilterChoice(data.getTabChoice(data.getMenuChoice()), recordId, displayValue);
-        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        data.setTabFilterChoice(data.getSubMenuChoice(data.getMenuChoice()), recordId, displayValue);
+        handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
     }
 
     private void handleCloseSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,
@@ -279,7 +279,7 @@ public class AdminServlet extends HttpServlet
         System.err.println("CLOSE SELECT: " + click);
         String tabName = click.substring(6);
         data.clearTabFilterChoice(tabName);
-        handleTab(request, response, "tab-" + data.getTabChoice(data.getMenuChoice()), data, 0);
+        handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
     }
 
     private void handleSort(final HttpServletRequest request, final HttpServletResponse response, final String click,

@@ -149,7 +149,7 @@ public class UserLoginServlet extends HttpServlet
                 data.setUsername(user.getName());
                 data.setUser(user);
                 data.setMenuChoice("home");
-                data.putTabChoice("home", "");
+                data.putSubMenuChoice("home", "");
                 response.sendRedirect("jsp/admin/admin.jsp");
                 return;
             }
