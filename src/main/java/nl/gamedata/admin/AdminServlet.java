@@ -65,7 +65,7 @@ public class AdminServlet extends HttpServlet
             return;
         }
 
-        if (click.equals("menu-admin-panel"))
+        if (click.equals("menu-admin-panel") || click.equals("menu-home"))
             handleHome(request, response, click, data);
         else if (click.equals("menu-settings"))
             handleSettings(request, response, click, data);
@@ -87,8 +87,8 @@ public class AdminServlet extends HttpServlet
             handleRecordDelete(request, response, click, data, recordId);
         else if (click.equals("record-delete-ok"))
             handleRecordDeleteOk(request, response, click, data, recordId);
-        else if (click.equals("record-select"))
-            handleRecordSelect(request, response, click, data, recordId);
+        // else if (click.equals("record-select"))
+        // handleRecordSelect(request, response, click, data, recordId);
         else if (click.startsWith("close-"))
             handleCloseSelect(request, response, click, data, recordId);
         else if (click.startsWith("az"))
@@ -260,25 +260,25 @@ public class AdminServlet extends HttpServlet
         handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
     }
 
-    private void handleRecordSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,
-            final AdminData data, final int recordId) throws IOException
-    {
-        System.err.println("RECORD SELECT: " + click + " with recordId: " + recordId);
-        var dslContext = data.getDSL();
-        SubMenu tab = Menus.getActiveSubMenu(data);
-        String table = tab.tableName();
-        Record tableRecord = dslContext.selectFrom(table).where("id=" + recordId).fetchAny();
-        String displayValue = tableRecord.get(tab.selectField()).toString();
-        data.setTabFilterChoice(data.getSubMenuChoice(data.getMenuChoice()), recordId, displayValue);
-        handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
-    }
+    // private void handleRecordSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,
+    // final AdminData data, final int recordId) throws IOException
+    // {
+    // System.err.println("RECORD SELECT: " + click + " with recordId: " + recordId);
+    // var dslContext = data.getDSL();
+    // SubMenu subMenu = Menus.getActiveSubMenu(data);
+    // String table = subMenu.tableName();
+    // Record tableRecord = dslContext.selectFrom(table).where("id=" + recordId).fetchAny();
+    // String displayValue = tableRecord.get(subMenu.selectField()).toString();
+    // data.setMenuFilterChoice(data.getSubMenuChoice(data.getMenuChoice()), recordId, displayValue);
+    // handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
+    // }
 
     private void handleCloseSelect(final HttpServletRequest request, final HttpServletResponse response, final String click,
             final AdminData data, final int recordId) throws IOException
     {
         System.err.println("CLOSE SELECT: " + click);
         String tabName = click.substring(6);
-        data.clearTabFilterChoice(tabName);
+        data.clearMenuFilterChoice(tabName);
         handleTab(request, response, "tab-" + data.getSubMenuChoice(data.getMenuChoice()), data, 0);
     }
 

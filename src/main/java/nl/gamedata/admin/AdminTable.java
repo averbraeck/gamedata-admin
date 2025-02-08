@@ -3,8 +3,6 @@ package nl.gamedata.admin;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 
-import nl.gamedata.admin.Menus.SubMenu;
-
 /**
  * Table.java.
  * <p>
@@ -108,8 +106,6 @@ public class AdminTable
 
     private boolean newButton = false;
 
-    private boolean select = false;
-
     private String[] header;
 
     private String sortColumn;
@@ -128,8 +124,6 @@ public class AdminTable
     {
         this.data = data;
         this.title = title;
-        SubMenu tab = Menus.getActiveSubMenu(data);
-        this.select = tab.selectField() != null;
         if (data.getTableColumnSort() == null)
             data.selectTableColumnSort(defaultSortField);
         this.sortColumn = this.data.getTableColumnSort().fieldName();
@@ -167,8 +161,6 @@ public class AdminTable
         else
             s.append(tableTitleNoNew.formatted(this.title));
         s.append(tableHeaderTop);
-        if (this.select)
-            s.append(tableheaderIcon.formatted("fa-filter"));
         s.append(tableheaderIcon.formatted("fa-pencil"));
         s.append(tableHeaderSpacing);
         for (String h : this.header)
@@ -188,8 +180,6 @@ public class AdminTable
         {
             Row row = this.rows.get(key);
             s.append(tableRowStart);
-            if (this.select)
-                s.append(tableRowIcon.formatted("record-select", row.recordId(), "fa-filter"));
             if (row.edit)
                 s.append(tableRowIcon.formatted("record-edit", row.recordId(), "fa-pencil"));
             else

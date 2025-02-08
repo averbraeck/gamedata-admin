@@ -63,7 +63,7 @@ public class AdminData extends CommonData
     private Map<String, String> subMenuChoice = new HashMap<>();
 
     /** Map that links the menu#tab name to a potential filter choice (record and display name) in the navbar. */
-    private Map<String, FilterChoice> tabFilterChoices = new HashMap<>();
+    private Map<String, FilterChoice> menuFilterChoices = new HashMap<>();
 
     /** The sorting order of columns in the tables. The map is from menu#tab to column header to A-Z / Z-A */
     private Map<String, ColumnSort> tableColumnSort = new HashMap<>();
@@ -876,19 +876,19 @@ public class AdminData extends CommonData
             this.tableColumnSort.put(key, new ColumnSort(fn, true));
     }
 
-    public FilterChoice getTabFilterChoice(final String tabChoice)
+    public FilterChoice getMenuFilterChoice(final String filterChoice)
     {
-        return this.tabFilterChoices.get(this.menuChoice + "#" + tabChoice);
+        return this.menuFilterChoices.get(this.menuChoice + "#" + filterChoice);
     }
 
-    public void setTabFilterChoice(final String tabChoice, final int recordId, final String displayName)
+    public void setMenuFilterChoice(final String filterChoice, final int recordId, final String displayName)
     {
-        this.tabFilterChoices.put(this.menuChoice + "#" + tabChoice, new FilterChoice(recordId, displayName));
+        this.menuFilterChoices.put(this.menuChoice + "#" + filterChoice, new FilterChoice(recordId, displayName));
     }
 
-    public void clearTabFilterChoice(final String tabChoice)
+    public void clearMenuFilterChoice(final String filterChoice)
     {
-        this.tabFilterChoices.remove(this.menuChoice + "#" + tabChoice);
+        this.menuFilterChoices.remove(this.menuChoice + "#" + filterChoice);
     }
 
     public String getError()

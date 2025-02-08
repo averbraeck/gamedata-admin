@@ -369,13 +369,12 @@ public class Menus
 
     }
 
-    public static record SubMenu(String subMenuChoice, String subMenuText, String tableName, String selectField,
+    public static record SubMenu(String subMenuChoice, String subMenuText, String tableName, String selectFieldXX,
             Set<Integer> access, ITable tableRef, IEdit editRef)
     {
     }
 
-    public static record Filter(String subMenuChoice, String subMenuText, String tableName, String selectField,
-            Set<Integer> access, ITable tableRef, IEdit editRef)
+    public static record Filter(String tableName, String tableText, String selectField, Set<Integer> access)
     {
     }
 }

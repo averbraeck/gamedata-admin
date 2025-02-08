@@ -2,6 +2,7 @@ package nl.gamedata.admin;
 
 import java.util.List;
 
+import nl.gamedata.admin.Menus.Filter;
 import nl.gamedata.admin.Menus.SubMenu;
 
 /**
@@ -47,88 +48,6 @@ public class SubMenubar
               </div>
             """;
 
-    /** active tab with choice; 1=menu name, 2=choice text, 3=close action. */
-    private static String tabChoiceActive = """
-                  <div class="gd-tab">
-                    <div class="gd-tab-item gd-tab-item-active">
-                      %s
-                    </div>
-                    <div class="gd-tab-choice">
-                      <div class="gd-tab-choice-text">%s</div>
-                      <div class="gd-tab-choice-close">
-                        <a href="#" onclick="clickMenu('%s')">
-                          <i class="fas fa-xmark fa-fw"></i>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-            """;
-
-    /** inactive tab with choice; 1=onclick menu, 2=menu name, 3=choice text, 4=close action. */
-    private static String tabChoiceInactive = """
-                  <div class="gd-tab">
-                    <div class="gd-tab-item gd-tab-item-inactive">
-                      <a href="#" onclick="clickMenu('%s')">%s</a>
-                    </div>
-                    <div class="gd-tab-choice">
-                      <div class="gd-tab-choice-text">%s</div>
-                      <div class="gd-tab-choice-close">
-                        <a href="#" onclick="clickMenu('%s')">
-                          <i class="fas fa-xmark fa-fw"></i>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-            """;
-
-    /** active tab with choice; 1=menu name. */
-    private static String tabChoiceActiveEmpty = """
-                  <div class="gd-tab">
-                    <div class="gd-tab-item gd-tab-item-active">
-                      %s
-                    </div>
-                    <div class="gd-tab-choice">
-                      <div class="gd-tab-choice-text">&nbsp;</div>
-                    </div>
-                  </div>
-            """;
-
-    /** inactive tab with choice; 1=onclick menu, 2=menu name. */
-    private static String tabChoiceInactiveEmpty = """
-                  <div class="gd-tab">
-                    <div class="gd-tab-item gd-tab-item-inactive">
-                      <a href="#" onclick="clickMenu('%s')">%s</a>
-                    </div>
-                    <div class="gd-tab-choice">
-                      <div class="gd-tab-choice-text">&nbsp;</div>
-                    </div>
-                  </div>
-            """;
-
-    /** active tab without choice; 1=menu name. */
-    private static String tabActive = """
-                  <div class="gd-tab">
-                    <div class="gd-tab-item gd-tab-item-active">
-                      %s
-                    </div>
-                    <div class="gd-tab-nochoice">
-                      <div class="gd-tab-choice-text">&nbsp;</div>
-                    </div>
-                  </div>
-            """;
-
-    /** inactive tab without choice; 1=onclick menu, 2=menu name. */
-    private static String tabInactive = """
-                  <div class="gd-tab">
-                    <div class="gd-tab-item gd-tab-item-inactive">
-                      <a href="#" onclick="clickMenu('%s')">%s</a>
-                    </div>
-                    <div class="gd-tab-nochoice">
-                      <div class="gd-tab-choice-text">&nbsp;</div>
-                    </div>
-                  </div>
-            """;
-
     private static String submenubarEnd = """
             </div>
             <!-- SubMenubar -->
@@ -141,26 +60,22 @@ public class SubMenubar
         String menuChoice = data.getMenuChoice();
         List<SubMenu> subMenuList = Menus.menuMap.get(menuChoice).subMenus();
         s.append(subMenuBarGroup.formatted("TABLES"));
-        for (SubMenu tab : subMenuList)
+        for (SubMenu subMenu : subMenuList)
         {
             if (Menus.showSubMenu(data, menuChoice, data.getSubMenuChoice(menuChoice)))
-                nav(s, data, tab.subMenuChoice(), tab.subMenuText());
+                showSubMenu(s, data, subMenu.subMenuChoice(), subMenu.subMenuText());
         }
         s.append(subMenuBarGroup.formatted(""));
         s.append(subMenuBarGroup.formatted("FILTERS"));
-//        for (SubMenu subMenu : subMenuList)
-//        {
-//            if (Menus.showSubMenu(data, menuChoice, data.getSubMenuChoice(menuChoice)))
-//            {
-//                if (subMenu.selectField() != null)
-//                    filter(s, data, subMenu.subMenuChoice(), subMenu.subMenuText());
-//            }
-//        }
+        for (Filter filter : Menus.menuMap.get(menuChoice).filters())
+        {
+            // showFilter(s, data, tabName, tabText);
+        }
         s.append(submenubarEnd);
         return s.toString();
     }
 
-    private static void nav(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
+    private static void showSubMenu(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
     {
         if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
             s.append(subMenuBarItem.formatted("gd-active", "true", "tab-" + tabName, "fa-circle", tabText));
@@ -168,73 +83,24 @@ public class SubMenubar
             s.append(subMenuBarItem.formatted("", "false", "tab-" + tabName, "fa-circle", tabText));
     }
 
-    private static void filter(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
+    private static void showFilter(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
     {
-        if (data.getTabFilterChoice(tabName) != null)
+        if (data.getMenuFilterChoice(tabName) != null)
         {
-            if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
-                s.append(tabChoiceActiveEmpty.formatted(tabText));
-            else
-                s.append(tabChoiceInactiveEmpty.formatted("tab-" + tabName, tabText));
+            // if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
+            // s.append(tabChoiceActiveEmpty.formatted(tabText));
+            // else
+            // s.append(tabChoiceInactiveEmpty.formatted("tab-" + tabName, tabText));
         }
         else
         {
-            String choice = data.getTabFilterChoice(tabName).name();
+            String choice = data.getMenuFilterChoice(tabName).name();
             if (choice.length() > 12)
                 choice = choice.substring(0, 9) + "...";
-            if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
-                s.append(tabChoiceActive.formatted(tabText, choice, "close-" + tabName));
-            else
-                s.append(tabChoiceInactive.formatted("tab-" + tabName, tabText, choice, "close-" + tabName));
-        }
-    }
-
-    public static String makeSubMenubarOld(final AdminData data)
-    {
-        StringBuilder s = new StringBuilder();
-        s.append(subMenuBarStart);
-        String menuChoice = data.getMenuChoice();
-        List<SubMenu> tabList = Menus.menuMap.get(menuChoice).subMenus();
-        for (SubMenu tab : tabList)
-        {
-            if (Menus.showSubMenu(data, menuChoice, data.getSubMenuChoice(menuChoice)))
-            {
-                if (tab.selectField() != null)
-                    tabChoice(s, data, tab.subMenuChoice(), tab.subMenuText());
-                else
-                    tab(s, data, tab.subMenuChoice(), tab.subMenuText());
-            }
-        }
-        s.append(submenubarEnd);
-        return s.toString();
-    }
-
-    private static void tab(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
-    {
-        if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
-            s.append(tabActive.formatted(tabText));
-        else
-            s.append(tabInactive.formatted("tab-" + tabName, tabText));
-    }
-
-    private static void tabChoice(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
-    {
-        if (data.getTabFilterChoice(tabName) == null)
-        {
-            if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
-                s.append(tabChoiceActiveEmpty.formatted(tabText));
-            else
-                s.append(tabChoiceInactiveEmpty.formatted("tab-" + tabName, tabText));
-        }
-        else
-        {
-            String choice = data.getTabFilterChoice(tabName).name();
-            if (choice.length() > 12)
-                choice = choice.substring(0, 9) + "...";
-            if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
-                s.append(tabChoiceActive.formatted(tabText, choice, "close-" + tabName));
-            else
-                s.append(tabChoiceInactive.formatted("tab-" + tabName, tabText, choice, "close-" + tabName));
+            // if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
+            // s.append(tabChoiceActive.formatted(tabText, choice, "close-" + tabName));
+            // else
+            // s.append(tabChoiceInactive.formatted("tab-" + tabName, tabText, choice, "close-" + tabName));
         }
     }
 }
