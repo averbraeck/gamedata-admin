@@ -71,51 +71,51 @@ public class Menus
         List<Filter> organizationFilters = new ArrayList<>();
         menuMap.put("organization", new Menu("fa-sitemap", "organization", "organizations", organizationSubMenus, Set.of(0, 2),
                 organizationFilters));
-        organizationSubMenus.add(new SubMenu("organization", "Organization", "organization", "code", Set.of(0, 2),
+        organizationSubMenus.add(new SubMenu("organization", "Organization", "organization", Set.of(0, 2),
                 TableOrganization::table, TableOrganization::edit));
-        organizationSubMenus.add(new SubMenu("user", "User", "user", "name", Set.of(0, 2), TableUser::table, TableUser::edit));
-        organizationSubMenus.add(new SubMenu("user-role", "User Role", "organization_role", null, Set.of(0, 2),
+        organizationSubMenus.add(new SubMenu("user", "User", "user", Set.of(0, 2), TableUser::table, TableUser::edit));
+        organizationSubMenus.add(new SubMenu("user-role", "User Role", "organization_role", Set.of(0, 2),
                 TableOrganizationRole::table, TableOrganizationRole::edit));
-        organizationSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 2), TableGame::table, TableGame::edit));
-        organizationSubMenus.add(new SubMenu("organization-game", "Game Access", "organization_game", null, Set.of(0, 2),
+        organizationSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 2), TableGame::table, TableGame::edit));
+        organizationSubMenus.add(new SubMenu("organization-game", "Game Access", "organization_game", Set.of(0, 2),
                 TableOrganizationGame::table, TableOrganizationGame::edit));
-        organizationSubMenus.add(new SubMenu("org-game-token", "Access Token", "organization_game_token", null, Set.of(0, 2),
+        organizationSubMenus.add(new SubMenu("org-game-token", "Access Token", "organization_game_token", Set.of(0, 2),
                 TableOrganizationGameToken::table, TableOrganizationGameToken::edit));
-        organizationSubMenus.add(new SubMenu("game-session", "Game Session", "game_session", null, Set.of(0, 2),
+        organizationSubMenus.add(new SubMenu("game-session", "Game Session", "game_session", Set.of(0, 2),
                 TableGameSession::table, TableGameSession::edit));
 
         menuList.add("user");
         List<SubMenu> userSubMenus = new ArrayList<>();
         List<Filter> userFilters = new ArrayList<>();
         menuMap.put("user", new Menu("fa-user", "user", "users", userSubMenus, Set.of(0, 1, 2), userFilters));
-        userSubMenus.add(new SubMenu("user", "User", "user", "name", Set.of(0, 1, 2), TableUser::table, TableUser::edit));
-        userSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 1), TableGame::table, TableGame::edit));
-        userSubMenus.add(new SubMenu("organization-role", "Organization Role", "organization_role", null, Set.of(0, 2),
+        userSubMenus.add(new SubMenu("user", "User", "user", Set.of(0, 1, 2), TableUser::table, TableUser::edit));
+        userSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 1), TableGame::table, TableGame::edit));
+        userSubMenus.add(new SubMenu("organization-role", "Organization Role", "organization_role", Set.of(0, 2),
                 TableOrganizationRole::table, TableOrganizationRole::edit));
-        userSubMenus.add(new SubMenu("game-role", "Game Role", "game_role", null, Set.of(0, 1), TableGameRole::table,
-                TableGameRole::edit));
-        userSubMenus.add(new SubMenu("org-game-role", "Org-Game Role", "organization_game_role", null, Set.of(0, 2),
+        userSubMenus.add(
+                new SubMenu("game-role", "Game Role", "game_role", Set.of(0, 1), TableGameRole::table, TableGameRole::edit));
+        userSubMenus.add(new SubMenu("org-game-role", "Org-Game Role", "organization_game_role", Set.of(0, 2),
                 TableOrganizationGameRole::table, TableOrganizationGameRole::edit));
-        userSubMenus.add(new SubMenu("game-session-role", "Game Session Role", "game_session_role", null, Set.of(0, 2),
+        userSubMenus.add(new SubMenu("game-session-role", "Game Session Role", "game_session_role", Set.of(0, 2),
                 TableGameSessionRole::table, TableGameSessionRole::edit));
-        userSubMenus.add(new SubMenu("dashboard-role", "Dashboard Role", "dashboard_role", null, Set.of(0, 1, 2),
+        userSubMenus.add(new SubMenu("dashboard-role", "Dashboard Role", "dashboard_role", Set.of(0, 1, 2),
                 TableDashboardRole::table, TableDashboardRole::edit));
 
         menuList.add("game");
         List<SubMenu> gameSubMenus = new ArrayList<>();
         List<Filter> gameFilters = new ArrayList<>();
         menuMap.put("game", new Menu("fa-dice", "game", "games", gameSubMenus, Set.of(0, 1), gameFilters));
-        gameSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 1), TableGame::table, TableGame::edit));
-        gameSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", "code", Set.of(0, 1),
-                TableGameVersion::table, TableGameVersion::edit));
-        gameSubMenus.add(new SubMenu("game-mission", "Game Mission", "game_mission", "code", Set.of(0, 1),
-                TableGameMission::table, TableGameMission::edit));
-        gameSubMenus.add(new SubMenu("scale", "Scale", "scale", null, Set.of(0, 1), TableScale::table, TableScale::edit));
-        gameSubMenus.add(new SubMenu("learning-goal", "Learning Goal", "learning_goal", "code", Set.of(0, 1),
-                TableLearningGoal::table, TableLearningGoal::edit));
-        gameSubMenus.add(new SubMenu("player-objective", "Player Objective", "player_objective", null, Set.of(0, 1),
+        gameSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 1), TableGame::table, TableGame::edit));
+        gameSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", Set.of(0, 1), TableGameVersion::table,
+                TableGameVersion::edit));
+        gameSubMenus.add(new SubMenu("game-mission", "Game Mission", "game_mission", Set.of(0, 1), TableGameMission::table,
+                TableGameMission::edit));
+        gameSubMenus.add(new SubMenu("scale", "Scale", "scale", Set.of(0, 1), TableScale::table, TableScale::edit));
+        gameSubMenus.add(new SubMenu("learning-goal", "Learning Goal", "learning_goal", Set.of(0, 1), TableLearningGoal::table,
+                TableLearningGoal::edit));
+        gameSubMenus.add(new SubMenu("player-objective", "Player Objective", "player_objective", Set.of(0, 1),
                 TablePlayerObjective::table, TablePlayerObjective::edit));
-        gameSubMenus.add(new SubMenu("group-objective", "Group Objective", "group_objective", null, Set.of(0, 1),
+        gameSubMenus.add(new SubMenu("group-objective", "Group Objective", "group_objective", Set.of(0, 1),
                 TableGroupObjective::table, TableGroupObjective::edit));
 
         menuList.add("game-control");
@@ -123,12 +123,12 @@ public class Menus
         List<Filter> gameControlFilters = new ArrayList<>();
         menuMap.put("game-control", new Menu("fa-square-binary", "game-control", "game access", gameControlSubMenus,
                 Set.of(0, 3), gameControlFilters));
-        gameControlSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 3), TableGame::table, TableGame::edit));
-        gameControlSubMenus.add(new SubMenu("organization", "Organization", "organization", "code", Set.of(0, 3),
+        gameControlSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 3), TableGame::table, TableGame::edit));
+        gameControlSubMenus.add(new SubMenu("organization", "Organization", "organization", Set.of(0, 3),
                 TableOrganization::table, TableOrganization::edit));
-        gameControlSubMenus.add(new SubMenu("organization-game", "Game Access", "organization_game", null, Set.of(0, 3),
+        gameControlSubMenus.add(new SubMenu("organization-game", "Game Access", "organization_game", Set.of(0, 3),
                 TableOrganizationGame::table, TableOrganizationGame::edit));
-        gameControlSubMenus.add(new SubMenu("org-game-token", "Access Token", "organization_game_token", null, Set.of(0, 3),
+        gameControlSubMenus.add(new SubMenu("org-game-token", "Access Token", "organization_game_token", Set.of(0, 3),
                 TableOrganizationGameToken::table, TableOrganizationGameToken::edit));
 
         menuList.add("game-session");
@@ -136,12 +136,12 @@ public class Menus
         List<Filter> gameSessionFilters = new ArrayList<>();
         menuMap.put("game-session", new Menu("fa-calendar-check", "game-session", "game sessions", gameSessionSubMenus,
                 Set.of(0, 4), gameSessionFilters));
-        gameSessionSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
-        gameSessionSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", "code", Set.of(0, 4),
+        gameSessionSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 4), TableGame::table, TableGame::edit));
+        gameSessionSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", Set.of(0, 4),
                 TableGameVersion::table, TableGameVersion::edit));
-        gameSessionSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", "code", Set.of(0, 4),
+        gameSessionSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", Set.of(0, 4),
                 TableGameSession::table, TableGameSession::edit));
-        // gameSessionSubMenus.add(new Tab("session-dashboard", "Session Dashboard", null, Set.of(0, 4)));
+        // gameSessionSubMenus.add(new Tab("session-dashboard", "Session Dashboard", Set.of(0, 4)));
 
         menuList.add("DATA");
         menuMap.put("DATA", new Menu("DATA", new ArrayList<>(), Set.of(0, 1, 2, 4)));
@@ -151,14 +151,14 @@ public class Menus
         List<Filter> dataSessionFilters = new ArrayList<>();
         menuMap.put("data-session", new Menu("fa-chart-pie", "data-session", "Data Session", dataSessionSubMenus, Set.of(0, 4),
                 dataSessionFilters));
-        dataSessionSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
-        dataSessionSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", "code", Set.of(0, 4),
+        dataSessionSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 4), TableGame::table, TableGame::edit));
+        dataSessionSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", Set.of(0, 4),
                 TableGameVersion::table, TableGameVersion::edit));
-        dataSessionSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", "code", Set.of(0, 4),
+        dataSessionSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", Set.of(0, 4),
                 TableGameSession::table, TableGameSession::edit));
-        dataSessionSubMenus.add(new SubMenu("game-mission", "Game Mission", "game_mission", "code", Set.of(0, 1),
+        dataSessionSubMenus.add(new SubMenu("game-mission", "Game Mission", "game_mission", Set.of(0, 1),
                 TableGameMission::table, TableGameMission::edit));
-        dataSessionSubMenus.add(new SubMenu("mission-event", "Mission Event", "mission_event", null, Set.of(0, 4),
+        dataSessionSubMenus.add(new SubMenu("mission-event", "Mission Event", "mission_event", Set.of(0, 4),
                 TableMissionEvent::table, TableMissionEvent::view));
 
         menuList.add("data-player");
@@ -166,50 +166,48 @@ public class Menus
         List<Filter> dataPlayerFilters = new ArrayList<>();
         menuMap.put("data-player",
                 new Menu("fa-chart-line", "data-player", "Data Player", dataPlayerSubMenus, Set.of(0, 4), dataPlayerFilters));
-        dataPlayerSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
-        dataPlayerSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", "code", Set.of(0, 4),
+        dataPlayerSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 4), TableGame::table, TableGame::edit));
+        dataPlayerSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", Set.of(0, 4),
                 TableGameVersion::table, TableGameVersion::edit));
-        dataPlayerSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", "code", Set.of(0, 4),
+        dataPlayerSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", Set.of(0, 4),
                 TableGameSession::table, TableGameSession::edit));
-        dataPlayerSubMenus
-                .add(new SubMenu("player", "Player", "player", "name", Set.of(0, 4), TablePlayer::table, TablePlayer::view));
-        dataPlayerSubMenus.add(new SubMenu("player-attempt", "Player_Attempt", "player_attempt", null, Set.of(0, 4),
+        dataPlayerSubMenus.add(new SubMenu("player", "Player", "player", Set.of(0, 4), TablePlayer::table, TablePlayer::view));
+        dataPlayerSubMenus.add(new SubMenu("player-attempt", "Player_Attempt", "player_attempt", Set.of(0, 4),
                 TablePlayerAttempt::table, TablePlayerAttempt::view));
-        dataPlayerSubMenus.add(new SubMenu("player-score", "Player Score", "player_score", null, Set.of(0, 4),
+        dataPlayerSubMenus.add(new SubMenu("player-score", "Player Score", "player_score", Set.of(0, 4),
                 TablePlayerScore::table, TablePlayerScore::view));
-        dataPlayerSubMenus.add(new SubMenu("player-event", "Player Event", "player_event", null, Set.of(0, 4),
+        dataPlayerSubMenus.add(new SubMenu("player-event", "Player Event", "player_event", Set.of(0, 4),
                 TablePlayerEvent::table, TablePlayerEvent::view));
-        dataPlayerSubMenus.add(new SubMenu("player-group-role", "Group Role", "group_role", null, Set.of(0, 4),
-                TableGroupRole::table, TableGroupRole::view));
+        dataPlayerSubMenus.add(new SubMenu("player-group-role", "Group Role", "group_role", Set.of(0, 4), TableGroupRole::table,
+                TableGroupRole::view));
 
         menuList.add("data-group");
         List<SubMenu> dataGroupSubMenus = new ArrayList<>();
         List<Filter> dataGroupFilters = new ArrayList<>();
         menuMap.put("data-group",
                 new Menu("fa-chart-simple", "data-group", "Data Group", dataGroupSubMenus, Set.of(0, 4), dataGroupFilters));
-        dataGroupSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 4), TableGame::table, TableGame::edit));
-        dataGroupSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", "code", Set.of(0, 4),
-                TableGameVersion::table, TableGameVersion::edit));
-        dataGroupSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", "code", Set.of(0, 4),
-                TableGameSession::table, TableGameSession::edit));
-        dataGroupSubMenus
-                .add(new SubMenu("group", "Group", "group", "name", Set.of(0, 4), TableGroup::table, TableGroup::view));
-        dataGroupSubMenus.add(new SubMenu("group-player", "Group Player", "group_role", null, Set.of(0, 4),
-                TableGroupRole::table, TableGroupRole::view));
-        dataGroupSubMenus.add(new SubMenu("group-attempt", "Group Attempt", "group_attempt", null, Set.of(0, 4),
+        dataGroupSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 4), TableGame::table, TableGame::edit));
+        dataGroupSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", Set.of(0, 4), TableGameVersion::table,
+                TableGameVersion::edit));
+        dataGroupSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", Set.of(0, 4), TableGameSession::table,
+                TableGameSession::edit));
+        dataGroupSubMenus.add(new SubMenu("group", "Group", "group", Set.of(0, 4), TableGroup::table, TableGroup::view));
+        dataGroupSubMenus.add(new SubMenu("group-player", "Group Player", "group_role", Set.of(0, 4), TableGroupRole::table,
+                TableGroupRole::view));
+        dataGroupSubMenus.add(new SubMenu("group-attempt", "Group Attempt", "group_attempt", Set.of(0, 4),
                 TableGroupAttempt::table, TableGroupAttempt::view));
-        dataGroupSubMenus.add(new SubMenu("group-score", "Group Score", "group_score", null, Set.of(0, 4),
-                TableGroupScore::table, TableGroupScore::view));
-        dataGroupSubMenus.add(new SubMenu("group-event", "Group Event", "group_event", null, Set.of(0, 4),
-                TableGroupEvent::table, TableGroupEvent::view));
+        dataGroupSubMenus.add(new SubMenu("group-score", "Group Score", "group_score", Set.of(0, 4), TableGroupScore::table,
+                TableGroupScore::view));
+        dataGroupSubMenus.add(new SubMenu("group-event", "Group Event", "group_event", Set.of(0, 4), TableGroupEvent::table,
+                TableGroupEvent::view));
 
         menuList.add("errors");
         List<SubMenu> errorsSubMenus = new ArrayList<>();
         List<Filter> errorsFilters = new ArrayList<>();
         menuMap.put("errors",
                 new Menu("fa-triangle-exclamation", "errors", "Errors", errorsSubMenus, Set.of(0, 1, 2), errorsFilters));
-        errorsSubMenus.add(
-                new SubMenu("last-100", "Last 100", null, null, Set.of(0, 1, 2), TableErrors::table100, TableErrors::view));
+        errorsSubMenus
+                .add(new SubMenu("last-100", "Last 100", null, Set.of(0, 1, 2), TableErrors::table100, TableErrors::view));
 
         menuList.add("DASHBOARDS");
         menuMap.put("DASHBOARDS", new Menu("DASHBOARDS", new ArrayList<>(), Set.of(0, 5)));
@@ -218,11 +216,11 @@ public class Menus
         List<SubMenu> layoutSubMenus = new ArrayList<>();
         List<Filter> layoutFilters = new ArrayList<>();
         menuMap.put("layout", new Menu("fa-display", "layout", "Layout", layoutSubMenus, Set.of(0), layoutFilters));
-        layoutSubMenus.add(new SubMenu("dashboard-layout", "Dashboard Layout", "dashboard_layout", "code", Set.of(0),
+        layoutSubMenus.add(new SubMenu("dashboard-layout", "Dashboard Layout", "dashboard_layout", Set.of(0),
                 TableDashboardLayout::table, TableDashboardLayout::edit));
-        layoutSubMenus.add(new SubMenu("dashboard-element", "Dashboard Element", "dashboard_element", "code", Set.of(0),
+        layoutSubMenus.add(new SubMenu("dashboard-element", "Dashboard Element", "dashboard_element", Set.of(0),
                 TableDashboardElement::table, TableDashboardElement::edit));
-        layoutSubMenus.add(new SubMenu("element-property", "Element Property", "element_property", "code", Set.of(0),
+        layoutSubMenus.add(new SubMenu("element-property", "Element Property", "element_property", Set.of(0),
                 TableElementProperty::table, TableElementProperty::edit));
 
         menuList.add("dashboard");
@@ -230,15 +228,15 @@ public class Menus
         List<Filter> dashboardFilters = new ArrayList<>();
         menuMap.put("dashboard",
                 new Menu("fa-table-cells-large", "dashboard", "Dashboard", dashboardSubMenus, Set.of(0, 5), dashboardFilters));
-        dashboardSubMenus.add(new SubMenu("game", "Game", "game", "code", Set.of(0, 5), TableGame::table, TableGame::edit));
-        dashboardSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", "code", Set.of(0, 5),
-                TableGameVersion::table, TableGameVersion::edit));
-        // dashboardSubMenus.add(new SubMenu("dashboard-template", "Dashboard Template", "code", Set.of(0, 5)));
-        // dashboardSubMenus.add(new SubMenu("template-element", "Template Element", null, Set.of(0, 5)));
-        // dashboardSubMenus.add(new SubMenu("property-value", "Property Value", null, Set.of(0, 5)));
+        dashboardSubMenus.add(new SubMenu("game", "Game", "game", Set.of(0, 5), TableGame::table, TableGame::edit));
+        dashboardSubMenus.add(new SubMenu("game-version", "Game Version", "game_version", Set.of(0, 5), TableGameVersion::table,
+                TableGameVersion::edit));
+        // dashboardSubMenus.add(new SubMenu("dashboard-template", "Dashboard Template", Set.of(0, 5)));
+        // dashboardSubMenus.add(new SubMenu("template-element", "Template Element", Set.of(0, 5)));
+        // dashboardSubMenus.add(new SubMenu("property-value", "Property Value", Set.of(0, 5)));
         // dashboardSubMenus.add(new SubMenu("dashboard", "Dashboard", "name", Set.of(0, 5)));
-        // dashboardSubMenus.add(new SubMenu("session-dashboard", "Session Dashboard", null, Set.of(0, 5)));
-        // dashboardSubMenus.add(new SubMenu("dashboard-token", "Dashboard Token", null, Set.of(0, 5)));
+        // dashboardSubMenus.add(new SubMenu("session-dashboard", "Session Dashboard", Set.of(0, 5)));
+        // dashboardSubMenus.add(new SubMenu("dashboard-token", "Dashboard Token", Set.of(0, 5)));
 
         menuList.add("SETTINGS");
         menuMap.put("SETTINGS", new Menu("SETTINGS", new ArrayList<>(), Set.of(0, 1, 2, 3, 4, 5, 6)));
@@ -369,8 +367,8 @@ public class Menus
 
     }
 
-    public static record SubMenu(String subMenuChoice, String subMenuText, String tableName, String selectFieldXX,
-            Set<Integer> access, ITable tableRef, IEdit editRef)
+    public static record SubMenu(String subMenuChoice, String subMenuText, String tableName, Set<Integer> access,
+            ITable tableRef, IEdit editRef)
     {
     }
 
