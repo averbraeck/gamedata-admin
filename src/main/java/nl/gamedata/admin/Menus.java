@@ -83,9 +83,9 @@ public class Menus
                 TableOrganizationGameToken::table, TableOrganizationGameToken::edit));
         organizationSubMenus.add(new SubMenu("game-session", "Game Session", "game_session", Set.of(0, 2),
                 TableGameSession::table, TableGameSession::edit));
-        organizationFilters.add(new Filter("organization", "organization", "code", Set.of(0, 2)));
-        organizationFilters.add(new Filter("user", "user", "name", Set.of(0, 2)));
-        organizationFilters.add(new Filter("game", "game", "code", Set.of(0, 2)));
+        organizationFilters.add(new Filter("organization", "organization", new String[] {"id", "code", "name"}, Set.of(0, 2)));
+        organizationFilters.add(new Filter("user", "user", new String[] {"id", "name"}, Set.of(0, 2)));
+        organizationFilters.add(new Filter("game", "game", new String[] {"id", "code", "name", "archived"}, Set.of(0, 2)));
 
         menuList.add("user");
         List<SubMenu> userSubMenus = new ArrayList<>();
@@ -103,6 +103,8 @@ public class Menus
                 TableGameSessionRole::table, TableGameSessionRole::edit));
         userSubMenus.add(new SubMenu("dashboard-role", "Dashboard Role", "dashboard_role", Set.of(0, 1, 2),
                 TableDashboardRole::table, TableDashboardRole::edit));
+        userFilters.add(new Filter("user", "user", new String[] {"id", "name"}, Set.of(0, 1, 2)));
+        userFilters.add(new Filter("game", "game", new String[] {"id", "code", "name", "archived"}, Set.of(0, 1)));
 
         menuList.add("game");
         List<SubMenu> gameSubMenus = new ArrayList<>();
@@ -120,6 +122,10 @@ public class Menus
                 TablePlayerObjective::table, TablePlayerObjective::edit));
         gameSubMenus.add(new SubMenu("group-objective", "Group Objective", "group_objective", Set.of(0, 1),
                 TableGroupObjective::table, TableGroupObjective::edit));
+        gameFilters.add(new Filter("game", "game", new String[] {"id", "code", "name", "archived"}, Set.of(0, 1)));
+        gameFilters
+                .add(new Filter("game_version", "game version", new String[] {"id", "code", "name", "archived"}, Set.of(0, 1)));
+        gameFilters.add(new Filter("game_mission", "game mission", new String[] {"id", "code", "name"}, Set.of(0, 1)));
 
         menuList.add("game-control");
         List<SubMenu> gameControlSubMenus = new ArrayList<>();
@@ -133,6 +139,8 @@ public class Menus
                 TableOrganizationGame::table, TableOrganizationGame::edit));
         gameControlSubMenus.add(new SubMenu("org-game-token", "Access Token", "organization_game_token", Set.of(0, 3),
                 TableOrganizationGameToken::table, TableOrganizationGameToken::edit));
+        gameControlFilters.add(new Filter("game", "game", new String[] {"id", "code", "name", "archived"}, Set.of(0, 3)));
+        gameControlFilters.add(new Filter("organization", "organization", new String[] {"id", "code", "name"}, Set.of(0, 3)));
 
         menuList.add("game-session");
         List<SubMenu> gameSessionSubMenus = new ArrayList<>();
@@ -145,6 +153,9 @@ public class Menus
         gameSessionSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", Set.of(0, 4),
                 TableGameSession::table, TableGameSession::edit));
         // gameSessionSubMenus.add(new Tab("session-dashboard", "Session Dashboard", Set.of(0, 4)));
+        gameSessionFilters.add(new Filter("game", "game", new String[] {"id", "code", "name", "archived"}, Set.of(0, 4)));
+        gameSessionFilters
+                .add(new Filter("game_version", "game version", new String[] {"id", "code", "name", "archived"}, Set.of(0, 4)));
 
         menuList.add("DATA");
         menuMap.put("DATA", new Menu("DATA", new ArrayList<>(), Set.of(0, 1, 2, 4)));
@@ -159,10 +170,16 @@ public class Menus
                 TableGameVersion::table, TableGameVersion::edit));
         dataSessionSubMenus.add(new SubMenu("game-session", "Game Session", "game_version", Set.of(0, 4),
                 TableGameSession::table, TableGameSession::edit));
-        dataSessionSubMenus.add(new SubMenu("game-mission", "Game Mission", "game_mission", Set.of(0, 1),
+        dataSessionSubMenus.add(new SubMenu("game-mission", "Game Mission", "game_mission", Set.of(0, 4),
                 TableGameMission::table, TableGameMission::edit));
         dataSessionSubMenus.add(new SubMenu("mission-event", "Mission Event", "mission_event", Set.of(0, 4),
                 TableMissionEvent::table, TableMissionEvent::view));
+        dataSessionFilters.add(new Filter("game", "game", new String[] {"id", "code", "name", "archived"}, Set.of(0, 4)));
+        dataSessionFilters
+                .add(new Filter("game_version", "game version", new String[] {"id", "code", "name", "archived"}, Set.of(0, 4)));
+        dataSessionFilters.add(new Filter("game_session", "game session",
+                new String[] {"id", "code", "name", "play_date", "archived"}, Set.of(0, 4)));
+        dataSessionFilters.add(new Filter("game_mission", "game mission", new String[] {"id", "code", "name"}, Set.of(0, 4)));
 
         menuList.add("data-player");
         List<SubMenu> dataPlayerSubMenus = new ArrayList<>();
@@ -183,6 +200,13 @@ public class Menus
                 TablePlayerEvent::table, TablePlayerEvent::view));
         dataPlayerSubMenus.add(new SubMenu("player-group-role", "Group Role", "group_role", Set.of(0, 4), TableGroupRole::table,
                 TableGroupRole::view));
+        dataPlayerFilters.add(new Filter("game", "game", new String[] {"id", "code", "name", "archived"}, Set.of(0, 4)));
+        dataPlayerFilters
+                .add(new Filter("game_version", "game version", new String[] {"id", "code", "name", "archived"}, Set.of(0, 4)));
+        dataPlayerFilters.add(new Filter("game_session", "game session",
+                new String[] {"id", "code", "name", "play_date", "archived"}, Set.of(0, 4)));
+        dataPlayerFilters.add(new Filter("player", "player", new String[] {"id", "name", "display_name"}, Set.of(0, 4)));
+        dataPlayerFilters.add(new Filter("player_attempt", "player attempt", new String[] {"id", "attempt_nr"}, Set.of(0, 4)));
 
         menuList.add("data-group");
         List<SubMenu> dataGroupSubMenus = new ArrayList<>();
@@ -203,6 +227,13 @@ public class Menus
                 TableGroupScore::view));
         dataGroupSubMenus.add(new SubMenu("group-event", "Group Event", "group_event", Set.of(0, 4), TableGroupEvent::table,
                 TableGroupEvent::view));
+        dataGroupFilters.add(new Filter("game", "game", new String[] {"id", "code", "name", "archived"}, Set.of(0, 4)));
+        dataGroupFilters
+                .add(new Filter("game_version", "game version", new String[] {"id", "code", "name", "archived"}, Set.of(0, 4)));
+        dataGroupFilters.add(new Filter("game_session", "game session",
+                new String[] {"id", "code", "name", "play_date", "archived"}, Set.of(0, 4)));
+        dataGroupFilters.add(new Filter("group", "group", new String[] {"id", "name"}, Set.of(0, 4)));
+        dataGroupFilters.add(new Filter("group_attempt", "group attempt", new String[] {"id", "attempt_nr"}, Set.of(0, 4)));
 
         menuList.add("errors");
         List<SubMenu> errorsSubMenus = new ArrayList<>();
@@ -375,7 +406,7 @@ public class Menus
     {
     }
 
-    public static record Filter(String tableName, String tableText, String selectField, Set<Integer> access)
+    public static record Filter(String tableName, String tableText, String[] selectFields, Set<Integer> access)
     {
     }
 }
