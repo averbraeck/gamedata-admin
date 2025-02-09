@@ -16,7 +16,6 @@ body {
   font-size: var(--gd-body-font-size);
   font-weight: var(--gd-body-font-weight);
   line-height: var(--gd-body-line-height);
-  width: 100%;
 }
 
 .gd-body {
@@ -25,7 +24,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  width: 100%;
+  width: 99%;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -76,6 +75,7 @@ body {
 
 .gd-sidebar-menu-group {
   padding-top: 1rem;
+  padding-bottom: 4px;
   font-weight: bold;
   color: orange;
 }
@@ -130,6 +130,7 @@ a.gd-active:hover {
 
 .gd-submenubar-menu-group {
   padding-top: 1rem;
+  padding-bottom: 4px;
   font-weight: bold;
   color: orange;
 }
@@ -179,6 +180,13 @@ a.gd-active:hover {
 
 /* Table */
 
+.gd-table {
+  width: 99%;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-collapse: collapse;
+}
+
 .gd-table-caption {
   display: flex;
   flex-direction: row;
@@ -187,7 +195,35 @@ a.gd-active:hover {
 }
 
 .gd-table-title {
-  padding-left: 8px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  color: orange;
+}
+
+.gd-table > thead > tr {
+  background-color: #eeeeee;
+}
+
+.gd-table > thead > tr > th {
+  text-align: left;
+}
+
+.gd-table > thead > tr > th i {
+  color: blue;
+}
+
+.gd-table td {
+  padding-top: 1px;
+  padding-bottom: 2px;
+}
+
+.gd-table > tbody > tr {
+  border-top: none;
+  border-bottom: none;
+}
+
+.gd-table > tbody > tr:nth-child(odd) {
+  background-color: #cce0ff;
 }
 
 .gd-col-icon {
