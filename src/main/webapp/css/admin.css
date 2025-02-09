@@ -28,7 +28,7 @@ body {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  flex-wrap: none;
+  flex-wrap: nowrap;
   justify-content: flex-start;
 }
 
@@ -40,6 +40,7 @@ body {
   left: 0;
   right: 0;
   height: 58px;
+  min-height: 58px;
   width: 100%;
   background-color: var(--gd-topbar-background-color);  
 }
@@ -54,8 +55,11 @@ body {
   height: calc(100vh - 58px);
   display: flex;
   flex-direction: row;
-  flex-wrap: none;
+  flex-wrap: nowrap;
   justify-content: flex-start;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
 }
 
 /* Sidebar */
@@ -69,7 +73,7 @@ body {
   width: 240px;
   display: flex;
   flex-direction: column;
-  flex-wrap: none;
+  flex-wrap: nowrap;
   justify-content: flex-start;
 }
 
@@ -124,7 +128,7 @@ a.gd-active:hover {
   width: 240px;
   display: flex;
   flex-direction: column;
-  flex-wrap: none;
+  flex-wrap: nowrap;
   justify-content: flex-start;
 }
 
@@ -171,19 +175,24 @@ a.gd-active:hover {
 /* Content */
 
 .gd-content {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  max-height: calc(100vh - 58px);
+  margin-right: 10px;
 }
 
 /* Table */
 
-.gd-table {
-  width: 99%;
+.gd-table-container {
+  width: 100%;
   margin-left: 10px;
-  margin-right: 10px;
+  overflow-y: auto;
+  max-height: calc(100vh - 150px);
+}
+
+.gd-table {
+  width: 100%;
   border-collapse: collapse;
 }
 
@@ -200,12 +209,12 @@ a.gd-active:hover {
   color: orange;
 }
 
-.gd-table > thead > tr {
-  background-color: #eeeeee;
-}
-
 .gd-table > thead > tr > th {
+  background-color: #eeeeee;
   text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .gd-table > thead > tr > th i {
@@ -220,10 +229,19 @@ a.gd-active:hover {
 .gd-table > tbody > tr {
   border-top: none;
   border-bottom: none;
+  z-index: 0;
 }
 
 .gd-table > tbody > tr:nth-child(odd) {
   background-color: #cce0ff;
+}
+
+.gd-table td:first-child, th:first-child {
+  padding-left: 10px;
+}
+
+.gd-table td:last-child, th:last-child {
+  padding-right: 15px;
 }
 
 .gd-col-icon {

@@ -32,72 +32,74 @@ public class AdminTable
 
     /** No args for now. */
     private static final String tableHeaderTop = """
-            <table class="gd-table">
-              <thead>
-                <tr>
+            <div class="gd-table-container">
+              <table class="gd-table">
+                <thead>
+                  <tr>
                   """;
 
     /** 1 = icon. */
     private static final String tableheaderIcon = """
-                  <th class="gd-col-icon" scope="col"><i class="fas %s fa-fw"></i></th>
+                    <th class="gd-col-icon" scope="col"><i class="fas %s fa-fw"></i></th>
             """;
 
     /** 1 = name of column, 2 = name of clickMenu for a-z, 3=arrow to use for a-z. */
     private static final String tableHeaderCol = """
-                  <th scope="col">
-                    %s &nbsp;
-                    <a href="#" onclick="clickMenu('%s')">
-                      <i class="fas %s fa-fw"></i>
-                    </a>
-                  </th>
+                    <th scope="col">
+                      %s &nbsp;
+                      <a href="#" onclick="clickMenu('%s')">
+                        <i class="fas %s fa-fw"></i>
+                      </a>
+                    </th>
             """;
 
     /** No args. */
     private static final String tableHeaderSpacing = """
-                  <th class="gd-col-icon" scope="col">&nbsp;</th>
+                    <th class="gd-col-icon" scope="col">&nbsp;</th>
             """;
 
     /** No args for now. */
     private static final String tableHeaderBottom = """
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
             """;
 
     /** 1 = record nr. */
     private static final String tableRowStart = """
-                <tr>
+                  <tr>
             """;
 
     /** 1 = function, 2 = record nr, 3 = icon */
     private static final String tableRowIcon = """
-                  <td class="gd-col-icon" scope="col">
-                    <a href="#" onclick="clickRecordId('%s', %d)">
-                      <i class="fas %s fa-fw"></i>
-                    </a>
-                  </td>
+                    <td class="gd-col-icon" scope="col">
+                      <a href="#" onclick="clickRecordId('%s', %d)">
+                        <i class="fas %s fa-fw"></i>
+                      </a>
+                    </td>
             """;
 
     /** No args. */
     private static final String tableRowSpacing = """
-                  <td class="gd-col-icon" scope="col">&nbsp;</td>
+                    <td class="gd-col-icon" scope="col">&nbsp;</td>
             """;
 
     /** 1 = cell content. */
     private static final String tableCell = """
-                  <td>%s</td>
+                    <td>%s</td>
             """;
 
     /** No args for now. */
     private static final String tableRowEnd = """
-                </tr>
+                  </tr>
             """;
 
     /** No args for now. */
     private static final String tableEnd = """
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
               """;
 
     private final AdminData data;
