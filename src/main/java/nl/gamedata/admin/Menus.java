@@ -83,6 +83,9 @@ public class Menus
                 TableOrganizationGameToken::table, TableOrganizationGameToken::edit));
         organizationSubMenus.add(new SubMenu("game-session", "Game Session", "game_session", Set.of(0, 2),
                 TableGameSession::table, TableGameSession::edit));
+        organizationFilters.add(new Filter("organization", "organization", "code", Set.of(0, 2)));
+        organizationFilters.add(new Filter("user", "user", "name", Set.of(0, 2)));
+        organizationFilters.add(new Filter("game", "game", "code", Set.of(0, 2)));
 
         menuList.add("user");
         List<SubMenu> userSubMenus = new ArrayList<>();

@@ -33,6 +33,16 @@ public class SubMenubar
               <div class="gd-submenubar-menu-group">%s</div>
             """;
 
+    /** SubMenubar filter with: 1. field-text. */
+    private static String subMenuBarFilterEmpty = """
+              <div class="gd-submenubar-filter-text">
+                 %s
+              </div>
+              <div class="gd-tab-choice">
+                <div class="gd-tab-choice-text">&nbsp;</div>
+              </div>
+            """;
+
     /** SubMenubar filter with: 1. field-text, 2 = filter-text, 3=close action. */
     private static String subMenuBarFilter = """
               <div class="gd-submenubar-filter-text">
@@ -69,7 +79,7 @@ public class SubMenubar
         s.append(subMenuBarGroup.formatted("FILTERS"));
         for (Filter filter : Menus.menuMap.get(menuChoice).filters())
         {
-            // showFilter(s, data, tabName, tabText);
+            showFilter(s, data, filter);
         }
         s.append(submenubarEnd);
         return s.toString();
@@ -83,24 +93,18 @@ public class SubMenubar
             s.append(subMenuBarItem.formatted("", "false", "tab-" + tabName, "fa-circle", tabText));
     }
 
-    private static void showFilter(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
+    private static void showFilter(final StringBuilder s, final AdminData data, final Filter filter)
     {
-        if (data.getMenuFilterChoice(tabName) != null)
+        if (data.getMenuFilterChoice(filter.tableName()) == null)
         {
-            // if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
-            // s.append(tabChoiceActiveEmpty.formatted(tabText));
-            // else
-            // s.append(tabChoiceInactiveEmpty.formatted("tab-" + tabName, tabText));
+            s.append(subMenuBarFilterEmpty.formatted(filter.tableName()));
         }
         else
         {
-            String choice = data.getMenuFilterChoice(tabName).name();
+            String choice = data.getMenuFilterChoice(filter.tableName()).name();
             if (choice.length() > 12)
                 choice = choice.substring(0, 9) + "...";
-            // if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
-            // s.append(tabChoiceActive.formatted(tabText, choice, "close-" + tabName));
-            // else
-            // s.append(tabChoiceInactive.formatted("tab-" + tabName, tabText, choice, "close-" + tabName));
+            s.append(subMenuBarFilter.formatted(filter.tableName(), choice, "close-" + filter.tableName()));
         }
     }
 }
