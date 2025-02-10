@@ -42,7 +42,14 @@ body {
   height: 58px;
   min-height: 58px;
   width: 100%;
-  background-color: var(--gd-topbar-background-color);  
+  background-color: var(--gd-topbar-background-color);
+}
+
+.gd-topbar > img {
+  position: absolute;
+  top: -2px;
+  left: 20px;
+  height: 80px;
 }
 
 /* Everything except topbar */

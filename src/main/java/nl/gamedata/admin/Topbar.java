@@ -13,6 +13,7 @@ public class Topbar
     private static String topbarStart = """
             <!-- Topbar -->
             <div id="main-topbar" class="gd-topbar">
+              <img src="images/header.png">
                       """;
 
     private static String topbarEnd = """
