@@ -43,6 +43,13 @@ html, body {
   margin-bottom: 20px;
 }
 
+.gd-login-header > img {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  height: 80px;
+}
+
 .gd-login-header-right {
   position: absolute;
   background: white;
@@ -145,6 +152,7 @@ html, body {
 <body>
   <div class="gd-login-page">
     <div class="gd-login-header">
+      <img src="images/header.png">
       <div class="gd-login-header-right">
         <img src="images/tudelft.png" />
         <span style="font-size: 12px; padding-left: 20px; position:relative; top:-4px; color:black;">GameData v0.1</span>
