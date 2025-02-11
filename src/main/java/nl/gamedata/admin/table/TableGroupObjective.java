@@ -41,7 +41,12 @@ public class TableGroupObjective
     {
         AdminTable table = new AdminTable(data, "Group Objective", "Name");
         boolean admin = data.isSuperAdmin() || data.isGameAdmin() || data.hasGameAccess(Access.EDIT);
-        table.setNewButton(admin);
+        if (admin)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Game", "Version", "Mission", "Learning Goal", "Objective", "Scale", "Threshold");
         List<Record> poList = data.getDSL()
                 .selectFrom(Tables.GROUP_OBJECTIVE.join(Tables.LEARNING_GOAL)

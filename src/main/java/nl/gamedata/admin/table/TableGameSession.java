@@ -41,8 +41,13 @@ public class TableGameSession
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Game Session", "Code");
-        boolean newButton = data.isSuperAdmin() || data.isOrganizationAdmin() || data.hasGameSessionAccess(Access.CREATE);
-        table.setNewButton(newButton);
+        boolean access = data.isSuperAdmin() || data.isOrganizationAdmin() || data.hasGameSessionAccess(Access.CREATE);
+        if (access)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Game", "Version", "Code", "Name", "Valid", "Archived");
         List<Record> gsList = data.getDSL()
                 .selectFrom(Tables.GAME_SESSION.join(Tables.GAME_VERSION)

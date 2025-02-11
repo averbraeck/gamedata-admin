@@ -13,23 +13,6 @@ import java.util.TreeMap;
  */
 public class AdminTable
 {
-    /** 1 = Title. */
-    private static final String tableTitleNew = """
-            <div class="gd-table-caption">
-              <div class="gd-table-title"><h3>%s</h3></div>
-              <div class="gd-button">
-                <button type="button" class="btn btn-primary" onclick="clickMenu('record-new')">New</button>
-              </div>
-            </div>
-            """;
-
-    /** 1 = Title. */
-    private static final String tableTitleNoNew = """
-            <div class="gd-table-caption">
-              <div class="gd-table-title"><h3>%s</h3></div>
-            </div>
-            """;
-
     /** No args for now. */
     private static final String tableHeaderTop = """
             <div class="gd-table-container">
@@ -106,8 +89,6 @@ public class AdminTable
 
     private final String title;
 
-    private boolean newButton = false;
-
     private String[] header;
 
     private String sortColumn;
@@ -126,15 +107,12 @@ public class AdminTable
     {
         this.data = data;
         this.title = title;
+        data.getTopbar().clear();
+        data.getTopbar().setTitle(this.title);
         if (data.getTableColumnSort() == null)
             data.selectTableColumnSort(defaultSortField);
         this.sortColumn = this.data.getTableColumnSort().fieldName();
         this.az = this.data.getTableColumnSort().az();
-    }
-
-    public void setNewButton(final boolean newButton)
-    {
-        this.newButton = newButton;
     }
 
     public void setHeader(final String... header)
@@ -158,10 +136,6 @@ public class AdminTable
     {
         // TABLE START
         StringBuilder s = new StringBuilder();
-        if (this.newButton)
-            s.append(tableTitleNew.formatted(this.title));
-        else
-            s.append(tableTitleNoNew.formatted(this.title));
         s.append(tableHeaderTop);
         s.append(tableheaderIcon.formatted("fa-pencil"));
         s.append(tableHeaderSpacing);
@@ -172,8 +146,8 @@ public class AdminTable
                 sort = this.az ? "fa-arrow-down-a-z" : "fa-arrow-up-z-a";
             s.append(tableHeaderCol.formatted(h, "az-" + h.toLowerCase().replace(' ', '-'), sort));
         }
-        if (this.newButton)
-            s.append(tableheaderIcon.formatted("fa-trash-can"));
+        // if (this.newButton)
+        // s.append(tableheaderIcon.formatted("fa-trash-can"));
         s.append(tableHeaderBottom);
 
         // ROWS
@@ -191,8 +165,8 @@ public class AdminTable
             {
                 s.append(tableCell.formatted(c));
             }
-            if (this.newButton)
-                s.append(tableRowIcon.formatted("record-delete", row.recordId(), "fa-trash-can"));
+            // if (this.newButton)
+            // s.append(tableRowIcon.formatted("record-delete", row.recordId(), "fa-trash-can"));
             s.append(tableRowEnd);
         }
 

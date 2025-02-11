@@ -26,7 +26,8 @@ public class TableDashboardLayout
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Dashboard Layout", "Code");
-        table.setNewButton(data.isSuperAdmin());
+        if (data.isSuperAdmin())
+            data.getTopbar().addNewButton();
         table.setHeader("Code", "Name");
         List<DashboardLayoutRecord> dlList = data.getDSL().selectFrom(Tables.DASHBOARD_LAYOUT).fetch();
         for (var dl : dlList)

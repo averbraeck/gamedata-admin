@@ -31,7 +31,13 @@ public class TableScale
     {
         AdminTable table = new AdminTable(data, "Scale", "Game");
         boolean adminAccess = data.isSuperAdmin() || data.isGameAdmin();
-        table.setNewButton(adminAccess);
+        if (adminAccess)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
+
         table.setHeader("Game", "Scale");
         List<Record> scaleList =
                 data.getDSL().selectFrom(Tables.SCALE.join(Tables.GAME).on(Tables.SCALE.GAME_ID.eq(Tables.GAME.ID))).fetch();

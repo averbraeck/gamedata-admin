@@ -38,7 +38,12 @@ public class TableLearningGoal
     {
         AdminTable table = new AdminTable(data, "Learning Goal", "Name");
         boolean admin = data.isSuperAdmin() || data.isGameAdmin() || data.hasGameAccess(Access.EDIT);
-        table.setNewButton(admin);
+        if (admin)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Game", "Version", "Mission", "Learning Goal", "Name");
         List<Record> lgList = data.getDSL()
                 .selectFrom(Tables.LEARNING_GOAL.join(Tables.GAME_MISSION)

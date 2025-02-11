@@ -30,7 +30,13 @@ public class TableOrganizationRole
     {
         AdminTable table = new AdminTable(data, "User Roles in Organizations", "Organization");
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
-        table.setNewButton(access);
+        if (access)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
+
         table.setHeader("Organization", "User", "Admin", "Edit", "View");
         List<Record> orList = data.getDSL()
                 .selectFrom(Tables.ORGANIZATION_ROLE.join(Tables.ORGANIZATION)

@@ -30,7 +30,13 @@ public class TableOrganizationGameRole
     {
         AdminTable table = new AdminTable(data, "User Roles for Organization Games", "Org-Game");
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
-        table.setNewButton(access);
+        if (access)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
+
         table.setHeader("Org-Game", "User", "Edit", "View");
         List<Record> ogrList = data.getDSL()
                 .selectFrom(Tables.ORGANIZATION_GAME_ROLE.join(Tables.ORGANIZATION_GAME)

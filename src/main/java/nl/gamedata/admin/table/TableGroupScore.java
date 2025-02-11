@@ -33,7 +33,7 @@ public class TableGroupScore
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Group Score", "Session");
-        table.setNewButton(false);
+        data.getTopbar().addExportButton();
         table.setHeader("Session", "Group", "Attempt", "Timestamp", "Type", "Delta", "New(nr)", "New(str)");
         for (var gameSessionId : data.getGameSessionAccess(Access.VIEW))
         {

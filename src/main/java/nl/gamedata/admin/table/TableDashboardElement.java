@@ -26,7 +26,8 @@ public class TableDashboardElement
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Dashboard Element", "Code");
-        table.setNewButton(data.isSuperAdmin());
+        if (data.isSuperAdmin())
+            data.getTopbar().addNewButton();
         table.setHeader("Code", "Name");
         List<DashboardElementRecord> deList = data.getDSL().selectFrom(Tables.DASHBOARD_ELEMENT).fetch();
         for (var de : deList)

@@ -27,7 +27,12 @@ public class TableElementProperty
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Dashboard Element Property", "Code");
-        table.setNewButton(data.isSuperAdmin());
+        if (data.isSuperAdmin())
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Element", "Code", "Name", "Type");
         List<ElementPropertyRecord> epList = data.getDSL().selectFrom(Tables.ELEMENT_PROPERTY).fetch();
         for (var ep : epList)

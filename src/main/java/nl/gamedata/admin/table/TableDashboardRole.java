@@ -30,7 +30,12 @@ public class TableDashboardRole
     {
         AdminTable table = new AdminTable(data, "Dashboard Roles", "Template");
         boolean access = data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin();
-        table.setNewButton(access);
+        if (access)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Template", "User", "Edit", "View");
         List<Record> dashboardRoleList = data.getDSL()
                 .selectFrom(Tables.DASHBOARD_ROLE.join(Tables.DASHBOARD_TEMPLATE)

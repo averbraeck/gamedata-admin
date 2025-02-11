@@ -26,7 +26,7 @@ public class TablePlayer
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Player", "Session");
-        table.setNewButton(data.isSuperAdmin() || data.hasGameSessionAccess(Access.VIEW));
+        data.getTopbar().addExportButton();
         table.setHeader("Session", "Player Name", "Display Name");
         for (var gameSessionId : data.getGameSessionAccess(Access.VIEW))
         {

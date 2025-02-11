@@ -31,7 +31,12 @@ public class TableOrganizationGame
     {
         AdminTable table = new AdminTable(data, "Game Access for Organizations", "Name");
         boolean access = data.isSuperAdmin() || data.isGameAdmin();
-        table.setNewButton(access);
+        if (access)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Name", "Organization", "Game");
         List<Record> ogList = data.getDSL()
                 .selectFrom(Tables.ORGANIZATION_GAME.join(Tables.ORGANIZATION)

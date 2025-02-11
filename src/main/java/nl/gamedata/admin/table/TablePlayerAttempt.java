@@ -28,7 +28,7 @@ public class TablePlayerAttempt
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Player Attempt", "Session");
-        table.setNewButton(false);
+        data.getTopbar().addExportButton();
         table.setHeader("Session", "Player Name", "Display Name", "Attempt", "Status");
         for (var gameSessionId : data.getGameSessionAccess(Access.VIEW))
         {

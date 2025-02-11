@@ -42,7 +42,13 @@ public class TableUser
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Users", "Name");
-        table.setNewButton(data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin());
+        if (data.isSuperAdmin() || data.isGameAdmin() || data.isOrganizationAdmin())
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
+
         table.setHeader("Name", "Email", "Super Admin", "Game Admin");
 
         List<UserRecord> userRecords = new ArrayList<>();

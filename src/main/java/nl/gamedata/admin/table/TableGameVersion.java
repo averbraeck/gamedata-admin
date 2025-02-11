@@ -32,7 +32,12 @@ public class TableGameVersion
     {
         AdminTable table = new AdminTable(data, "Game Version", "Game");
         boolean access = data.isSuperAdmin() || data.isGameAdmin();
-        table.setNewButton(access);
+        if (access)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Game", "Version", "Name", "Archived");
         List<Record> gvList = data.getDSL()
                 .selectFrom(Tables.GAME_VERSION.join(Tables.GAME).on(Tables.GAME_VERSION.GAME_ID.eq(Tables.GAME.ID))).fetch();

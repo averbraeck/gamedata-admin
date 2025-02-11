@@ -37,7 +37,12 @@ public class TableOrganization
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Organization", "Code");
-        table.setNewButton(data.isSuperAdmin());
+        if (data.isSuperAdmin())
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Code", "Name");
         for (var organizationId : data.getOrganizationAccess().keySet())
         {

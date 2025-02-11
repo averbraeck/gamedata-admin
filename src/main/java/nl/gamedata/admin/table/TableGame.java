@@ -27,7 +27,12 @@ public class TableGame
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Game", "Code");
-        table.setNewButton(data.isSuperAdmin() || data.isGameAdmin());
+        if (data.isSuperAdmin() || data.isGameAdmin())
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Code", "Name", "Archived");
         for (var gameId : data.getGameAccess().keySet())
         {

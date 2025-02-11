@@ -31,7 +31,12 @@ public class TableGameSessionRole
     {
         AdminTable table = new AdminTable(data, "Game Session Roles", "Game Session");
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin();
-        table.setNewButton(access);
+        if (access)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
         table.setHeader("Game Session", "User", "Edit", "View");
         List<Record> gameSessionRoleList = data.getDSL()
                 .selectFrom(Tables.GAME_SESSION_ROLE.join(Tables.GAME_SESSION)

@@ -38,8 +38,8 @@ public class SubMenubar
               <div class="gd-submenubar-filter-text">
                  %s
               </div>
-              <div class="gd-tab-choice">
-                <div class="gd-tab-choice-text">&nbsp;</div>
+              <div class="gd-submenu-choice">
+                <div class="gd-submenu-choice-text">&nbsp;</div>
               </div>
             """;
 
@@ -48,9 +48,9 @@ public class SubMenubar
               <div class="gd-submenubar-filter-text">
                  %s
               </div>
-              <div class="gd-tab-choice">
-                <div class="gd-tab-choice-text">%s</div>
-                <div class="gd-tab-choice-close">
+              <div class="gd-submenu-choice">
+                <div class="gd-submenu-choice-text">%s</div>
+                <div class="gd-submenu-choice-close">
                   <a href="#" onclick="clickMenu('%s')">
                     <i class="fas fa-xmark fa-fw"></i>
                   </a>
@@ -85,12 +85,12 @@ public class SubMenubar
         return s.toString();
     }
 
-    private static void showSubMenu(final StringBuilder s, final AdminData data, final String tabName, final String tabText)
+    private static void showSubMenu(final StringBuilder s, final AdminData data, final String subMenuName, final String tabText)
     {
-        if (tabName.equals(data.getSubMenuChoice(data.getMenuChoice())))
-            s.append(subMenuBarItem.formatted("gd-active", "true", "tab-" + tabName, "fa-circle", tabText));
+        if (subMenuName.equals(data.getSubMenuChoice(data.getMenuChoice())))
+            s.append(subMenuBarItem.formatted("gd-active", "true", "submenu-" + subMenuName, "fa-circle", tabText));
         else
-            s.append(subMenuBarItem.formatted("", "false", "tab-" + tabName, "fa-circle", tabText));
+            s.append(subMenuBarItem.formatted("", "false", "submenu-" + subMenuName, "fa-circle", tabText));
     }
 
     private static void showFilter(final StringBuilder s, final AdminData data, final Filter filter)

@@ -28,7 +28,7 @@ public class TableErrors
     public static void table100(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Errors", "Timestamp");
-        table.setNewButton(false);
+        data.getTopbar().addExportButton();
         table.setHeader("Timestamp", "Error type", "Stored?", "Data type", "Message");
         List<ErrorRecord> errorList =
                 data.getDSL().selectFrom(Tables.ERROR).orderBy(Tables.ERROR.TIMESTAMP.desc()).limit(100).fetch();

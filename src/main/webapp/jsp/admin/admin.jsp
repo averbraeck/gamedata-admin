@@ -18,10 +18,10 @@
 
   <body onload="initPage()">
     <div class="gd-body">
-       ${adminData.getTopbar()}
+       ${adminData.makeTopbar()}
        <div class="gd-main">
-	       ${adminData.getSidebar()}
-	       ${adminData.getSubMenubar()}
+	       ${adminData.makeSidebar()}
+	       ${adminData.makeSubMenubar()}
 	       <div class="gd-content">
   	       ${adminData.getContent()}
   	     </div>

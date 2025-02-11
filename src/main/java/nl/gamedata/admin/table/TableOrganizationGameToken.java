@@ -31,7 +31,13 @@ public class TableOrganizationGameToken
     {
         AdminTable table = new AdminTable(data, "Game Access Tokens", "Org-Game");
         boolean access = data.isSuperAdmin() || data.isOrganizationAdmin() || data.hasOrganizationGameAccess(Access.EDIT);
-        table.setNewButton(access);
+        if (access)
+        {
+            data.getTopbar().addNewButton();
+            data.getTopbar().addImportButton();
+        }
+        data.getTopbar().addExportButton();
+
         table.setHeader("Org", "Game", "Org-Game", "Name", "Value", "Reader", "Writer");
         List<Record> ogtList = data.getDSL()
                 .selectFrom(Tables.ORGANIZATION_GAME_TOKEN.join(Tables.ORGANIZATION_GAME)

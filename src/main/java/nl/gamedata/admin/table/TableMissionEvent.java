@@ -29,7 +29,7 @@ public class TableMissionEvent
     public static void table(final AdminData data, final HttpServletRequest request, final String menuChoice)
     {
         AdminTable table = new AdminTable(data, "Mission Event", "Session");
-        table.setNewButton(false);
+        data.getTopbar().addExportButton();
         table.setHeader("Session", "Mission", "Timestamp", "Type", "Key", "Value");
         for (var gameSessionId : data.getGameSessionAccess(Access.VIEW))
         {

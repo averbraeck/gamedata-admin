@@ -43,16 +43,70 @@ body {
   min-height: 58px;
   width: 100%;
   background-color: var(--gd-topbar-background-color);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+.gd-topbar-logo {
+  position: flex;
+  width: 240px;
 }
 
-.gd-topbar > img {
+.gd-topbar-logo img {
   position: absolute;
   top: -2px;
   left: 20px;
   height: 80px;
 }
 
+.gd-topbar-buttons-left {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.gd-topbar-buttons-right {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.gd-topbar .gd-button {
+  margin-top: 8px;
+}
+
+.btn {
+  display: inline-block;
+  margin: .25rem .125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #fff;
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  padding: .175rem .75rem;
+  font-size: 1rem;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.gd-topbar .gd-title > h3 {
+  font-family: var(--gd-body-font-family);
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 1;
+  margin-top: 20px;
+}
+
 /* Everything except topbar */
+
 .gd-main {
   top: 0;
   bottom: 0;
@@ -311,7 +365,7 @@ a.gd-active:hover {
   gap: 5px;
 }
 
-.gd-tab-item {
+.gd-submenu-item {
   border-style: solid;
   border-width: 1px;
   min-width: 120px;
@@ -321,17 +375,17 @@ a.gd-active:hover {
   padding-bottom: 3px;
 }
 
-.gd-tab-item-active {
+.gd-submenu-item-active {
   border-color: #0d6efd;
   background-color: #0d6efd;
   color: white;
 }
 
-.gd-tab-item-inactive {
+.gd-submenu-item-inactive {
   border-color: #bbbbbb; 
 }
 
-.gd-tab-choice {
+.gd-submenu-choice {
   border-style: solid;
   border-width: 1px;
   border-color: #bbbbbb;
@@ -341,17 +395,17 @@ a.gd-active:hover {
   justify-content: space-between;
 }
 
-.gd-tab-nochoice {
+.gd-submenu-nochoice {
   border-style: none;
   border-width: 1px;
 }
 
-.gd-tab-choice-text {
+.gd-submenu-choice-text {
   margin-left: 5px;
   margin-right: 5px;
 }
 
-.gd-tab-choice-close {
+.gd-submenu-choice-close {
   display: block;  
 }
 

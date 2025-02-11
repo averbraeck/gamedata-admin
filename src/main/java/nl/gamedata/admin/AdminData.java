@@ -68,6 +68,9 @@ public class AdminData extends CommonData
     /** The sorting order of columns in the tables. The map is from menu#tab to column header to A-Z / Z-A */
     private Map<String, ColumnSort> tableColumnSort = new HashMap<>();
 
+    /** The topbar data. */
+    private Topbar topbar = new Topbar();
+
     /** the page content as built by the appropriate class. */
     private String content = "";
 
@@ -108,19 +111,19 @@ public class AdminData extends CommonData
         Menus.initializeSubMenuChoices(this);
     }
 
-    public String getSidebar()
+    public String makeSidebar()
     {
         return Sidebar.makeSidebar(this);
     }
 
-    public String getSubMenubar()
+    public String makeSubMenubar()
     {
         return SubMenubar.makeSubMenubar(this);
     }
 
-    public String getTopbar()
+    public String makeTopbar()
     {
-        return Topbar.makeTopbar(this);
+        return this.topbar.makeTopbar(this);
     }
 
 
@@ -828,6 +831,11 @@ public class AdminData extends CommonData
     public void putSubMenuChoice(final String menuChoice, final String subMenuChoice)
     {
         this.subMenuChoice.put(menuChoice, subMenuChoice);
+    }
+
+    public Topbar getTopbar()
+    {
+        return this.topbar;
     }
 
     public String getContent()
