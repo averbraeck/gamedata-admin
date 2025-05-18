@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jooq.Record;
 import org.jooq.UpdatableRecord;
 
+import jakarta.servlet.http.HttpServletRequest;
 import nl.gamedata.admin.form.WebForm;
 import nl.gamedata.common.Access;
 import nl.gamedata.common.CommonData;

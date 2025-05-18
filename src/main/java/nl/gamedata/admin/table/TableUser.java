@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jooq.exception.DataAccessException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.xml.bind.DatatypeConverter;
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;

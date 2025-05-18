@@ -3,8 +3,7 @@ package nl.gamedata.admin.form;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
+import jakarta.servlet.http.HttpServletRequest;
 import nl.gamedata.admin.AdminData;
 
 public class WebForm

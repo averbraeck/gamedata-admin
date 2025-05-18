@@ -2,10 +2,9 @@ package nl.gamedata.admin.table;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jooq.Record;
 
+import jakarta.servlet.http.HttpServletRequest;
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.FormEntryString;

@@ -1,7 +1,6 @@
 package nl.gamedata.admin.table;
 
-import javax.servlet.http.HttpServletRequest;
-
+import jakarta.servlet.http.HttpServletRequest;
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.AdminTable;
 import nl.gamedata.admin.form.table.TableEntryBoolean;

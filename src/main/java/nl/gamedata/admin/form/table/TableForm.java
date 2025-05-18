@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-
 import org.jooq.Record;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Part;
 import nl.gamedata.admin.AdminData;
 import nl.gamedata.admin.form.AbstractFormEntry;
 import nl.gamedata.admin.form.WebForm;
